@@ -3,18 +3,19 @@ import { Link } from 'react-router-dom'
 import logo from '../assets/images/logo.svg'
 import styled from 'styled-components'
 import Wrapper from '../assets/wrappers/LandingPage'
+import { Logo } from '../components'
 
 const Landing = () => {
   return (
     <Wrapper>
       <nav>
-        <img src={logo} alt="jobify" className="logo" />
+        <Logo />
       </nav>
       <div className="container page">
         {/* info */}
         <div className="info">
           <h1>
-            job <span>tracking</span> app
+            Achievement <span>tracking</span> app
           </h1>
           <p>
             I'm baby wayfarers hoodie next level taiyaki brooklyn cliche blue
