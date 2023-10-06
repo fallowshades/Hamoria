@@ -493,8 +493,6 @@ export default Logo
 
 ### Navigation depend on user privilage
 
-https://hamoria.atlassian.net/browse/TES-13
-
 #### 14. Error Page
 
 Error.jsx
