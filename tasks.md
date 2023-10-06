@@ -17,8 +17,8 @@
 
 Story: basic navigation
 []Data context support: set up router
----[]static test
----[]create pages to render dynamically
+---[x]static test
+---[x]create pages to render dynamically
 ---[]Test: can navigate with url
 
 []Interior Points
