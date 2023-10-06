@@ -6,12 +6,12 @@
 
 #### Layer 0 v0.0.1
 
-[]all tools for development with a team (secure n-scalled)
+[x]all tools for development with a team (secure n-scalled)
 ---[x]developter: emmet, react-native snippets
----[]arcitecur: built with vite to configure proxy
----[]testing: easier w same css. (troubleshot)
-[]color root node with favvicon and title (packages to color decending nedos)
----[]Test: app does render
+---[x]arcitecur: built with vite to configure proxy
+---[x]testing: easier w same css. (troubleshot)
+[x]color root node with favvicon and title (packages to color decending nedos)
+---[x]Test: app does render
 
 #### Layer 1 v0.0.2
 
