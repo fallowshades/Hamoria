@@ -21,14 +21,14 @@ Story: basic navigation
 ---[x]create pages to render dynamically
 ---[x]Test: can navigate with url
 
-[]Interior Points
----[]index to but pages inside homeLayout for shared maintenance
----[]Link interior points
----[]Test: can navigate with user interaction
+[x]Interior Points
+---[x]index to but pages inside homeLayout for shared maintenance
+---[x]Link interior points
+---[x]Test: can navigate with user interaction
 
-[]Errors bubble up
----[]errors from internal errors
----[]Test: ???
+[x]Errors bubble up
+---[x]errors from internal errors
+---[x]Test: ???
 
 Story: advanced navigation
 []shared parent responsibility
