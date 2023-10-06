@@ -16,7 +16,7 @@
 #### Layer 1 v0.0.2
 
 Story: basic navigation
-[]Data context support: set up router
+[x]Data context support: set up router
 ---[x]static test
 ---[x]create pages to render dynamically
 ---[x]Test: can navigate with url
@@ -31,11 +31,12 @@ Story: basic navigation
 ---[x]Test: ???
 
 Story: advanced navigation
-[]shared parent responsibility
----[]navigate 1 active
----[]Test: sharedLayout has a default page
----[]Navigation depend 404 error and later user privileges
----[]test bas redirect url
+[x]shared parent responsibility
+---[x]navigate 1 active
+---[x]Test: sharedLayout has a default page
+---[x]Navigation depend 404 error and later user privileges
+---[x]test bas redirect url
+[x] default FormRow components
 
 #### Layer 2 v0.0.1
 
