@@ -19,7 +19,7 @@ Story: basic navigation
 []Data context support: set up router
 ---[x]static test
 ---[x]create pages to render dynamically
----[]Test: can navigate with url
+---[x]Test: can navigate with url
 
 []Interior Points
 ---[]index to but pages inside homeLayout for shared maintenance
