@@ -1,764 +1,878 @@
-# Hamoria
+# Second layer and beyond
 
-## front layer 1
+## Partition logic of
 
-## Data context supported n-way communication for its children
+### 1. Layout fixed/relatife 2 column setup
 
-### Main section simple form flow (verticaly scaled)
-
-#### Router
-
-[React Router](https://reactrouter.com/en/main)
-
-- version 6.4 brought significant changes (loader and action)
-- pages as independent entities
-- less need for global state
-- more pages
-
-#### 1. Setup Router
-
-- all my examples will include version !!!
-
-```sh
-npm i react-router-dom@6.10.0
-```
+#### 1. Dashboard Pages
 
 App.jsx
 
 ```jsx
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <h1>home</h1>,
-  },
-  {
-    path: '/about',
-    element: (
-      <div>
-        <h2>about page</h2>
-      </div>
-    ),
-  },
-])
-
-const App = () => {
-  return <RouterProvider router={router} />
-}
-export default App
-```
-
-#### 2. Create Pages
-
-- create src/pages directory
-- setup index.js and following pages :
-
-  AddAchievements.jsx
-  Admin.jsx
-  AllAchievements.jsx
-  DashboardLayout.jsx
-  DeleteAchievement.jsx
-  EditAchievement.jsx
-  Error.jsx
-  HomeLayout.jsx
-  Landing.jsx
-  Login.jsx
-  Profile.jsx
-  Register.jsx
-  Stats.jsx
-
-```jsx
-const AddJob = () => {
-  return <h1>AddJob</h1>
-}
-export default AddJob
-```
-
-#### 3. Index
-
-App.jsx
-
-```jsx
-import HomeLayout from '../ pages/HomeLayout'
-```
-
-pages/index.js
-
-```js
-export { default as DashboardLayout } from './DashboardLayout'
-export { default as Landing } from './Landing'
-export { default as HomeLayout } from './HomeLayout'
-export { default as Register } from './Register'
-export { default as Login } from './Login'
-export { default as Error } from './Error'
-export { default as Stats } from './Stats'
-export { default as AllAchievements } from './AllAchievements'
-export { default as AddJob } from './AddJob'
-export { default as EditJob } from './EditJob'
-export { default as Profile } from './Profile'
-export { default as Admin } from './Admin'
-```
-
-App.jsx
-
-```jsx
-import {
-  HomeLayout,
-  Landing,
-  Register,
-  Login,
-  DashboardLayout,
-  Error,
-} from './pages'
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <HomeLayout />,
-  },
-  {
-    path: '/register',
-    element: <Register />,
-  },
-  {
-    path: '/login',
-    element: <Login />,
-  },
-  {
-    path: '/dashboard',
-    element: <DashboardLayout />,
-  },
-])
-```
-
-### interior points
-
-#### 4. Link Component
-
-- navigate around project
-- client side routing
-
-Register.jsx
-
-```jsx
-import { Link } from 'react-router-dom'
-
-const Register = () => {
-  return (
-    <div>
-      <h1>Register</h1>
-      <Link to="/login">Login Page</Link>
-    </div>
-  )
-}
-export default Register
-```
-
-Login.jsx
-
-```jsx
-import { Link } from 'react-router-dom'
-
-const Login = () => {
-  return (
-    <div>
-      <h1>Login</h1>
-      <Link to="/register">Register Page</Link>
-    </div>
-  )
-}
-export default Login
-```
-
-### Error bubble up homeLayout (horizontal, verticle, shared, index)
-
-#### 5. Nested Routes
-
-- what about Navbar?
-- decide on root (parent route)
-- make path relative
-- for time being only home layout will be visible
-
-App.jsx
-
-```jsx
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <HomeLayout />,
-    children: [
-      {
-        path: 'register',
-        element: <Register />,
-      },
-      {
-        path: 'login',
-        element: <Login />,
-      },
-      {
+ {
         path: 'dashboard',
         element: <DashboardLayout />,
+        children: [
+          {
+            index: true,
+            element: <AddJob />,
+          },
+          { path: 'stats', element: <Stats /> },
+          {
+            path: 'all-jobs',
+            element: <AllJobs />,
+          },
+
+          {
+            path: 'profile',
+            element: <Profile />,
+          },
+          {
+            path: 'admin',
+            element: <Admin />,
+          },
+        ],
       },
-    ],
-  },
-])
 ```
 
-HomeLayout.jsx
+Dashboard.jsx
 
 ```jsx
 import { Outlet } from 'react-router-dom'
 
-const HomeLayout = () => {
+const DashboardLayout = () => {
   return (
-    <>
-      {/* add things like Navbar */}
-      {/* <h1>home layout</h1> */}
+    <div>
       <Outlet />
-    </>
-  )
-}
-export default HomeLayout
-```
-
-#### 6. Index (Home) Page
-
-App.jsx
-
-```jsx
-{
-    path: '/',
-    element: <HomeLayout />,
-    children: [
-      {
-        index: true,
-        element: <Landing />,
-      },
-...
-      ]
-}
-```
-
-#### 7. Error Page
-
-- bubbles up
-
-App.jsx
-
-```jsx
-{
-    path: '/',
-    element: <HomeLayout />,
-    errorElement: <Error />,
-    ...
-}
-```
-
-Error.jsx
-
-```jsx
-import { Link, useRouteError } from 'react-router-dom'
-
-const Error = () => {
-  const error = useRouteError()
-  console.log(error)
-  return (
-    <div>
-      <h1>Error Page !!!</h1>
-      <Link to="/dashboard">back home</Link>
     </div>
   )
 }
-export default Error
+export default DashboardLayout
 ```
 
-## shared responsibillities for parent node
+#### 2. Navbar, BigSidebar and SmallSidebar
 
-### Navigate --> 1 active node in array of children
+- in components create :
+  Navbar.jsx
+  BigSidebar.jsx
+  SmallSidebar.jsx
 
-#### 8. Styled Components
-
-- CSS in JS
-- Styled Components
-- have logic and styles in component
-- no name collisions
-- apply javascript logic
-- [Styled Components Docs](https://styled-components.com/)
-- [Styled Components Course](https://www.udemy.com/course/styled-components-tutorial-and-project-course/?referralCode=9DABB172FCB2625B663F)
-
-```sh
-npm install styled-components@5.3.10
-```
-
-```js
-import styled from 'styled-components'
-
-const El = styled.el`
-  // styles go here
-`
-```
-
-- no name collisions, since unique class
-- vscode-styled-components extension
-- colors and bugs
-
-Landing.jsx
+DashboardLayout.jsx
 
 ```jsx
-import styled from 'styled-components'
+import { Outlet } from 'react-router-dom'
 
-const Landing = () => {
-  return (
-    <div>
-      <h1>Landing</h1>
-      <StyledButton>Click Me</StyledButton>
-    </div>
-  )
-}
+import Wrapper from '../assets/wrappers/Dashboard'
+import { Navbar, BigSidebar, SmallSidebar } from '../components'
 
-const StyledButton = styled.button`
-  background-color: red;
-  color: white;
-`
-export default Landing
-```
-
-#### 9. Style Entire React Component
-
-```js
-const Wrapper = styled.el``
-
-const Component = () => {
+const Dashboard = () => {
   return (
     <Wrapper>
-      <h1> Component</h1>
-    </Wrapper>
-  )
-}
-```
-
-- only responsible for styling
-- wrappers folder in assets
-
-Landing.jsx
-
-```jsx
-import styled from 'styled-components'
-
-const Landing = () => {
-  return (
-    <Wrapper>
-      <h1>Landing</h1>
-      <div className="content">some content</div>
-    </Wrapper>
-  )
-}
-
-const Wrapper = styled.div`
-  background-color: red;
-  h1 {
-    color: white;
-  }
-  .content {
-    background-color: blue;
-    color: yellow;
-  }
-`
-export default Landing
-```
-
-#### 10 Landing Page
-
-```jsx
-import main from '../assets/images/main.svg'
-import { Link } from 'react-router-dom'
-import logo from '../assets/images/logo.svg'
-import styled from 'styled-components'
-const Landing = () => {
-  return (
-    <StyledWrapper>
-      <nav>
-        <img src={logo} alt="jobify" className="logo" />
-      </nav>
-      <div className="container page">
-        {/* info */}
-        <div className="info">
-          <h1>
-            job <span>tracking</span> app
-          </h1>
-          <p>
-            I'm baby wayfarers hoodie next level taiyaki brooklyn cliche blue
-            bottle single-origin coffee chia. Aesthetic post-ironic venmo,
-            quinoa lo-fi tote bag adaptogen everyday carry meggings +1 brunch
-            narwhal.
-          </p>
-          <Link to="/register" className="btn register-link">
-            Register
-          </Link>
-          <Link to="/login" className="btn">
-            Login / Demo User
-          </Link>
-        </div>
-        <img src={main} alt="job hunt" className="img main-img" />
-      </div>
-    </StyledWrapper>
-  )
-}
-
-const StyledWrapper = styled.section`
-  nav {
-    width: var(--fluid-width);
-    max-width: var(--max-width);
-    margin: 0 auto;
-    height: var(--nav-height);
-    display: flex;
-    align-items: center;
-  }
-  .page {
-    min-height: calc(100vh - var(--nav-height));
-    display: grid;
-    align-items: center;
-    margin-top: -3rem;
-  }
-  h1 {
-    font-weight: 700;
-    span {
-      color: var(--primary-500);
-    }
-    margin-bottom: 1.5rem;
-  }
-  p {
-    line-height: 2;
-    color: var(--text-secondary-color);
-    margin-bottom: 1.5rem;
-    max-width: 35em;
-  }
-  .register-link {
-    margin-right: 1rem;
-  }
-  .main-img {
-    display: none;
-  }
-  .btn {
-    padding: 0.75rem 1rem;
-  }
-  @media (min-width: 992px) {
-    .page {
-      grid-template-columns: 1fr 400px;
-      column-gap: 3rem;
-    }
-    .main-img {
-      display: block;
-    }
-  }
-`
-
-export default Landing
-```
-
-#### 11. Assets/Wrappers
-
-- css optional
-
-  Landing.jsx
-
-```jsx
-import Wrapper from '../assets/wrappers/LandingPage'
-```
-
-#### 12. Logo Component
-
-- create src/components/Logo.jsx
-- import logo and setup component
-- in components setup index.js import/export (just like pages)
-- replace in Landing
-
-  Logo.jsx
-
-```jsx
-import logo from '../assets/images/logo.svg'
-
-const Logo = () => {
-  return <img src={logo} alt="jobify" className="logo" />
-}
-
-export default Logo
-```
-
-#### 13. Logo and Images
-
-- logo built in Figma
-- [Cool Images](https://undraw.co/)
-
-### Navigation depend on user privilage
-
-#### 14. Error Page
-
-Error.jsx
-
-```jsx
-import { Link, useRouteError } from 'react-router-dom'
-import img from '../assets/images/not-found.svg'
-import Wrapper from '../assets/wrappers/ErrorPage'
-
-const Error = () => {
-  const error = useRouteError()
-  console.log(error)
-  if (error.status === 404) {
-    return (
-      <Wrapper>
+      <main className="dashboard">
+        <SmallSidebar />
+        <BigSidebar />
         <div>
-          <img src={img} alt="not found" />
-          <h3>Ohh! page not found</h3>
-          <p>We can't seem to find the page you're looking for</p>
-          <Link to="/dashboard">back home</Link>
+          <Navbar />
+          <div className="dashboard-page">
+            <Outlet />
+          </div>
         </div>
-      </Wrapper>
-    )
-  }
-  return (
-    <Wrapper>
-      <div>
-        <h3>something went wrong</h3>
-      </div>
+      </main>
     </Wrapper>
   )
 }
 
-export default Error
+export default Dashboard
 ```
 
-#### 15. Error Page CSS (optional)
+#### 3. Dashboard Layout - CSS (optional)
 
-assets/wrappers/Error.js
-
-```js
-import styled from 'styled-components'
-
-const Wrapper = styled.main`
-  min-height: 100vh;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  img {
-    width: 90vw;
-    max-width: 600px;
-    display: block;
-    margin-bottom: 2rem;
-    margin-top: -3rem;
-  }
-  h3 {
-    margin-bottom: 0.5rem;
-  }
-  p {
-    line-height: 1.5;
-    margin-top: 0.5rem;
-    margin-bottom: 1rem;
-    color: var(--text-secondary-color);
-  }
-  a {
-    color: var(--primary-500);
-    text-transform: capitalize;
-  }
-`
-
-export default Wrapper
-```
-
-#### 16. Register Page
-
-Register.jsx
-
-```jsx
-import { Logo } from '../components'
-import Wrapper from '../assets/wrappers/RegisterAndLoginPage'
-import { Link } from 'react-router-dom'
-
-const Register = () => {
-  return (
-    <Wrapper>
-      <form className="form">
-        <Logo />
-        <h4>Register</h4>
-        <div className="form-row">
-          <label htmlFor="name" className="form-label">
-            name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            className="form-input"
-            defaultValue="john"
-            required
-          />
-        </div>
-
-        <button type="submit" className="btn btn-block">
-          submit
-        </button>
-        <p>
-          Already a member?
-          <Link to="/login" className="member-btn">
-            Login
-          </Link>
-        </p>
-      </form>
-    </Wrapper>
-  )
-}
-export default Register
-```
-
-- required attribute
-
-  In HTML, the "required" attribute is used to indicate that a form input field must be filled out before the form can be submitted. It is typically applied to input elements such as text fields, checkboxes, and radio buttons. When the "required" attribute is added to an input element, the browser will prevent form submission if the field is left empty, providing a validation message to prompt the user to enter the required information.
-
-- default value
-
-In React, the defaultValue prop is used to set the initial or default value of an input component. It is similar to the value attribute in HTML, but with a slightly different behavior.
-
-#### 17. FormRow Component
-
-- create components/FormRow.jsx (export/import)
-
-FormRow.jsx
-
-```jsx
-const FormRow = ({ type, name, labelText, defaultValue = '' }) => {
-  return (
-    <div className="form-row">
-      <label htmlFor={name} className="form-label">
-        {labelText || name}
-      </label>
-      <input
-        type={type}
-        id={name}
-        name={name}
-        className="form-input"
-        defaultValue={defaultValue}
-        required
-      />
-    </div>
-  )
-}
-
-export default FormRow
-```
-
-Register.jsx
-
-```jsx
-import { Logo, FormRow } from '../components'
-import Wrapper from '../assets/wrappers/RegisterAndLoginPage'
-import { Link } from 'react-router-dom'
-
-const Register = () => {
-  return (
-    <Wrapper>
-      <form className="form">
-        <Logo />
-        <h4>Register</h4>
-        <FormRow type="text" name="name" />
-        <FormRow type="text" name="lastName" labelText="last name" />
-        <FormRow type="text" name="location" />
-        <FormRow type="email" name="email" />
-
-        <FormRow type="password" name="password" />
-
-        <button type="submit" className="btn btn-block">
-          submit
-        </button>
-        <p>
-          Already a member?
-          <Link to="/login" className="member-btn">
-            Login
-          </Link>
-        </p>
-      </form>
-    </Wrapper>
-  )
-}
-export default Register
-```
-
-#### 18. Login Page
-
-Login Page
-
-```jsx
-import { Logo, FormRow } from '../components'
-import Wrapper from '../assets/wrappers/RegisterAndLoginPage'
-
-import { Link } from 'react-router-dom'
-
-const Login = () => {
-  return (
-    <Wrapper>
-      <form className="form">
-        <Logo />
-        <h4>Login</h4>
-        <FormRow type="email" name="email" defaultValue="john@gmail.com" />
-        <FormRow type="password" name="password" defaultValue="secret123" />
-        <button type="submit" className="btn btn-block">
-          submit
-        </button>
-        <button type="button" className="btn btn-block">
-          explore the app
-        </button>
-        <p>
-          Not a member yet?
-          <Link to="/register" className="member-btn">
-            Register
-          </Link>
-        </p>
-      </form>
-    </Wrapper>
-  )
-}
-export default Login
-```
-
-#### 19. Register and Login CSS (optional)
-
-assets/wrappers/RegisterAndLoginPage.js
+assets/wrappers/DashboardLayout.jsx
 
 ```js
 import styled from 'styled-components'
 
 const Wrapper = styled.section`
-  min-height: 100vh;
-  display: grid;
-  align-items: center;
-  .logo {
-    display: block;
+  .dashboard {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .dashboard-page {
+    width: 90vw;
     margin: 0 auto;
-    margin-bottom: 1.38rem;
+    padding: 2rem 0;
   }
-  .form {
-    max-width: 400px;
-    border-top: 5px solid var(--primary-500);
-  }
-
-  h4 {
-    text-align: center;
-    margin-bottom: 1.38rem;
-  }
-  p {
-    margin-top: 1rem;2. 
-    text-align: center;
-    line-height: 1.5;
-  }
-  .btn {
-    margin-top: 1rem;
-  }
-  .member-btn {
-    color: var(--primary-500);
-    letter-spacing: var(--letter-spacing);
-    margin-left: 0.25rem;
+  @media (min-width: 992px) {
+    .dashboard {
+      grid-template-columns: auto 1fr;
+    }
+    .dashboard-page {
+      width: 90%;
+    }
   }
 `
 export default Wrapper
+```
+
+### 2. Main wrapper for (n-scalled prop / m- scalled nav)
+
+#### .4 Dashboard Context
+
+```jsx
+import { Outlet } from 'react-router-dom'
+
+import Wrapper from '../assets/wrappers/Dashboard'
+import { Navbar, BigSidebar, SmallSidebar } from '../components'
+
+import { useState, createContext, useContext } from 'react'
+const DashboardContext = createContext()
+const DashboardLayout = () => {
+  // temp
+  const user = { name: 'john' }
+
+  const [showSidebar, setShowSidebar] = useState(false)
+  const [isDarkTheme, setIsDarkTheme] = useState(false)
+
+  const toggleDarkTheme = () => {
+    console.log('toggle dark theme')
+  }
+
+  const toggleSidebar = () => {
+    setShowSidebar(!showSidebar)
+  }
+
+  const logoutUser = async () => {
+    console.log('logout user')
+  }
+  return (
+    <DashboardContext.Provider
+      value={{
+        user,
+        showSidebar,
+        isDarkTheme,
+        toggleDarkTheme,
+        toggleSidebar,
+        logoutUser,
+      }}
+    >
+      <Wrapper>
+        <main className="dashboard">
+          <SmallSidebar />
+          <BigSidebar />
+          <div>
+            <Navbar />
+            <div className="dashboard-page">
+              <Outlet />
+            </div>
+          </div>
+        </main>
+      </Wrapper>
+    </DashboardContext.Provider>
+  )
+}
+
+export const useDashboardContext = () => useContext(DashboardContext)
+
+export default Dashboard
+```
+
+#### .5 React Icons
+
+[React Icons](https://react-icons.github.io/react-icons/)
+
+```sh
+npm install react-icons@4.8.0
+```
+
+Navbar.jsx
+
+```jsx
+
+import {FaHome} from 'react-icons/fa'
+const Navbar = () => {
+  return (
+    <div>
+      <h2>navbar</h2>
+      <FaHome>
+    </div>
+  )
+}
+
+```
+
+#### .6 Navbar - Initial Setup
+
+```jsx
+import Wrapper from '../assets/wrappers/Navbar'
+import { FaAlignLeft } from 'react-icons/fa'
+import Logo from './Logo'
+
+import { useDashboardContext } from '../pages/DashboardLayout'
+const Navbar = () => {
+  const { toggleSidebar } = useDashboardContext()
+  return (
+    <Wrapper>
+      <div className="nav-center">
+        <button type="button" className="toggle-btn" onClick={toggleSidebar}>
+          <FaAlignLeft />
+        </button>
+        <div>
+          <Logo />
+          <h4 className="logo-text">dashboard</h4>
+        </div>
+        <div className="btn-container">toggle/logout</div>
+      </div>
+    </Wrapper>
+  )
+}
+
+export default Navbar
+```
+
+#### .7 Navbar CSS (optional)
+
+assets/wrappers/Navbar.js
+
+```js
+import styled from 'styled-components'
+
+const Wrapper = styled.nav`
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 0px 0px rgba(0, 0, 0, 0.1);
+  background: var(--background-secondary-color);
+  .logo {
+    display: flex;
+    align-items: center;
+    width: 100px;
+  }
+  .nav-center {
+    display: flex;
+    width: 90vw;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .toggle-btn {
+    background: transparent;
+    border-color: transparent;
+    font-size: 1.75rem;
+    color: var(--primary-500);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  .btn-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-text {
+    display: none;
+  }
+  @media (min-width: 992px) {
+    position: sticky;
+    top: 0;
+
+    .nav-center {
+      width: 90%;
+    }
+    .logo {
+      display: none;
+    }
+    .logo-text {
+      display: block;
+    }
+  }
+`
+export default Wrapper
+```
+
+### 3. m-scalled nav extend context
+
+#### 8. Links
+
+- create src/utils/links.jsx
+
+```jsx
+import React from 'react'
+
+import { IoBarChartSharp } from 'react-icons/io5'
+import { MdQueryStats } from 'react-icons/md'
+import { FaWpforms } from 'react-icons/fa'
+import { ImProfile } from 'react-icons/im'
+import { MdAdminPanelSettings } from 'react-icons/md'
+
+const links = [
+  { text: 'add job', path: '.', icon: <FaWpforms /> },
+  { text: 'all jobs', path: 'all-jobs', icon: <MdQueryStats /> },
+  { text: 'stats', path: 'stats', icon: <IoBarChartSharp /> },
+  { text: 'profile', path: 'profile', icon: <ImProfile /> },
+  { text: 'admin', path: 'admin', icon: <MdAdminPanelSettings /> },
+]
+
+export default links
+```
+
+- in a second, we will discuss why '.' in "add job"
+
+#### 9. SmallSidebar
+
+SmallSidebar
+
+```jsx
+import Wrapper from '../assets/wrappers/SmallSidebar'
+import { FaTimes } from 'react-icons/fa'
+
+import Logo from './Logo'
+import { NavLink } from 'react-router-dom'
+import links from '../utils/links'
+import { useDashboardContext } from '../pages/DashboardLayout'
+
+const SmallSidebar = () => {
+  const { showSidebar, toggleSidebar } = useDashboardContext()
+  return (
+    <Wrapper>
+      <div
+        className={
+          showSidebar ? 'sidebar-container show-sidebar' : 'sidebar-container'
+        }
+      >
+        <div className="content">
+          <button type="button" className="close-btn" onClick={toggleSidebar}>
+            <FaTimes />
+          </button>
+          <header>
+            <Logo />
+          </header>
+          <div className="nav-links">
+            {links.map((link) => {
+              const { text, path, icon } = link
+
+              return (
+                <NavLink
+                  to={path}
+                  key={text}
+                  className="nav-link"
+                  onClick={toggleSidebar}
+                  // will discuss in a second
+                  end
+                >
+                  <span className="icon">{icon}</span>
+                  {text}
+                </NavLink>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    </Wrapper>
+  )
+}
+
+export default SmallSidebar
+```
+
+- cover '.' path ,active class and 'end' prop
+
+#### 10. Small Sidebar CSS (optional)
+
+assets/wrappers/SmallSidebar.js
+
+```js
+import styled from 'styled-components'
+
+const Wrapper = styled.aside`
+  @media (min-width: 992px) {
+    display: none;
+  }
+  .sidebar-container {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -1;
+    opacity: 0;
+    transition: var(--transition);
+    visibility: hidden;
+  }
+  .show-sidebar {
+    z-index: 99;
+    opacity: 1;
+    visibility: visible;
+  }
+  .content {
+    background: var(--background-secondary-color);
+    width: var(--fluid-width);
+    height: 95vh;
+    border-radius: var(--border-radius);
+    padding: 4rem 2rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: transparent;
+    border-color: transparent;
+    font-size: 2rem;
+    color: var(--red-dark);
+    cursor: pointer;
+  }
+  .nav-links {
+    padding-top: 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    color: var(--text-secondary-color);
+    padding: 1rem 0;
+    text-transform: capitalize;
+    transition: var(--transition);
+  }
+  .nav-link:hover {
+    color: var(--primary-500);
+  }
+
+  .icon {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    display: grid;
+    place-items: center;
+  }
+  .active {
+    color: var(--primary-500);
+  }
+`
+export default Wrapper
+```
+
+#### 11. NavLinks
+
+- components/NavLinks.jsx
+
+```jsx
+import { useDashboardContext } from '../pages/DashboardLayout'
+import links from '../utils/links'
+import { NavLink } from 'react-router-dom'
+
+const NavLinks = () => {
+  const { user, toggleSidebar } = useDashboardContext()
+
+  return (
+    <div className="nav-links">
+      {links.map((link) => {
+        const { text, path, icon } = link
+        // admin user
+        return (
+          <NavLink
+            to={path}
+            key={text}
+            onClick={toggleSidebar}
+            className="nav-link"
+            end
+          >
+            <span className="icon">{icon}</span>
+            {text}
+          </NavLink>
+        )
+      })}
+    </div>
+  )
+}
+
+export default NavLinks
+```
+
+### 4. Contitional container
+
+#### 12. Big Sidebar
+
+```jsx
+import NavLinks from './NavLinks'
+import Logo from '../components/Logo'
+import Wrapper from '../assets/wrappers/BigSidebar'
+import { useDashboardContext } from '../pages/DashboardLayout'
+
+const BigSidebar = () => {
+  const { showSidebar } = useDashboardContext()
+  return (
+    <Wrapper>
+      <div
+        className={
+          showSidebar ? 'sidebar-container ' : 'sidebar-container show-sidebar'
+        }
+      >
+        <div className="content">
+          <header>
+            <Logo />
+          </header>
+          <NavLinks isBigSidebar />
+        </div>
+      </div>
+    </Wrapper>
+  )
+}
+
+export default BigSidebar
+```
+
+```jsx
+const NavLinks = ({ isBigSidebar }) => {
+  const { user, toggleSidebar } = useDashboardContext()
+
+  return (
+    <div className="nav-links">
+      {links.map((link) => {
+        const { text, path, icon } = link
+        // admin user
+        return (
+          <NavLink
+            to={path}
+            key={text}
+            onClick={isBigSidebar ? null : toggleSidebar}
+            className="nav-link"
+            end
+          >
+            <span className="icon">{icon}</span>
+            {text}
+          </NavLink>
+        )
+      })}
+    </div>
+  )
+}
+
+export default NavLinks
+```
+
+#### 13. BigSidebar CSS (optional)
+
+assets/wrappers/BigSidebar.js
+
+```js
+import styled from 'styled-components'
+
+const Wrapper = styled.aside`
+  display: none;
+  @media (min-width: 992px) {
+    display: block;
+    box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.1);
+    .sidebar-container {
+      background: var(--background-secondary-color);
+      min-height: 100vh;
+      height: 100%;
+      width: 250px;
+      margin-left: -250px;
+      transition: margin-left 0.3s ease-in-out;
+    }
+    .content {
+      position: sticky;
+      top: 0;
+    }
+    .show-sidebar {
+      margin-left: 0;
+    }
+    header {
+      height: 6rem;
+      display: flex;
+      align-items: center;
+      padding-left: 2.5rem;
+    }
+    .nav-links {
+      padding-top: 2rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      color: var(--text-secondary-color);
+      padding: 1rem 0;
+      padding-left: 2.5rem;
+      text-transform: capitalize;
+      transition: padding-left 0.3s ease-in-out;
+    }
+    .nav-link:hover {
+      padding-left: 3rem;
+      color: var(--primary-500);
+      transition: var(--transition);
+    }
+
+    .icon {
+      font-size: 1.5rem;
+      margin-right: 1rem;
+      display: grid;
+      place-items: center;
+    }
+    .active {
+      color: var(--primary-500);
+    }
+  }
+`
+export default Wrapper
+```
+
+#### 14. LogoutContainer
+
+components/LogoutContainer.jsx
+
+```jsx
+import { FaUserCircle, FaCaretDown } from 'react-icons/fa'
+import Wrapper from '../assets/wrappers/LogoutContainer'
+import { useState } from 'react'
+import { useDashboardContext } from '../pages/DashboardLayout'
+
+const LogoutContainer = () => {
+  const [showLogout, setShowLogout] = useState(false)
+  const { user, logoutUser } = useDashboardContext()
+
+  return (
+    <Wrapper>
+      <button
+        type="button"
+        className="btn logout-btn"
+        onClick={() => setShowLogout(!showLogout)}
+      >
+        {user.avatar ? (
+          <img src={user.avatar} alt="avatar" className="img" />
+        ) : (
+          <FaUserCircle />
+        )}
+
+        {user?.name}
+        <FaCaretDown />
+      </button>
+      <div className={showLogout ? 'dropdown show-dropdown' : 'dropdown'}>
+        <button type="button" className="dropdown-btn" onClick={logoutUser}>
+          logout
+        </button>
+      </div>
+    </Wrapper>
+  )
+}
+
+export default LogoutContainer
+```
+
+component/Navbar.jsx
+
+```jsx
+import LogoutContainer from './LogoutContainer'
+
+const Navbar = () => {
+  const { toggleSidebar } = useDashboardContext()
+
+  return (
+    <Wrapper>
+      <div className="nav-center">
+        <button type="button" className="toggle-btn" onClick={toggleSidebar}>
+          <FaAlignLeft />
+        </button>
+        <div>
+          <Logo />
+          <h4 className="logo-text">dashboard</h4>
+        </div>
+        <div className="btn-container">
+          <LogoutContainer />
+        </div>
+      </div>
+    </Wrapper>
+  )
+}
+export default Navbar
+```
+
+#### 15. LogoutContainer CSS (optional)
+
+assets/wrappers/LogoutContainer.js
+
+```js
+import styled from 'styled-components'
+
+const Wrapper = styled.div`
+  position: relative;
+
+  .logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0 0.5rem;
+  }
+  .img {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+  }
+  .dropdown {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    width: 100%;
+    box-shadow: var(--shadow-2);
+    text-align: center;
+    visibility: hidden;
+    border-radius: var(--border-radius);
+    background: var(--primary-500);
+  }
+  .show-dropdown {
+    visibility: visible;
+  }
+  .dropdown-btn {
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+    background: transparent;
+    border-color: transparent;
+    color: var(--white);
+    letter-spacing: var(--letter-spacing);
+    text-transform: capitalize;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+`
+
+export default Wrapper
+```
+
+## Navigate and local storage
+
+### 1. insert conditional logic in useState (when (time) couple)
+
+#### 16. ThemeToggle
+
+components/ThemeToggle.jsx
+
+```jsx
+import { BsFillSunFill, BsFillMoonFill } from 'react-icons/bs'
+import Wrapper from '../assets/wrappers/ThemeToggle'
+import { useDashboardContext } from '../pages/DashboardLayout'
+
+const ThemeToggle = () => {
+  const { isDarkTheme, toggleDarkTheme } = useDashboardContext()
+  return (
+    <Wrapper onClick={toggleDarkTheme}>
+      {isDarkTheme ? (
+        <BsFillSunFill className="toggle-icon" />
+      ) : (
+        <BsFillMoonFill className="toggle-icon" />
+      )}
+    </Wrapper>
+  )
+}
+
+export default ThemeToggle
+```
+
+Navbar.jsx
+
+```jsx
+<div className="btn-container">
+  <ThemeToggle />
+</div>
+```
+
+#### 17. ThemeToggle CSS (optional)
+
+assets/wrappers/ThemeToggle.js
+
+```js
+import styled from 'styled-components'
+
+const Wrapper = styled.div`
+  background: transparent;
+  border-color: transparent;
+  width: 3.5rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+
+  .toggle-icon {
+    font-size: 1.15rem;
+    color: var(--text-color);
+  }
+`
+export default Wrapper
+```
+
+#### 18. Dark Theme - Logic
+
+DashboardLayout.jsx
+
+```jsx
+const toggleDarkTheme = () => {
+  const newDarkTheme = !isDarkTheme
+  setIsDarkTheme(newDarkTheme)
+  document.body.classList.toggle('dark-theme', newDarkTheme)
+  localStorage.setItem('darkTheme', newDarkTheme)
+}
+```
+
+#### 19. Access Theme
+
+App.jsx
+
+```jsx
+const checkDefaultTheme = () => {
+  const isDarkTheme =
+    localStorage.getItem('darkTheme') === 'true'
+  document.body.classList.toggle('dark-theme', isDarkTheme);
+  return isDarkTheme;
+};
+
+const isDarkThemeEnabled = checkDefaultTheme();
+
+{
+path: 'dashboard',
+element: <DashboardLayout isDarkThemeEnabled={isDarkThemeEnabled} />,
+}
+```
+
+DashboardLayout.jsx
+
+```jsx
+const Dashboard = ({ isDarkThemeEnabled }) => {
+  const [isDarkTheme, setIsDarkTheme] = useState(isDarkThemeEnabled)
+}
+```
+
+#### 20. Dark Theme CSS
+
+index.css
+
+```css
+:root {
+  /* DARK MODE */
+
+  --dark-mode-bg-color: #333;
+  --dark-mode-text-color: #f0f0f0;
+  --dark-mode-bg-secondary-color: #3f3f3f;
+  --dark-mode-text-secondary-color: var(--grey-300);
+
+  --background-color: var(--grey-50);
+  --text-color: var(--grey-900);
+  --background-secondary-color: var(--white);
+  --text-secondary-color: var(--grey-500);
+}
+
+.dark-theme {
+  --text-color: var(--dark-mode-text-color);
+  --background-color: var(--dark-mode-bg-color);
+  --text-secondary-color: var(--dark-mode-text-secondary-color);
+  --background-secondary-color: var(--dark-mode-bg-secondary-color);
+}
+
+body {
+  background: var(--background-color);
+  color: var(--text-color);
+}
 ```

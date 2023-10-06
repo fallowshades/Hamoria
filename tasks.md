@@ -38,19 +38,19 @@ Story: advanced navigation
 ---[x]test bas redirect url
 [x] default FormRow components
 
-#### Layer 2 v0.0.1
+#### Layer 2 v0.0.3
 
 []global context
 
 []partitioned logic of nav and body
 ---[]Layout fixed/relative 2 column set up
----[]main wrapper for m/n scalled prop drilling and nav privilage
----[]m-scalled navigation of existing content extend context
+---[]main wrapper for m/n scaled prop drilling and nav privilege
+---[]m-scaled navigation of existing content extend context
 ---[]Conditional Containers
------[] navlinks are aware of non default sidebar
+-----[] nav links are aware of non default sidebar
 -----[]nav toggle sidebar default/non default and set conditional user?.name for logout container
 []Navigate and local storage
----[]insert theam when app accss local storage
+---[]insert theam when app access local storage
 
 ## Backend
 
