@@ -87,7 +87,7 @@ Story: advanced navigation
 [x]Connection dependence
 ---[x]constants with domain restrictions
 ---[x]Test create model
-[]Expressive module application with middleware
+[x]Expressive module application with middleware
 ---[x]status codes
 ---[x]errorHandlerMiddleware
 ---[x]CustomError bad requests
