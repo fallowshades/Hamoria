@@ -81,9 +81,9 @@ Story: advanced navigation
 
 #### Erroneous flow
 
-[]white and black box error flow support routes
+[x]white and black box error flow support routes
 ---[x]Test something went wrong
----[]set up routes
+---[c]set up routes
 []Connection dependence
 ---[]constants with domain restrictions
 []Expressive module application with middleware
