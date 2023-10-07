@@ -96,8 +96,9 @@ Story: advanced navigation
 
 #### type Domain restriction
 
-[]general validation
----[]creation validation
+[x]general validation
+---[x]creation validation
+---[]validate id
 
 #### user Domain restrictions
 

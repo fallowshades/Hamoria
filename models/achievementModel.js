@@ -16,7 +16,7 @@ const AchievementSchema = new mongoose.Schema(
 
     type: {
       type: String,
-      enum: [ACHIEVEMENT_STATUS],
+      enum: [ACHIEVEMENT_TYPE],
       default: ACHIEVEMENT_TYPE.EXPLORATION,
     },
     dateOfCompletion: {

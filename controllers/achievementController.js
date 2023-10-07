@@ -8,7 +8,7 @@ export const getAllAchievements = async (req, res) => {
 }
 
 export const createAchievement = async (req, res) => {
-  const { description } = req.body
+  const { description, status, points, type, dateOfCompletion } = req.body
 
   const achievement = await Achievement.create({ description })
   res.status(201).json({ achievement })

@@ -1,5 +1,7 @@
 import { body, validationResult } from 'express-validator'
-import { BadRequestError } from '../errors/customErrors'
+import { BadRequestError } from '../errors/customErrors.js'
+import { ACHIEVEMENT_STATUS, ACHIEVEMENT_TYPE } from '../utils/constants.js'
+
 const withValidationErrors = (validateValues) => {
   return [
     validateValues,
@@ -13,3 +15,13 @@ const withValidationErrors = (validateValues) => {
     },
   ]
 }
+
+export const validateAchievementInput = withValidationErrors([
+  body('description').notEmpty().withMessage('description is required'),
+  body('status')
+    .isIn(Object.values(ACHIEVEMENT_STATUS))
+    .withMessage('invalid status value'),
+  body('type')
+    .isIn(Object.values(ACHIEVEMENT_TYPE))
+    .withMessage('invalid type value'),
+])
