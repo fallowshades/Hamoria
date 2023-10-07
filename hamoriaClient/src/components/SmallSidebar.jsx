@@ -2,7 +2,7 @@ import Wrapper from '../assets/wrappers/SmallSidebar'
 import { FaTimes } from 'react-icons/fa'
 
 import Logo from './Logo'
-import { NavLink } from 'react-router-dom'
+import { NavLink } from './NavLinks'
 import links from '../utils/links'
 import { useDashboardContext } from '../pages/DashboardLayout'
 
