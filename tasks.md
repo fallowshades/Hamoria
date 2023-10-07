@@ -76,7 +76,8 @@ Story: advanced navigation
 
 #### successive Flow
 
-[]basic Crud with Middleware
+[x]basic Crud with Middleware
+---[x]Test all crud methods as if was server
 
 #### Erroneous flow
 
