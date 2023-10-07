@@ -43,7 +43,7 @@ Story: advanced navigation
 []global context
 
 []partitioned logic of nav and body
----[]Layout fixed/relative 2 column set up
+---[x]Layout fixed/relative 2 column set up
 ---[]main wrapper for m/n scaled prop drilling and nav privilege
 ---[]m-scaled navigation of existing content extend context
 ---[]Conditional Containers
