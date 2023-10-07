@@ -2,8 +2,8 @@ import Achievement from '../models/achievementModel.js'
 import 'express-async-errors'
 
 export const getAllAchievements = async (req, res) => {
-  const achievement = await Achievement.find({})
-  res.status(200).json({ achievement })
+  const achievements = await Achievement.find({})
+  res.status(tatusCodes.CREATED).json({ achievements })
 }
 
 export const createAchievement = async (req, res) => {
@@ -19,7 +19,7 @@ export const getAchievement = async (req, res) => {
   if (!achievement) {
     return res.status(404).json({ msg: `no achievement with id ${id}` })
   }
-  res.status(200).json({ achievement })
+  res.status(StatusCodes.OK).json({ achievement })
 }
 
 export const updateAchievement = async (req, res) => {
@@ -33,7 +33,7 @@ export const updateAchievement = async (req, res) => {
     return res.status(404).json({ msg: `no achievement with id ${id}` })
   }
 
-  res.status(200).json({ description: updatedAchievement })
+  res.status(StatusCodes.OK).json({ description: updatedAchievement })
 }
 
 export const deleteAchievement = async (req, res) => {
@@ -43,5 +43,5 @@ export const deleteAchievement = async (req, res) => {
   if (!removedAchievement) {
     return res.status(404).json({ msg: `no job with id ${id}` })
   }
-  res.status(200).json({ achievement: removedAchievement })
+  res.status(StatusCodes.OK).json({ achievement: removedAchievement })
 }
