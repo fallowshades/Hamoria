@@ -1,331 +1,316 @@
-# Proper remote set up for identification
+# Iteration 3 layer 2 Effective validate data
 
-## SDK to remote architecture
+## 1 layer behave as 2 layer existence check
 
-### Successive flow
+### Valid value in closed range
 
-#### 1. Basic CRUD
+#### 1. Validation Layer
 
-- create jobs array where each item is an object with following properties
-  id, description, position
-- create routes to handle - create, read, update and delete functionalities
-
-#### 2. Get All Achievements
-
-[Nanoid](https://www.npmjs.com/package/nanoid)
-
-The nanoid package is a software library used for generating unique and compact identifiers in web applications or databases. It creates short and URL-safe IDs by combining random characters from a set of 64 characters. Nanoid is a popular choice due to its simplicity, efficiency, and collision-resistant nature.
+[Express Validator](https://express-validator.github.io/docs/)
 
 ```sh
-npm i nanoid@4.0.2
+npm i express-validator@7.0.1
 ```
+
+#### 2. Test Route
 
 server.js
 
 ```js
-import { nanoid } from 'nanoid'
-
-let achievements = [
-  { id: nanoid(), description: 'apple', track: 'front-end' },
-  { id: nanoid(), description: 'google', track: 'back-end' },
-]
-
-app.get('/api/v1/achievements', (req, res) => {
-  res.status(200).json({ achievements })
+app.post('/api/v1/test', (req, res) => {
+  const { name } = req.body
+  res.json({ msg: `hello ${name}` })
 })
 ```
 
-#### 3. Create, FindOne, Modify and Delete
+#### 3. Express Validator
 
 ```js
-// CREATE JOB
+import { body, validationResult } from 'express-validator'
 
-app.post('/api/v1/jobs', (req, res) => {
-  const { company, position } = req.body
-  if (!company || !position) {
-    return res.status(400).json({ msg: 'please provide company and position' })
+app.post(
+  '/api/v1/test',
+  [body('name').notEmpty().withMessage('name is required')],
+  (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      const errorMessages = errors.array().map((error) => error.msg)
+      return res.status(400).json({ errors: errorMessages })
+    }
+    next()
+  },
+  (req, res) => {
+    const { name } = req.body
+    res.json({ msg: `hello ${name}` })
   }
-  const id = nanoid(10)
-  // console.log(id);
-  const job = { id, company, track }
-  jobs.push(job)
-  res.status(200).json({ job })
-})
-
-// GET SINGLE JOB
-
-app.get('/api/v1/jobs/:id', (req, res) => {
-  const { id } = req.params
-  const job = jobs.find((job) => job.id === id)
-  if (!job) {
-    return res.status(404).json({ msg: `no job with id ${id}` })
-  }
-  res.status(200).json({ job })
-})
-
-// EDIT JOB
-
-app.patch('/api/v1/jobs/:id', (req, res) => {
-  const { description, track } = req.body
-  if (!description || !track) {
-    return res.status(400).json({ msg: 'please provide description and track' })
-  }
-  const { id } = req.params
-  const job = jobs.find((job) => job.id === id)
-  if (!job) {
-    return res.status(404).json({ msg: `no achievement with id ${id}` })
-  }
-
-  achievement.description = company
-  job.position = position
-  res.status(200).json({ msg: 'achievement modified', achievement })
-})
-
-// DELETE JOB
-
-app.delete('/api/v1/achivements/:id', (req, res) => {
-  const { id } = req.params
-  const job = jobs.find((job) => job.id === id)
-  if (!job) {
-    return res.status(404).json({ msg: `no achievement with id ${id}` })
-  }
-  const newAchievements = jobs.filter((job) => job.id !== id)
-  achievement = newAchievements
-
-  res.status(200).json({ msg: 'achievement deleted' })
-})
+)
 ```
 
-### Erroneous flow
+#### 4. Validation Middleware
 
-#### 4. Not Found Middleware
-
-```js
-app.use('*', (req, res) => {
-  res.status(404).json({ msg: 'not found' })
-})
-```
-
-#### 5. Error Middleware
+middleware/validationMiddleware.js
 
 ```js
-app.use((err, req, res, next) => {
-  console.log(err)
-  res.status(500).json({ msg: 'something went wrong' })
-})
-```
-
-#### 6. Not Found and Error Middleware
-
-The "not found" middleware in Express.js is used when a request is made to a route that does not exist. It catches these requests and responds with a 404 status code, indicating that the requested resource was not found.
-
-On the other hand, the "error" middleware in Express.js is used to handle any errors that occur during the processing of a request. It is typically used to catch unexpected errors or exceptions that are not explicitly handled in the application code. It logs the error and sends a 500 status code, indicating an internal server error.
-
-In summary, the "not found" middleware is specifically designed to handle requests for non-existent routes, while the "error" middleware is a catch-all for handling unexpected errors that occur during request processing.
-
-- make a request to "/achievements"
-
-```js
-// GET ALL JOBS
-app.get('/api/v1/jobs', (req, res) => {
-  // console.log(jobss);
-  res.status(200).json({ jobs })
-})
-
-// GET SINGLE JOB
-app.get('/api/v1/jobs/:id', (req, res) => {
-  const { id } = req.params
-  const job = jobs.find((job) => job.id === id)
-  if (!job) {
-    throw new Error('no job with that id')
-    return res.status(404).json({ msg: `no job with id ${id}` })
-  }
-  res.status(200).json({ job })
-})
-```
-
-#### 7. Controller and Router
-
-setup controllers and router
-
-controllers/jobController.js
-
-```js
-import { nanoid } from 'nanoid'
-
-let jobs = [
-  { id: nanoid(), company: 'apple', position: 'front-end developer' },
-  { id: nanoid(), company: 'google', position: 'back-end developer' },
-]
-
-export const getAllJobs = async (req, res) => {
-  res.status(200).json({ jobs })
+import { body, validationResult } from 'express-validator'
+import { BadRequestError } from '../errors/customErrors'
+const withValidationErrors = (validateValues) => {
+  return [
+    validateValues,
+    (req, res, next) => {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        const errorMessages = errors.array().map((error) => error.msg)
+        throw new BadRequestError(errorMessages)
+      }
+      next()
+    },
+  ]
 }
 
-export const createJob = async (req, res) => {
-  const { company, position } = req.body
+export const validateTest = withValidationErrors([
+  body('name')
+    .notEmpty()
+    .withMessage('name is required')
+    .isLength({ min: 3, max: 50 })
+    .withMessage('name must be between 3 and 50 characters long')
+    .trim(),
+])
+```
 
-  if (!company || !position) {
-    return res.status(400).json({ msg: 'please provide company and position' })
-  }
-  const id = nanoid(10)
-  const job = { id, company, position }
-  jobs.push(job)
-  res.status(200).json({ job })
+belive he console.log
+
+#### 5. Remove Test Case From Server
+
+### check achievement
+
+#### 6. Setup Constants
+
+utils/constants.js
+
+```js
+export const ACHIEVEMENT_STATUS = {
+  INACTIVE: 'inactive',
+  ACTIVATED: 'activated',
+  COMPLETE: 'complete',
 }
 
-export const getJob = async (req, res) => {
-  const { id } = req.params
-  const job = jobs.find((job) => job.id === id)
-  if (!job) {
-    // throw new Error('no job with that id');
-    return res.status(404).json({ msg: `no job with id ${id}` })
-  }
-  res.status(200).json({ job })
-}
-
-export const updateJob = async (req, res) => {
-  const { company, position } = req.body
-  if (!company || !position) {
-    return res.status(400).json({ msg: 'please provide company and position' })
-  }
-  const { id } = req.params
-  const job = jobs.find((job) => job.id === id)
-  if (!job) {
-    return res.status(404).json({ msg: `no job with id ${id}` })
-  }
-
-  job.company = company
-  job.position = position
-  res.status(200).json({ msg: 'job modified', job })
-}
-
-export const deleteJob = async (req, res) => {
-  const { id } = req.params
-  const job = jobs.find((job) => job.id === id)
-  if (!job) {
-    return res.status(404).json({ msg: `no job with id ${id}` })
-  }
-  const newJobs = jobs.filter((job) => job.id !== id)
-  jobs = newJobs
-
-  res.status(200).json({ msg: 'job deleted' })
+export const ACHIEVEMENT_TYPE = {
+  PROGRESSIVE: 'progressive',
+  EXPLORATION: 'exploration',
+  TIME_BASED: 'time-based',
+  SKILL_BASED: 'skill-based',
+  SOCIAL: 'social',
+  COLLECTION: 'collection',
+  STORYLINE: 'storyline',
+  EVENT: 'event',
+  HIDDEN: 'hidden',
+  LIFETIME: 'lifetime',
 }
 ```
 
-routes/jobRouter.js
-
-```js
-import { Router } from 'express'
-const router = Router()
-
-import {
-  getAllJobs,
-  getJob,
-  createJob,
-  updateJob,
-  deleteJob,
-} from '../controllers/jobController.js'
-
-// router.get('/', getAllJobs);
-// router.post('/', createJob);
-
-router.route('/').get(getAllJobs).post(createJob)
-router.route('/:id').get(getJob).patch(updateJob).delete(deleteJob)
-
-export default router
-```
-
-server.js
-
-```js
-import jobRouter from './routers/jobRouter.js'
-app.use('/api/v1/jobs', jobRouter)
-```
-
-## Uncerntainty in-box try-catch
-
-### Connection dependence
-
-#### 8. MongoDB
-
-[MongoDb](https://www.mongodb.com/)
-
-MongoDB is a popular NoSQL database that provides a flexible and scalable approach to storing and retrieving data. It uses a document-oriented model, where data is organized into collections of JSON-like documents. MongoDB offers high performance, horizontal scalability, and easy integration with modern development frameworks, making it suitable for handling diverse data types and handling large-scale applications.
-
-MongoDB Atlas is a fully managed cloud database service provided by MongoDB, offering automated deployment, scaling, and monitoring of MongoDB clusters, allowing developers to focus on building their applications without worrying about infrastructure management.
-
-#### 9. Mongoosejs
-
-[Mongoose](https://mongoosejs.com/)
-
-Mongoose is an Object Data Modeling (ODM) library for Node.js that provides a straightforward and elegant way to interact with MongoDB. It allows developers to define schemas and models for their data, providing structure and validation. Mongoose also offers features like data querying, middleware, and support for data relationships, making it a powerful tool for building MongoDB-based applications.
-
-```sh
-npm i mongoose@7.0.5
-```
-
-server.js
+models/AchievementModel.js
 
 ```js
 import mongoose from 'mongoose'
-
-try {
-  await mongoose.connect(process.env.MONGO_URL)
-  app.listen(port, () => {
-    console.log(`server running on PORT ${port}....`)
-  })
-} catch (error) {
-  console.log(error)
-  process.exit(1)
-}
-```
-
-#### 10. Achievement Model
-
-models/achievementModel.js
-
-enum - data type represents a field with a predefined set of values
-
-```js
-import mongoose from 'mongoose'
-
+import { ACHIEVEMENT_STATUS, ACHIEVEMENT_TYPE } from '../utils/constants.js'
 const AchievementSchema = new mongoose.Schema(
   {
     description: String,
     //uh mb later
-    status_type: enum...
-    achivementtype...
+    status: {
+      type: String,
+      enum: [ACHIEVEMENT_STATUS],
+      default: ACHIEVEMENT_STATUS.INACTIVE,
+    },
+    points: {
+      type: Number,
+      default: 0,
+    },
+
+    type: {
+      type: String,
+      enum: [ACHIEVEMENT_STATUS],
+      default: ACHIEVEMENT_TYPE.EXPLORATION,
+    },
+    dateOfCompletion: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true }
 )
-
-export default mongoose.model('achievement', AchievementSchema)
 ```
 
-#### 11. Create achievement with routes
+#### 7. Validate Create Achievement
 
-achievementController.js
+validationMiddleware.js
 
 ```js
+import { ACHIEVEMENT_STATUS, ACHIEVEMENT_TYPE } from '../utils/constants.js'
+
+export const validateAchievementInput = withValidationErrors([
+  body('description').notEmpty().withMessage('description is required'),
+  body('completion_status')
+    .isIn(Object.values(ACHIEVEMENT_STATUS))
+    .withMessage('invalid status value'),
+  body('jobType')
+    .isIn(Object.values(ACHIEVEMENT_TYPE))
+    .withMessage('invalid job type'),
+])
+```
+
+```js
+import { validateAchievementInput } from '../middleware/validationMiddleware.js'
+
+router
+  .route('/')
+  .get(getAllAchievements)
+  .post(validateAchievementInput, createAchievement)
+
+router
+  .route('/:id')
+  .get(getAchievement)
+  .delete(deleteAchievement)
+  .patch(validateAchievementInput, updateAchievement)
+```
+
+- create Achievement request
+
+```json
+{
+  "company": "coding addict",
+  "position": "backend-end",
+  "jobStatus": "pending",
+  "jobType": "full-time",
+  "jobLocation": "florida"
+}
+```
+
+#### 8. Validate ID Parameter
+
+validationMiddleware.js
+
+```js
+import mongoose from 'mongoose'
+import { param } from 'express-validator'
+
+export const validateIdParam = withValidationErrors([
+  param('id')
+    .custom((value) => mongoose.Types.ObjectId.isValid(value))
+    .withMessage('invalid MongoDB id'),
+])
+```
+
+```js
+export const validateIdParam = withValidationErrors([
+  param('id').custom(async (value) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value)
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
+    const achievement = await Achievement.findById(value)
+    if (!achievement)
+      throw new NotFoundError(`no achievement with id : ${value}`)
+  }),
+])
+```
+
+```js
+import { body, param, validationResult } from 'express-validator'
+import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
+import { ACHIEVEMENT_STATUS, ACHIEVEMENT_TYPE } from '../utils/constants.js'
+import mongoose from 'mongoose'
 import Achievement from '../models/achievementModel.js'
 
-export const createAchievement = async (req, res) => {
-  const { description } = req.body
-  const achievement = await Achievement.create({ description })
-  res.status(201).json({ achievement })
+const withValidationErrors = (validateValues) => {
+  return [
+    validateValues,
+    (req, res, next) => {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        const errorMessages = errors.array().map((error) => error.msg)
+        if (errorMessages[0].startsWith('no achievement')) {
+          throw new NotFoundError(errorMessages)
+        }
+        throw new BadRequestError(errorMessages)
+      }
+      next()
+    },
+  ]
 }
 ```
 
 achievementRouter.js
 
 ```js
+import {
+  validateAchievementInput,
+  validateIdParam,
+} from '../middleware/validationMiddleware.js'
+
+router
+  .route('/:id')
+  .get(validateIdParam, getAchievement)
+  .delete(validateIdParam, deleteAchievement)
+```
+
+- remove NotFoundError from getJob, updateJob, deleteJob controllers
+
+#### 9. Clean DB
+
+## user 1 element existence check may throw
+
+### identifiable data on DB (common, admin)
+
+#### .10 User Model
+
+models/UserModel.js
+
+```js
+import mongoose from 'mongoose'
+
+const UserSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  password: String,
+  lastName: {
+    type: String,
+    default: 'lastName',
+  },
+  location: {
+    type: String,
+    default: 'my city',
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user',
+  },
+})
+
+export default mongoose.model('User', UserSchema)
+```
+
+#### 11. User Controller and Router
+
+controllers/authController.js
+
+```js
+export const register = async (req, res) => {
+  res.send('register')
+}
+export const login = async (req, res) => {
+  res.send('login')
+}
+```
+
+routers/authRouter.js
+
+```js
 import { Router } from 'express'
+import { register, login } from '../controllers/authController.js'
 const router = Router()
 
-import { createAchievement } from '../controllers/achievementController.js'
-
-router.route('/').post(createAchievement)
+router.post('/register', register)
+router.post('/login', login)
 
 export default router
 ```
@@ -333,287 +318,83 @@ export default router
 server.js
 
 ```js
-import achievementRouter from './routes/achievementRouter.js'
-app.use('/api/v1/achievements', achievementRouter)
+import authRouter from './routes/authRouter.js'
+
+app.use('/api/v1/auth', authRouter)
 ```
 
-#### 12. Try / Catch (meh i used express-async-error before)
+#### 12. Create User - Initial Setup
 
-jobController.js
-
-```js
-export const createJob = async (req, res) => {
-  const { company, position } = req.body
-  try {
-    const job = await Job.create('something')
-    res.status(201).json({ job })
-  } catch (error) {
-    res.status(500).json({ msg: 'server error' })
-  }
-}
-```
-
-#### 13. express-async-errors
-
-The "express-async-errors" package is an Express.js middleware that helps handle errors that occur within asynchronous functions. It catches unhandled errors inside async/await functions and forwards them to Express.js's error handling middleware, preventing the Node.js process from crashing. It simplifies error handling in Express.js applications by allowing you to write asynchronous code without worrying about manually catching and forwarding errors.
-
-[Express Async Errors](https://www.npmjs.com/package/express-async-errors)
-
-```sh
-npm i express-async-errors@3.1.1
-```
-
-- setup import at the top !!!
-
-  server.js
-
-```js
-import 'express-async-errors'
-```
-
-AchievementController.js
-
-```js
-export const createJob = async (req, res) => {
-  const { company, position } = req.body
-
-  const achievement = await Achievement.create({ description, position })
-  res.status(201).json({ achievement })
-}
-```
-
-#### 14. Get All Achievements
-
-achievementsController.js
-
-```js
-export const getAllAchievements = async (req, res) => {
-  const achievement = await Achievement.find({})
-  res.status(200).json({ achievement })
-}
-```
-
-achievementRouter.js
-
-```js
-router.route('/').get(getAllAchievements).post(createAchievement)
-```
-
-#### 15. Get Single Achievement
-
-```js
-export const getAchievement = async (req, res) => {
-  const { id } = req.params
-  const achievement = await Achievement.findById(id)
-  if (!achievement) {
-    return res.status(404).json({ msg: `no job with id ${id}` })
-  }
-  res.status(200).json({ achievement })
-}
-```
-
-achievementRouter.js
-
-```js
-router.route('/id').get(getAchievement)
-```
-
-#### 16. Delete Achievement
-
-AchievementController.js
-
-```js
-export const deleteAchievement = async (req, res) => {
-  const { id } = req.params
-  const removedAchievement = await Achievement.findByIdAndDelete(id)
-
-  if (!removedAchievement) {
-    return res.status(404).json({ msg: `no job with id ${id}` })
-  }
-  res.status(200).json({ job: removedJob })
-}
-```
-
-achievementRouter.js
-
-```js
-router.route('/:id').get(getAchievement).delete(deleteAchievement)
-```
-
-#### 17. Update Achievement
-
-```js
-export const updateAchievement = async (req, res) => {
-  const { id } = req.params
-
-  const updatedAchievement = await Achievement.findByIdAndUpdate(id, req.body, {
-    new: true,
-  })
-
-  if (!updatedAchievement) {
-    return res.status(404).json({ msg: `no job with id ${id}` })
-  }
-
-  res.status(200).json({ description: updatedAchievement })
-}
-```
-
-achievementRouter.js
-
-```js
-router
-  .route('/:id')
-  .get(getAchievement)
-  .delete(deleteAchievement)
-  .patch(updateAchievement)
-```
-
-### Expressive module application also middleware uncerntainty
-
-#### 18 Status Codes
-
-A library for HTTP status codes is useful because it provides a comprehensive and standardized set of codes that represent the outcome of HTTP requests. It allows developers to easily understand and handle different scenarios during web development, such as successful responses, client or server errors, redirects, and more. By using a status code library, developers can ensure consistent and reliable communication between servers and clients, leading to better error handling and improved user experience.
-
-[Http Status Codes](https://www.npmjs.com/package/http-status-codes)
-
-```sh
-npm i http-status-codes@2.2.0
-
-```
-
-200 OK OK
-201 CREATED Created
-
-400 BAD_REQUEST Bad Request
-401 UNAUTHORIZED Unauthorized
-
-403 FORBIDDEN Forbidden
-404 NOT_FOUND Not Found
-
-500 INTERNAL_SERVER_ERROR Internal Server Error
-
-- refactor 200 response in all controllers
-
-achivementsController.js
-
-```js
-res.status(StatusCodes.OK).json({ achivements })
-```
-
-createAchivements
-
-```js
-res.status(StatusCodes.CREATED).json({ achivements })
-```
-
-#### 19. Custom Error Class
-
-achievementsController
-
-```js
-export const getAchievements = async (req, res) => {
-  ....
-  if (!achivement) {
-    throw new Error('no achivement with that id');
-    // return res.status(404).json({ msg: `no achivement with id ${id}` });
-  }
-  ...
-};
-
-```
-
-errors/customErrors.js
+authController.js
 
 ```js
 import { StatusCodes } from 'http-status-codes'
-export class NotFoundError extends Error {
-  constructor(message) {
-    super(message)
-    this.name = 'NotFoundError'
-    this.statusCode = StatusCodes.NOT_FOUND
-  }
+import User from '../models/UserModel.js'
+
+export const register = async (req, res) => {
+  const user = await User.create(req.body)
+  res.status(StatusCodes.CREATED).json({ user })
 }
 ```
 
-This code defines a custom error class NotFoundError that extends the built-in Error class in JavaScript. The NotFoundError class is designed to be used when a requested resource is not found, and it includes a status code of 404 to indicate this.
+- register user request
 
-Here's a breakdown of the code:
-
-class NotFoundError extends Error: This line defines a new class NotFoundError that extends the built-in Error class. This means that NotFoundError inherits all of the properties and methods of the Error class, and can also define its own properties and methods.
-
-constructor(message): This is the constructor method for the NotFoundError class, which is called when a new instance of the class is created. The message parameter is the error message that will be displayed when the error is thrown.
-
-super(message): This line calls the constructor of the Error class and passes the message parameter to it. This sets the error message for the NotFoundError instance.
-
-this.name = "NotFoundError": This line sets the name property of the NotFoundError instance to "NotFoundError". This is a built-in property of the Error class that specifies the name of the error.
-
-this.statusCode = 404: This line sets the statusCode property of the NotFoundError instance to 404. This is a custom property that is specific to the NotFoundError class and indicates the HTTP status code that should be returned when this error occurs.
-
-By creating a custom error class like NotFoundError, you can provide more specific error messages and properties to help with debugging and error handling in your application.
-
-#### 20. Custom Error
-
-achievementController.js
-
-```js
-import { NotFoundError } from '../customErrors.js'
-
- if (!achievement) {
-    throw new NotFoundError('no achievement with that id')
+```json
+{
+  "name": "name",
+  "email": "name@gmail.com",
+  "password": "secret123",
+  "lastName": "lastName",
+  "location": "my city"
+}
 ```
 
-middleware/errorHandlerMiddleware.js
+#### 13. Validate User
+
+validationMiddleware.js
 
 ```js
-import { StatusCodes } from 'http-status-codes'
-const errorHandlerMiddleware = (err, req, res, next) => {
-  console.log(err)
-  const statusCode = err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR
-  const msg = err.message || 'Something went wrong, try again later'
+import User from '../models/UserModel.js'
 
-  res.status(statusCode).json({ msg })
-}
-
-export default errorHandlerMiddleware
+export const validateRegisterInput = withValidationErrors([
+  body('name').notEmpty().withMessage('name is required'),
+  body('email')
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .withMessage('invalid email format')
+    .custom(async (email) => {
+      const user = await User.findOne({ email })
+      if (user) {
+        throw new BadRequestError('email already exists')
+      }
+    }),
+  body('password')
+    .notEmpty()
+    .withMessage('password is required')
+    .isLength({ min: 8 })
+    .withMessage('password must be at least 8 characters long'),
+  body('location').notEmpty().withMessage('location is required'),
+  body('lastName').notEmpty().withMessage('last name is required'),
+])
 ```
 
-server.js
+authRouter.js
 
 ```js
-import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js'
+import { validateRegisterInput } from '../middleware/validationMiddleware.js'
 
-app.use(errorHandlerMiddleware)
+router.post('/register', validateRegisterInput, register)
 ```
 
-#### 21. Bad Request Error
+#### 14. Admin Role
 
-400 BAD_REQUEST Bad Request
-401 UNAUTHORIZED Unauthorized
-403 FORBIDDEN Forbidden
-404 NOT_FOUND Not Found
-
-customErrors.js
+authController.js
 
 ```js
-export class BadRequestError extends Error {
-  constructor(message) {
-    super(message)
-    this.name = 'BadRequestError'
-    this.statusCode = StatusCodes.BAD_REQUEST
-  }
-}
-export class UnauthenticatedError extends Error {
-  constructor(message) {
-    super(message)
-    this.name = 'UnauthenticatedError'
-    this.statusCode = StatusCodes.UNAUTHORIZED
-  }
-}
-export class UnauthorizedError extends Error {
-  constructor(message) {
-    super(message)
-    this.name = 'UnauthorizedError'
-    this.statusCode = StatusCodes.FORBIDDEN
-  }
-}
+// first registered user is an admin
+const isFirstAccount = (await User.countDocuments()) === 0
+req.body.role = isFirstAccount ? 'admin' : 'user'
+
+const user = await User.create(req.body)
 ```

@@ -98,12 +98,12 @@ Story: advanced navigation
 
 [x]general validation
 ---[x]creation validation
----[]validate id
+---[x]validate id
 
 #### user Domain restrictions
 
-[]Validate initial user
-[]validate different types of users
+[x]Validate initial user
+[x]validate different types of users
 
 ### Identifying structure v0.1.3
 
