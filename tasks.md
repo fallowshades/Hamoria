@@ -89,8 +89,8 @@ Story: advanced navigation
 ---[x]Test create model
 []Expressive module application with middleware
 ---[x]status codes
----[]errorHandlerMiddleware
----[]CustomError
+---[x]errorHandlerMiddleware
+---[x]CustomError bad requests
 
 ### Effective validate data v0.1.2
 
