@@ -44,11 +44,11 @@ Story: advanced navigation
 
 []partitioned logic of nav and body
 ---[x]Layout fixed/relative 2 column set up
----[]main wrapper for m/n scaled prop drilling and nav privilege
----[]m-scaled navigation of existing content extend context
+---[x]main wrapper for m/n scaled prop drilling and nav privilege
+---[x]m-scaled navigation of existing content extend context
 ---[]Conditional Containers
------[] nav links are aware of non default sidebar
------[]nav toggle sidebar default/non default and set conditional user?.name for logout container
+-----[x] nav links are aware of non default sidebar
+-----[x]nav toggle sidebar default/non default and set conditional user?.name for logout container
 []Navigate and local storage
 ---[]insert theam when app access local storage
 

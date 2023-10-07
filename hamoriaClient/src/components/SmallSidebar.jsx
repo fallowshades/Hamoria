@@ -2,7 +2,7 @@ import Wrapper from '../assets/wrappers/SmallSidebar'
 import { FaTimes } from 'react-icons/fa'
 
 import Logo from './Logo'
-import { NavLink } from './NavLinks'
+import NavLinks from './NavLinks'
 import links from '../utils/links'
 import { useDashboardContext } from '../pages/DashboardLayout'
 
@@ -27,7 +27,7 @@ const SmallSidebar = () => {
               const { text, path, icon } = link
 
               return (
-                <NavLink
+                <NavLinks
                   to={path}
                   key={text}
                   className="nav-link"
@@ -37,7 +37,7 @@ const SmallSidebar = () => {
                 >
                   <span className="icon">{icon}</span>
                   {text}
-                </NavLink>
+                </NavLinks>
               )
             })}
           </div>
