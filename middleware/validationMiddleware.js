@@ -1,6 +1,10 @@
 import { body, validationResult } from 'express-validator'
-import { BadRequestError } from '../errors/customErrors.js'
+import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
 import { ACHIEVEMENT_STATUS, ACHIEVEMENT_TYPE } from '../utils/constants.js'
+
+import mongoose from 'mongoose'
+import { param } from 'express-validator'
+import Achievement from '../models/achievementModel.js'
 
 const withValidationErrors = (validateValues) => {
   return [
@@ -9,6 +13,9 @@ const withValidationErrors = (validateValues) => {
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
         const errorMessages = errors.array().map((error) => error.msg)
+        if (errorMessages[0].startsWith('no achievement')) {
+          throw new NotFoundError(errorMessages)
+        }
         throw new BadRequestError(errorMessages)
       }
       next()
@@ -24,4 +31,14 @@ export const validateAchievementInput = withValidationErrors([
   body('type')
     .isIn(Object.values(ACHIEVEMENT_TYPE))
     .withMessage('invalid type value'),
+])
+
+export const validateIdParam = withValidationErrors([
+  param('id').custom(async (value) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value)
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
+    const achievement = await Achievement.findById(value)
+    if (!achievement)
+      throw new NotFoundError(`no achievement with id : ${value}`)
+  }),
 ])

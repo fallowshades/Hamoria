@@ -1,5 +1,8 @@
 import { Router } from 'express'
-import { validateAchievementInput } from '../middleware/validationMiddleware.js'
+import {
+  validateAchievementInput,
+  validateIdParam,
+} from '../middleware/validationMiddleware.js'
 const router = Router()
 
 import {
@@ -16,8 +19,8 @@ router
   .post(validateAchievementInput, createAchievement)
 router
   .route('/:id')
-  .get(getAchievement)
+  .get(validateIdParam, getAchievement)
   .patch(validateAchievementInput, updateAchievement)
-  .delete(deleteAchievement)
+  .delete(validateIdParam, deleteAchievement)
 
 export default router
