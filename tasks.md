@@ -65,10 +65,12 @@ Story: advanced navigation
 
 #### Remote black boxes
 
+[x]Nodemon and express
+---[x]Test: server is running
+[x]Basic Express server accept JSON
+---[x]Test: accept JSON
 []Morgan and doteEnv
 ---[]Test: set up DoteENV during dev || production
-[]Basic Express server accept JSON
----[]Test: accept JSON
 
 ### proper remote set up for identification of achievements v0.1.1
 
