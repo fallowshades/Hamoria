@@ -88,7 +88,7 @@ Story: advanced navigation
 ---[x]constants with domain restrictions
 ---[x]Test create model
 []Expressive module application with middleware
----[]status codes
+---[x]status codes
 ---[]errorHandlerMiddleware
 ---[]CustomError
 

@@ -1,5 +1,6 @@
 import Achievement from '../models/achievementModel.js'
 import 'express-async-errors'
+import { NotFoundError } from '../errors/customErrors.js'
 
 export const getAllAchievements = async (req, res) => {
   const achievements = await Achievement.find({})
@@ -17,8 +18,7 @@ export const getAchievement = async (req, res) => {
   const { id } = req.params
   const achievement = await Achievement.findById(id)
   if (!achievement) {
-    throw new Error('no achivement with that id')
-    //return res.status(404).json({ msg: `no achievement with id ${id}` })
+    throw new NotFoundError('no achievement with that id')
   }
   res.status(StatusCodes.OK).json({ achievement })
 }
