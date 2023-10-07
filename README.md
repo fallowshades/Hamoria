@@ -1,878 +1,240 @@
-# Second layer and beyond
+# itteration 2 layer 1 blacck and white box
 
-## Partition logic of
+## white box is safly monitored
 
-### 1. Layout fixed/relatife 2 column setup
+### l
 
-#### 1. Dashboard Pages
+#### 1. Folder Setup
 
-App.jsx
+- IMPORTANT !!!!
+- remove existing .git folder (if any) from client
 
-```jsx
- {
-        path: 'dashboard',
-        element: <DashboardLayout />,
-        children: [
-          {
-            index: true,
-            element: <AddJob />,
-          },
-          { path: 'stats', element: <Stats /> },
-          {
-            path: 'all-jobs',
-            element: <AllJobs />,
-          },
-
-          {
-            path: 'profile',
-            element: <Profile />,
-          },
-          {
-            path: 'admin',
-            element: <Admin />,
-          },
-        ],
-      },
-```
-
-Dashboard.jsx
-
-```jsx
-import { Outlet } from 'react-router-dom'
-
-const DashboardLayout = () => {
-  return (
-    <div>
-      <Outlet />
-    </div>
-  )
-}
-export default DashboardLayout
-```
-
-#### 2. Navbar, BigSidebar and SmallSidebar
-
-- in components create :
-  Navbar.jsx
-  BigSidebar.jsx
-  SmallSidebar.jsx
-
-DashboardLayout.jsx
-
-```jsx
-import { Outlet } from 'react-router-dom'
-
-import Wrapper from '../assets/wrappers/Dashboard'
-import { Navbar, BigSidebar, SmallSidebar } from '../components'
-
-const Dashboard = () => {
-  return (
-    <Wrapper>
-      <main className="dashboard">
-        <SmallSidebar />
-        <BigSidebar />
-        <div>
-          <Navbar />
-          <div className="dashboard-page">
-            <Outlet />
-          </div>
-        </div>
-      </main>
-    </Wrapper>
-  )
-}
-
-export default Dashboard
-```
-
-#### 3. Dashboard Layout - CSS (optional)
-
-assets/wrappers/DashboardLayout.jsx
-
-```js
-import styled from 'styled-components'
-
-const Wrapper = styled.section`
-  .dashboard {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-  .dashboard-page {
-    width: 90vw;
-    margin: 0 auto;
-    padding: 2rem 0;
-  }
-  @media (min-width: 992px) {
-    .dashboard {
-      grid-template-columns: auto 1fr;
-    }
-    .dashboard-page {
-      width: 90%;
-    }
-  }
-`
-export default Wrapper
-```
-
-### 2. Main wrapper for (n-scalled prop / m- scalled nav)
-
-#### .4 Dashboard Context
-
-```jsx
-import { Outlet } from 'react-router-dom'
-
-import Wrapper from '../assets/wrappers/Dashboard'
-import { Navbar, BigSidebar, SmallSidebar } from '../components'
-
-import { useState, createContext, useContext } from 'react'
-const DashboardContext = createContext()
-const DashboardLayout = () => {
-  // temp
-  const user = { name: 'john' }
-
-  const [showSidebar, setShowSidebar] = useState(false)
-  const [isDarkTheme, setIsDarkTheme] = useState(false)
-
-  const toggleDarkTheme = () => {
-    console.log('toggle dark theme')
-  }
-
-  const toggleSidebar = () => {
-    setShowSidebar(!showSidebar)
-  }
-
-  const logoutUser = async () => {
-    console.log('logout user')
-  }
-  return (
-    <DashboardContext.Provider
-      value={{
-        user,
-        showSidebar,
-        isDarkTheme,
-        toggleDarkTheme,
-        toggleSidebar,
-        logoutUser,
-      }}
-    >
-      <Wrapper>
-        <main className="dashboard">
-          <SmallSidebar />
-          <BigSidebar />
-          <div>
-            <Navbar />
-            <div className="dashboard-page">
-              <Outlet />
-            </div>
-          </div>
-        </main>
-      </Wrapper>
-    </DashboardContext.Provider>
-  )
-}
-
-export const useDashboardContext = () => useContext(DashboardContext)
-
-export default Dashboard
-```
-
-#### .5 React Icons
-
-[React Icons](https://react-icons.github.io/react-icons/)
+Mac
 
 ```sh
-npm install react-icons@4.8.0
+rm -rf .git
 ```
 
-Navbar.jsx
+Windows
 
-```jsx
-
-import {FaHome} from 'react-icons/fa'
-const Navbar = () => {
-  return (
-    <div>
-      <h2>navbar</h2>
-      <FaHome>
-    </div>
-  )
-}
-
+```sh
+rmdir -Force -Recurse .git
 ```
 
-#### .6 Navbar - Initial Setup
-
-```jsx
-import Wrapper from '../assets/wrappers/Navbar'
-import { FaAlignLeft } from 'react-icons/fa'
-import Logo from './Logo'
-
-import { useDashboardContext } from '../pages/DashboardLayout'
-const Navbar = () => {
-  const { toggleSidebar } = useDashboardContext()
-  return (
-    <Wrapper>
-      <div className="nav-center">
-        <button type="button" className="toggle-btn" onClick={toggleSidebar}>
-          <FaAlignLeft />
-        </button>
-        <div>
-          <Logo />
-          <h4 className="logo-text">dashboard</h4>
-        </div>
-        <div className="btn-container">toggle/logout</div>
-      </div>
-    </Wrapper>
-  )
-}
-
-export default Navbar
+```sh
+rd /s /q .git
 ```
 
-#### .7 Navbar CSS (optional)
+- Windows commands were shared by students and I have not personally tested them.
+- git status should return :
+  "fatal: Not a git repository (or any of the parent directories): .git"
+- create jobify directory
+- copy/paste client
+- move README to root
 
-assets/wrappers/Navbar.js
+#### 2. Setup Server
+
+- create package.json
+
+```sh
+npm init -y
+```
+
+- create and test server.js
+
+```sh
+node server
+```
+
+#### 3. ES6 Modules
+
+package.json
+
+```json
+  "type": "module",
+```
+
+Create test.js and implement named import
+
+test.js
 
 ```js
-import styled from 'styled-components'
-
-const Wrapper = styled.nav`
-  height: var(--nav-height);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 1px 0px 0px rgba(0, 0, 0, 0.1);
-  background: var(--background-secondary-color);
-  .logo {
-    display: flex;
-    align-items: center;
-    width: 100px;
-  }
-  .nav-center {
-    display: flex;
-    width: 90vw;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .toggle-btn {
-    background: transparent;
-    border-color: transparent;
-    font-size: 1.75rem;
-    color: var(--primary-500);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
-  .btn-container {
-    display: flex;
-    align-items: center;
-  }
-
-  .logo-text {
-    display: none;
-  }
-  @media (min-width: 992px) {
-    position: sticky;
-    top: 0;
-
-    .nav-center {
-      width: 90%;
-    }
-    .logo {
-      display: none;
-    }
-    .logo-text {
-      display: block;
-    }
-  }
-`
-export default Wrapper
+export const value = 42
 ```
 
-### 3. m-scalled nav extend context
-
-#### 8. Links
-
-- create src/utils/links.jsx
-
-```jsx
-import React from 'react'
-
-import { IoBarChartSharp } from 'react-icons/io5'
-import { MdQueryStats } from 'react-icons/md'
-import { FaWpforms } from 'react-icons/fa'
-import { ImProfile } from 'react-icons/im'
-import { MdAdminPanelSettings } from 'react-icons/md'
-
-const links = [
-  { text: 'add job', path: '.', icon: <FaWpforms /> },
-  { text: 'all jobs', path: 'all-jobs', icon: <MdQueryStats /> },
-  { text: 'stats', path: 'stats', icon: <IoBarChartSharp /> },
-  { text: 'profile', path: 'profile', icon: <ImProfile /> },
-  { text: 'admin', path: 'admin', icon: <MdAdminPanelSettings /> },
-]
-
-export default links
-```
-
-- in a second, we will discuss why '.' in "add job"
-
-#### 9. SmallSidebar
-
-SmallSidebar
-
-```jsx
-import Wrapper from '../assets/wrappers/SmallSidebar'
-import { FaTimes } from 'react-icons/fa'
-
-import Logo from './Logo'
-import { NavLink } from 'react-router-dom'
-import links from '../utils/links'
-import { useDashboardContext } from '../pages/DashboardLayout'
-
-const SmallSidebar = () => {
-  const { showSidebar, toggleSidebar } = useDashboardContext()
-  return (
-    <Wrapper>
-      <div
-        className={
-          showSidebar ? 'sidebar-container show-sidebar' : 'sidebar-container'
-        }
-      >
-        <div className="content">
-          <button type="button" className="close-btn" onClick={toggleSidebar}>
-            <FaTimes />
-          </button>
-          <header>
-            <Logo />
-          </header>
-          <div className="nav-links">
-            {links.map((link) => {
-              const { text, path, icon } = link
-
-              return (
-                <NavLink
-                  to={path}
-                  key={text}
-                  className="nav-link"
-                  onClick={toggleSidebar}
-                  // will discuss in a second
-                  end
-                >
-                  <span className="icon">{icon}</span>
-                  {text}
-                </NavLink>
-              )
-            })}
-          </div>
-        </div>
-      </div>
-    </Wrapper>
-  )
-}
-
-export default SmallSidebar
-```
-
-- cover '.' path ,active class and 'end' prop
-
-#### 10. Small Sidebar CSS (optional)
-
-assets/wrappers/SmallSidebar.js
+server.js
 
 ```js
-import styled from 'styled-components'
-
-const Wrapper = styled.aside`
-  @media (min-width: 992px) {
-    display: none;
-  }
-  .sidebar-container {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: -1;
-    opacity: 0;
-    transition: var(--transition);
-    visibility: hidden;
-  }
-  .show-sidebar {
-    z-index: 99;
-    opacity: 1;
-    visibility: visible;
-  }
-  .content {
-    background: var(--background-secondary-color);
-    width: var(--fluid-width);
-    height: 95vh;
-    border-radius: var(--border-radius);
-    padding: 4rem 2rem;
-    position: relative;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-  }
-  .close-btn {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: transparent;
-    border-color: transparent;
-    font-size: 2rem;
-    color: var(--red-dark);
-    cursor: pointer;
-  }
-  .nav-links {
-    padding-top: 2rem;
-    display: flex;
-    flex-direction: column;
-  }
-  .nav-link {
-    display: flex;
-    align-items: center;
-    color: var(--text-secondary-color);
-    padding: 1rem 0;
-    text-transform: capitalize;
-    transition: var(--transition);
-  }
-  .nav-link:hover {
-    color: var(--primary-500);
-  }
-
-  .icon {
-    font-size: 1.5rem;
-    margin-right: 1rem;
-    display: grid;
-    place-items: center;
-  }
-  .active {
-    color: var(--primary-500);
-  }
-`
-export default Wrapper
+import { value } from './test.js'
+console.log(value)
 ```
 
-#### 11. NavLinks
+- don't forget about .js extension
+- for named imports, names must match
 
-- components/NavLinks.jsx
+#### 4. Source Control
 
-```jsx
-import { useDashboardContext } from '../pages/DashboardLayout'
-import links from '../utils/links'
-import { NavLink } from 'react-router-dom'
+- create .gitignore
+- copy values from client/.gitignore
+- create Github Repo (optional)
 
-const NavLinks = () => {
-  const { user, toggleSidebar } = useDashboardContext()
+#### 5. Install Packages and Setup Install Script
 
-  return (
-    <div className="nav-links">
-      {links.map((link) => {
-        const { text, path, icon } = link
-        // admin user
-        return (
-          <NavLink
-            to={path}
-            key={text}
-            onClick={toggleSidebar}
-            className="nav-link"
-            end
-          >
-            <span className="icon">{icon}</span>
-            {text}
-          </NavLink>
-        )
-      })}
-    </div>
-  )
-}
+```sh
+npm install bcryptjs@2.4.3 concurrently@8.0.1 cookie-parser@1.4.6 dayjs@1.11.7 dotenv@16.0.3 express@4.18.2 express-async-errors@3.1.1 express-validator@7.0.1 http-status-codes@2.2.0 jsonwebtoken@9.0.0 mongoose@7.0.5 morgan@1.10.0 multer@1.4.5-lts.1 nanoid@4.0.2 nodemon@2.0.22 cloudinary@1.37.3 dayjs@1.11.9 datauri@4.1.0
 
-export default NavLinks
 ```
 
-### 4. Contitional container
+package.json
 
-#### 12. Big Sidebar
-
-```jsx
-import NavLinks from './NavLinks'
-import Logo from '../components/Logo'
-import Wrapper from '../assets/wrappers/BigSidebar'
-import { useDashboardContext } from '../pages/DashboardLayout'
-
-const BigSidebar = () => {
-  const { showSidebar } = useDashboardContext()
-  return (
-    <Wrapper>
-      <div
-        className={
-          showSidebar ? 'sidebar-container ' : 'sidebar-container show-sidebar'
-        }
-      >
-        <div className="content">
-          <header>
-            <Logo />
-          </header>
-          <NavLinks isBigSidebar />
-        </div>
-      </div>
-    </Wrapper>
-  )
-}
-
-export default BigSidebar
+```json
+"scripts": {
+    "setup-project": "npm i && cd client && npm i"
+  },
 ```
 
-```jsx
-const NavLinks = ({ isBigSidebar }) => {
-  const { user, toggleSidebar } = useDashboardContext()
+- install packages in root and client
 
-  return (
-    <div className="nav-links">
-      {links.map((link) => {
-        const { text, path, icon } = link
-        // admin user
-        return (
-          <NavLink
-            to={path}
-            key={text}
-            onClick={isBigSidebar ? null : toggleSidebar}
-            className="nav-link"
-            end
-          >
-            <span className="icon">{icon}</span>
-            {text}
-          </NavLink>
-        )
-      })}
-    </div>
-  )
-}
-
-export default NavLinks
+```sh
+npm run setup-project
 ```
 
-#### 13. BigSidebar CSS (optional)
+## remote black boxes
 
-assets/wrappers/BigSidebar.js
+### 1. Tester (thunder Client /morgan, accept json)
+
+#### 6. Setup Basic Express
+
+- install express and nodemon.
+- setup a basic server which listening on PORT=5100
+- create a basic home route which sends back "hello world"
+- setup a script with nodemon package.
+
+[Express Docs](https://expressjs.com/)
+
+Express is a fast and minimalist web application framework for Node.js. It simplifies the process of building web applications by providing a robust set of features for handling HTTP requests, routing, middleware, and more. Express allows you to create server-side applications and APIs easily, with a focus on simplicity and flexibility.
+
+[Nodemon Docs](https://nodemon.io/)
+
+Nodemon is a development tool that improves the developer experience. It monitors your Node.js application for any changes in the code and automatically restarts the server whenever a change is detected. This eliminates the need to manually restart the server after every code modification, making the development process more efficient and productive. Nodemon is commonly used during development to save time and avoid the hassle of manual server restarts.
+
+```sh
+npm i express@4.18.2 nodemon@2.0.22
+```
+
+server.js
 
 ```js
-import styled from 'styled-components'
+import express from 'express'
+const app = express()
 
-const Wrapper = styled.aside`
-  display: none;
-  @media (min-width: 992px) {
-    display: block;
-    box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.1);
-    .sidebar-container {
-      background: var(--background-secondary-color);
-      min-height: 100vh;
-      height: 100%;
-      width: 250px;
-      margin-left: -250px;
-      transition: margin-left 0.3s ease-in-out;
-    }
-    .content {
-      position: sticky;
-      top: 0;
-    }
-    .show-sidebar {
-      margin-left: 0;
-    }
-    header {
-      height: 6rem;
-      display: flex;
-      align-items: center;
-      padding-left: 2.5rem;
-    }
-    .nav-links {
-      padding-top: 2rem;
-      display: flex;
-      flex-direction: column;
-    }
-    .nav-link {
-      display: flex;
-      align-items: center;
-      color: var(--text-secondary-color);
-      padding: 1rem 0;
-      padding-left: 2.5rem;
-      text-transform: capitalize;
-      transition: padding-left 0.3s ease-in-out;
-    }
-    .nav-link:hover {
-      padding-left: 3rem;
-      color: var(--primary-500);
-      transition: var(--transition);
-    }
+app.get('/', (req, res) => {
+  res.send('Hello World')
+})
 
-    .icon {
-      font-size: 1.5rem;
-      margin-right: 1rem;
-      display: grid;
-      place-items: center;
-    }
-    .active {
-      color: var(--primary-500);
-    }
-  }
-`
-export default Wrapper
+app.listen(5100, () => {
+  console.log('server running....')
+})
 ```
 
-#### 14. LogoutContainer
+package.json
 
-components/LogoutContainer.jsx
-
-```jsx
-import { FaUserCircle, FaCaretDown } from 'react-icons/fa'
-import Wrapper from '../assets/wrappers/LogoutContainer'
-import { useState } from 'react'
-import { useDashboardContext } from '../pages/DashboardLayout'
-
-const LogoutContainer = () => {
-  const [showLogout, setShowLogout] = useState(false)
-  const { user, logoutUser } = useDashboardContext()
-
-  return (
-    <Wrapper>
-      <button
-        type="button"
-        className="btn logout-btn"
-        onClick={() => setShowLogout(!showLogout)}
-      >
-        {user.avatar ? (
-          <img src={user.avatar} alt="avatar" className="img" />
-        ) : (
-          <FaUserCircle />
-        )}
-
-        {user?.name}
-        <FaCaretDown />
-      </button>
-      <div className={showLogout ? 'dropdown show-dropdown' : 'dropdown'}>
-        <button type="button" className="dropdown-btn" onClick={logoutUser}>
-          logout
-        </button>
-      </div>
-    </Wrapper>
-  )
-}
-
-export default LogoutContainer
+```json
+"scripts": {
+    "dev": "nodemon server.js"
+  },
 ```
 
-component/Navbar.jsx
+#### 7. Thunder Client
 
-```jsx
-import LogoutContainer from './LogoutContainer'
+Thunder Client is a popular Visual Studio Code extension that facilitates API testing and debugging. It provides a user-friendly interface for making HTTP requests and viewing the responses, allowing developers to easily test APIs, examine headers, and inspect JSON/XML payloads. Thunder Client offers features such as environment variables, request history, and the ability to save and organize requests for efficient development workflows.
 
-const Navbar = () => {
-  const { toggleSidebar } = useDashboardContext()
+[Thunder Client](https://www.thunderclient.com/)
 
-  return (
-    <Wrapper>
-      <div className="nav-center">
-        <button type="button" className="toggle-btn" onClick={toggleSidebar}>
-          <FaAlignLeft />
-        </button>
-        <div>
-          <Logo />
-          <h4 className="logo-text">dashboard</h4>
-        </div>
-        <div className="btn-container">
-          <LogoutContainer />
-        </div>
-      </div>
-    </Wrapper>
-  )
-}
-export default Navbar
-```
+- install and test home route
 
-#### 15. LogoutContainer CSS (optional)
+#### 8. Accept JSON
 
-assets/wrappers/LogoutContainer.js
+Setup express middleware to accept json
+
+server
 
 ```js
-import styled from 'styled-components'
+app.use(express.json())
 
-const Wrapper = styled.div`
-  position: relative;
+app.post('/', (req, res) => {
+  console.log(req)
 
-  .logout-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0 0.5rem;
-  }
-  .img {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-  }
-  .dropdown {
-    position: absolute;
-    top: 45px;
-    left: 0;
-    width: 100%;
-    box-shadow: var(--shadow-2);
-    text-align: center;
-    visibility: hidden;
-    border-radius: var(--border-radius);
-    background: var(--primary-500);
-  }
-  .show-dropdown {
-    visibility: visible;
-  }
-  .dropdown-btn {
-    border-radius: var(--border-radius);
-    padding: 0.5rem;
-    background: transparent;
-    border-color: transparent;
-    color: var(--white);
-    letter-spacing: var(--letter-spacing);
-    text-transform: capitalize;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-  }
-`
-
-export default Wrapper
+  res.json({ message: 'Data received', data: req.body })
+})
 ```
 
-## Navigate and local storage
+### Architect
 
-### 1. insert conditional logic in useState (when (time) couple)
+#### 9. Morgan and Dotenv
 
-#### 16. ThemeToggle
+[Morgan](https://www.npmjs.com/package/morgan)
 
-components/ThemeToggle.jsx
+HTTP request logger middleware for node.js
 
-```jsx
-import { BsFillSunFill, BsFillMoonFill } from 'react-icons/bs'
-import Wrapper from '../assets/wrappers/ThemeToggle'
-import { useDashboardContext } from '../pages/DashboardLayout'
+[Dotenv](https://www.npmjs.com/package/dotenv)
 
-const ThemeToggle = () => {
-  const { isDarkTheme, toggleDarkTheme } = useDashboardContext()
-  return (
-    <Wrapper onClick={toggleDarkTheme}>
-      {isDarkTheme ? (
-        <BsFillSunFill className="toggle-icon" />
-      ) : (
-        <BsFillMoonFill className="toggle-icon" />
-      )}
-    </Wrapper>
-  )
-}
+Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.
 
-export default ThemeToggle
+```sh
+npm i morgan@1.10.0 dotenv@16.0.3
 ```
-
-Navbar.jsx
-
-```jsx
-<div className="btn-container">
-  <ThemeToggle />
-</div>
-```
-
-#### 17. ThemeToggle CSS (optional)
-
-assets/wrappers/ThemeToggle.js
 
 ```js
-import styled from 'styled-components'
+import morgan from 'morgan'
 
-const Wrapper = styled.div`
-  background: transparent;
-  border-color: transparent;
-  width: 3.5rem;
-  height: 2rem;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-
-  .toggle-icon {
-    font-size: 1.15rem;
-    color: var(--text-color);
-  }
-`
-export default Wrapper
+app.use(morgan('dev'))
 ```
 
-#### 18. Dark Theme - Logic
+- create .env file in the root
+- add PORT and NODE_ENV
+- add .env to .gitignore
 
-DashboardLayout.jsx
+server.js
 
-```jsx
-const toggleDarkTheme = () => {
-  const newDarkTheme = !isDarkTheme
-  setIsDarkTheme(newDarkTheme)
-  document.body.classList.toggle('dark-theme', newDarkTheme)
-  localStorage.setItem('darkTheme', newDarkTheme)
+```js
+import * as dotenv from 'dotenv'
+dotenv.config()
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'))
 }
+
+const port = process.env.PORT || 5100
+app.listen(port, () => {
+  console.log(`server running on PORT ${port}....`)
+})
 ```
 
-#### 19. Access Theme
+### Developer (convenience restart/fetch)
 
-App.jsx
+#### 10. New Features
 
-```jsx
-const checkDefaultTheme = () => {
-  const isDarkTheme =
-    localStorage.getItem('darkTheme') === 'true'
-  document.body.classList.toggle('dark-theme', isDarkTheme);
-  return isDarkTheme;
-};
+- fetch API
+- global await (top-level await)
+- watch mode
 
-const isDarkThemeEnabled = checkDefaultTheme();
-
-{
-path: 'dashboard',
-element: <DashboardLayout isDarkThemeEnabled={isDarkThemeEnabled} />,
+```js
+try {
+  const response = await fetch(
+    'https://www.course-api.com/react-useReducer-cart-project'
+  )
+  const cartData = await response.json()
+  console.log(cartData)
+} catch (error) {
+  console.log(error)
 }
 ```
 
-DashboardLayout.jsx
+package.json
 
-```jsx
-const Dashboard = ({ isDarkThemeEnabled }) => {
-  const [isDarkTheme, setIsDarkTheme] = useState(isDarkThemeEnabled)
-}
-```
-
-#### 20. Dark Theme CSS
-
-index.css
-
-```css
-:root {
-  /* DARK MODE */
-
-  --dark-mode-bg-color: #333;
-  --dark-mode-text-color: #f0f0f0;
-  --dark-mode-bg-secondary-color: #3f3f3f;
-  --dark-mode-text-secondary-color: var(--grey-300);
-
-  --background-color: var(--grey-50);
-  --text-color: var(--grey-900);
-  --background-secondary-color: var(--white);
-  --text-secondary-color: var(--grey-500);
-}
-
-.dark-theme {
-  --text-color: var(--dark-mode-text-color);
-  --background-color: var(--dark-mode-bg-color);
-  --text-secondary-color: var(--dark-mode-text-secondary-color);
-  --background-secondary-color: var(--dark-mode-bg-secondary-color);
-}
-
-body {
-  background: var(--background-color);
-  color: var(--text-color);
-}
+```json
+ "scripts": {
+    "watch": "node --watch server.js "
+  },
 ```

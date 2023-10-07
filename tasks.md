@@ -49,8 +49,8 @@ Story: advanced navigation
 ---[]Conditional Containers
 -----[x] nav links are aware of non default sidebar
 -----[x]nav toggle sidebar default/non default and set conditional user?.name for logout container
-[]Navigate and local storage
----[]insert theam when app access local storage
+[x]Navigate and local storage
+---[x]insert theam when app access local storage
 
 ## Backend
 
@@ -58,8 +58,10 @@ Story: advanced navigation
 
 #### White box is monitored
 
-[]set up server
+[x]set up server
+---[x]Test log
 []es6 modules
+---[]test named imports
 
 #### Remote black boxes
 
