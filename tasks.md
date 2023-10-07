@@ -60,8 +60,8 @@ Story: advanced navigation
 
 [x]set up server
 ---[x]Test log
-[]es6 modules
----[]test named imports
+[x]es6 modules
+---[x]test named imports
 
 #### Remote black boxes
 
