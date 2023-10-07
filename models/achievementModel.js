@@ -1,13 +1,13 @@
 import mongoose from 'mongoose'
-
+import { ACHIEVEMENT_STATUS, ACHIEVEMENT_TYPE } from '../utils/constants.js'
 const AchievementSchema = new mongoose.Schema(
   {
     description: String,
     //uh mb later
     status: {
       type: String,
-      enum: ['inactive', 'activated', 'complete'],
-      default: 'inactive',
+      enum: [ACHIEVEMENT_STATUS],
+      default: ACHIEVEMENT_STATUS.INACTIVE,
     },
     points: {
       type: Number,
@@ -16,19 +16,8 @@ const AchievementSchema = new mongoose.Schema(
 
     type: {
       type: String,
-      enum: [
-        'progressive',
-        'exploration',
-        'time-based',
-        'skill-based',
-        'social',
-        'collection',
-        'storyline',
-        'event',
-        'hidden',
-        'lifetime',
-      ],
-      default: 'exploration',
+      enum: [ACHIEVEMENT_STATUS],
+      default: ACHIEVEMENT_TYPE.EXPLORATION,
     },
     dateOfCompletion: {
       type: Date,
