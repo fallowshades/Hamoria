@@ -15,6 +15,11 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
 
+app.post('/api/v1/test', (req, res) => {
+  const { name } = req.body
+  res.json({ msg: `hello ${name}` })
+})
+
 app.use('/api/v1/achievements', achievementRouter)
 
 app.use('*', (req, res) => {
