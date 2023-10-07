@@ -12,6 +12,10 @@ import {
   DashboardLayout,
   Error,
   AllAchievements,
+  AddAchievement,
+  Stats,
+  Profile,
+  Admin,
 } from './pages'
 
 const router = createBrowserRouter([
@@ -35,14 +39,10 @@ const router = createBrowserRouter([
       {
         path: 'dashboard',
         element: <DashboardLayout />,
-      },
-      {
-        path: 'dashboard',
-        element: <DashboardLayout />,
         children: [
           {
             index: true,
-            element: <AddJob />,
+            element: <AddAchievement />,
           },
           { path: 'stats', element: <Stats /> },
           {
