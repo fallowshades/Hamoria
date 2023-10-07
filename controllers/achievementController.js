@@ -1,24 +1,14 @@
-import { nanoid } from 'nanoid'
-
-let achievements = [
-  { id: nanoid(), description: 'start', track: 'front-end developer' },
-  { id: nanoid(), description: 'end', track: 'back-end developer' },
-]
+import Achievement from '../models/achievementModel.js'
 
 export const getAllAchievements = async (req, res) => {
   res.status(200).json({ achievements })
 }
 
 export const createAchievement = async (req, res) => {
-  const { description, track } = req.body
+  const { description } = req.body
 
-  if (!description || !track) {
-    return res.status(400).json({ msg: 'please provide description and track' })
-  }
-  const id = nanoid(10)
-  const achievement = { id, description, track }
-  achievements.push(achievement)
-  res.status(200).json({ achievement })
+  const achievement = await Achievement.create({ description })
+  res.status(201).json({ achievement })
 }
 
 export const getAchievement = async (req, res) => {

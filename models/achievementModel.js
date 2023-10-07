@@ -4,10 +4,10 @@ const AchievementSchema = new mongoose.Schema(
   {
     description: String,
     //uh mb later
-    Status: {
+    status: {
       type: String,
       enum: ['inactive', 'activated', 'complete'],
-      default: 'pending',
+      default: 'inactive',
     },
     points: {
       type: Number,
@@ -28,7 +28,6 @@ const AchievementSchema = new mongoose.Schema(
         'hidden',
         'lifetime',
       ],
-      required: true,
       default: 'exploration',
     },
     dateOfCompletion: {

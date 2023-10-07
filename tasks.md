@@ -84,8 +84,8 @@ Story: advanced navigation
 [x]white and black box error flow support routes
 ---[x]Test something went wrong
 ---[c]set up routes
-[]Connection dependence
----[]constants with domain restrictions
+[x]Connection dependence
+---[x]constants with domain restrictions
 []Expressive module application with middleware
 ---[]errorHandlerMiddleware
 ---[]CustomError
