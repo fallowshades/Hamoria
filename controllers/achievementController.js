@@ -1,17 +1,16 @@
 import Achievement from '../models/achievementModel.js'
 import 'express-async-errors'
 import { NotFoundError } from '../errors/customErrors.js'
+import { StatusCodes } from 'http-status-codes'
 
 export const getAllAchievements = async (req, res) => {
   const achievements = await Achievement.find({})
-  res.status(tatusCodes.CREATED).json({ achievements })
+  res.status(StatusCodes.CREATED).json({ achievements })
 }
 
 export const createAchievement = async (req, res) => {
-  const { description, status, points, type, dateOfCompletion } = req.body
-
-  const achievement = await Achievement.create({ description })
-  res.status(201).json({ achievement })
+  const achievement = await Achievement.create(req.body)
+  res.status(StatusCodes.CREATED).json({ achievement })
 }
 
 export const getAchievement = async (req, res) => {
@@ -42,7 +41,7 @@ export const deleteAchievement = async (req, res) => {
   const removedAchievement = await Achievement.findByIdAndDelete(id)
 
   if (!removedAchievement) {
-    return res.status(404).json({ msg: `no job with id ${id}` })
+    return res.status(404).json({ msg: `no achievement with id ${id}` })
   }
   res.status(StatusCodes.OK).json({ achievement: removedAchievement })
 }
