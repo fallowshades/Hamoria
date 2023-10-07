@@ -17,7 +17,8 @@ export const getAchievement = async (req, res) => {
   const { id } = req.params
   const achievement = await Achievement.findById(id)
   if (!achievement) {
-    return res.status(404).json({ msg: `no achievement with id ${id}` })
+    throw new Error('no achivement with that id')
+    //return res.status(404).json({ msg: `no achievement with id ${id}` })
   }
   res.status(StatusCodes.OK).json({ achievement })
 }
