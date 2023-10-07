@@ -41,6 +41,7 @@ app.get('/api/v1/achievements/:id', (req, res) => {
   const { id } = req.params
   const achievement = achievements.find((achievement) => achievement.id === id)
   if (!achievement) {
+    throw new Error('no achievement with that id')
     return res.status(404).json({ msg: `no achievement with id ${id}` })
   }
   res.status(200).json({ achievement })
@@ -78,6 +79,15 @@ app.delete('/api/v1/achievements/:id', (req, res) => {
   achievements = newAchievements //misstake spelling achievements made it a constant
   console.log('l')
   res.status(200).json({ msg: 'achievement deleted' })
+})
+
+app.use('*', (req, res) => {
+  res.status(404).json({ msg: 'not found' })
+})
+
+app.use((err, req, res, next) => {
+  console.log(err)
+  res.status(500).json({ msg: 'something went wrong' })
 })
 
 const port = process.env.PORT || 5100

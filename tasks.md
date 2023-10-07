@@ -77,10 +77,13 @@ Story: advanced navigation
 #### successive Flow
 
 [x]basic Crud with Middleware
----[x]Test all crud methods as if was server
+---[x]Test: all crud methods as if was server
 
 #### Erroneous flow
 
+[]white and black box error flow support routes
+---[x]Test something went wrong
+---[]set up routes
 []Connection dependence
 ---[]constants with domain restrictions
 []Expressive module application with middleware
