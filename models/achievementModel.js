@@ -23,6 +23,10 @@ const AchievementSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+    },
   },
   { timestamps: true }
 )

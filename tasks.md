@@ -109,16 +109,16 @@ Story: advanced navigation
 
 #### Higher order user concerns
 
-[]hash security for success and errors
----[]Test: registered password is encrypted
-[]comparator and certificate for user
-[]Store connected tables/documents
+[x]hash security for success and errors
+---[x]Test: registered password is encrypted
+[x]comparator and certificate for user
+[x]Store connected tables/documents
 
 #### proper remote set up for public documents/tables
 
-[]Middleware interpretation
----[]Identity is extracted from cookie
-[]Permission granted/rejected
+[x]Middleware interpretation
+---[x]Identity is extracted from cookie
+[x]Permission granted/rejected
 
 ### Identifying workload v0.1.4
 

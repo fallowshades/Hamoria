@@ -8,6 +8,8 @@ import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js'
 import { body, validationResult } from 'express-validator'
 
 import authRouter from './routes/authRouter.js'
+import { authenticateUser } from './middleware/authMiddleware.js'
+import cookieParser from 'cookie-parser'
 
 dotenv.config()
 
@@ -18,8 +20,8 @@ app.use(express.json())
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
-
-app.use('/api/v1/achievements', achievementRouter)
+app.use(cookieParser())
+app.use('/api/v1/achievements', authenticateUser, achievementRouter)
 app.use('/api/v1/auth', authRouter)
 
 app.use('*', (req, res) => {

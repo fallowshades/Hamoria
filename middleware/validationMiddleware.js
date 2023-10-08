@@ -1,5 +1,9 @@
 import { body, validationResult } from 'express-validator'
-import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthenticatedError,
+} from '../errors/customErrors.js'
 import { ACHIEVEMENT_STATUS, ACHIEVEMENT_TYPE } from '../utils/constants.js'
 
 import mongoose from 'mongoose'
@@ -16,6 +20,9 @@ const withValidationErrors = (validateValues) => {
         const errorMessages = errors.array().map((error) => error.msg)
         if (errorMessages[0].startsWith('no achievement')) {
           throw new NotFoundError(errorMessages)
+        }
+        if (errorMessages[0].startsWith('not authorized')) {
+          throw new UnauthorizedError('not authorized to access this route')
         }
         throw new BadRequestError(errorMessages)
       }
@@ -41,6 +48,11 @@ export const validateIdParam = withValidationErrors([
     const achievement = await Achievement.findById(value)
     if (!achievement)
       throw new NotFoundError(`no achievement with id : ${value}`)
+
+    const isAdmin = req.user.role === 'admin'
+    const isOwner = req.user.userId === job.createdBy.toString()
+    if (!isAdmin && !isOwner)
+      throw UnauthorizedError('not authorized to access this route')
   }),
 ])
 export const validateRegisterInput = withValidationErrors([
@@ -63,4 +75,13 @@ export const validateRegisterInput = withValidationErrors([
     .withMessage('password must be at least 8 characters long'),
   body('location').notEmpty().withMessage('location is required'),
   body('lastName').notEmpty().withMessage('last name is required'),
+])
+
+export const validateLoginInput = withValidationErrors([
+  body('email')
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .withMessage('invalid email format'),
+  body('password').notEmpty().withMessage('password is required'),
 ])
