@@ -140,7 +140,7 @@ Story: advanced navigation
 ---[x]respons data is interprited from Object.fromEntities
 ---[x]vertical session encapsulated in require attribute (register user)
 ---[x]horizontal sessiion encapsulated in useNavigate hook and disable attribute (navigational state)
----[]horizontal scaling not encapsulated is caught feedback. (Readt toastify)
+---[x]horizontal scaling not encapsulated is caught feedback. (Readt toastify)
 
 ### Dashboard page v0.2.1
 
