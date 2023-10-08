@@ -132,14 +132,15 @@ Story: advanced navigation
 
 ### Register Page v0.2.0
 
-[]vertical scaling
--[]action handled by parent router
--[]errors encapsulated managment with hook (less catch code in context)
--[]respons data is interprited from Object.fromEntities
--[]vertical session encapsulated in require attribute (register user)
+[x]vertical scaling
+---[x]action handled by parent router
+
 []horizontal scaling
--[]horizontal sessiion encapsulated in useNavigate hook and disable attribute (navigational state)
--[]horizontal scaling not encapsulated is caught feedback. (Readt toastify)
+---[x]errors encapsulated managment with hook (less catch code in context)
+---[x]respons data is interprited from Object.fromEntities
+---[x]vertical session encapsulated in require attribute (register user)
+---[x]horizontal sessiion encapsulated in useNavigate hook and disable attribute (navigational state)
+---[x]horizontal scaling not encapsulated is caught feedback. (Readt toastify)
 
 ### Dashboard page v0.2.1
 

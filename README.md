@@ -73,11 +73,9 @@ import{action as registerAction} from './pages/Register'
 Register.jsx
 
 ```js
-
-export const action = async (data) {
-  return null;
+export const action = async (data) => {
+  return null
 }
-
 ```
 
 ## Horizontall scalling
@@ -215,6 +213,19 @@ const Login = () => {
 export default Login
 ```
 
+App.jsx
+
+```jsx
+import{action as loginAction} from './pages/Login'
+{
+  path: 'login',
+  element: <Login />,
+  action: loginAction,
+},
+
+
+```
+
 #### 6. Access Action Data (optional)
 
 ```js
@@ -238,4 +249,18 @@ export const action = async ({ request }) => {
     return errors
   }
 }
+const Login = () => {
+  const errors = useActionData()
+
+  return (
+    <Wrapper>
+      <Form method="post" className="form">
+        ...
+        {<p>errors && <p style={{ color: 'red' }}>{errors.msg}</p>}
+        ...
+      </Form>
+    </Wrapper>
+  )
+}
+export default Login
 ```
