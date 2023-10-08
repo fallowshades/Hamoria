@@ -140,20 +140,17 @@ Story: advanced navigation
 ---[x]respons data is interprited from Object.fromEntities
 ---[x]vertical session encapsulated in require attribute (register user)
 ---[x]horizontal sessiion encapsulated in useNavigate hook and disable attribute (navigational state)
----[x]horizontal scaling not encapsulated is caught feedback. (Readt toastify)
+---[x]horizontal scaling not encapsulated is caught feedback. (Readt toastify) -[x]Log in user (unChecked errors, 3rd type error)
+---[x]navigational effect caused by response redirect.
+---[x]is second child element in parent router with similar session managment -[x]useAction data hook (checked errors)
+---[x]checked session errors conditional password length return caught as feedback.
 
 ### Dashboard page v0.2.1
 
--[]Log in user (unChecked errors, 3rd type error)
----[]navigational effect caused by response redirect.
----[]is second child element in parent router with similar session managment
--[]useAction data hook (checked errors)
----[]checked session errors conditional password length return caught as feedback.
-
--[]Loaders (redirect before page render)
----[]encapsulate the mounted useEffect
--[]getCurrent (common cause = jwt issues)
----[]what is passed down Outlet with useLoaderData
+[x]Loaders (redirect before page render)
+---[x]encapsulate the mounted useEffect
+[x]getCurrent (common cause = jwt issues)
+---[x]what is passed down Outlet with useLoaderData
 
 ### Jobs page v0.2.2
 
