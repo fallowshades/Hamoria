@@ -10,6 +10,7 @@ import { body, validationResult } from 'express-validator'
 import authRouter from './routes/authRouter.js'
 import { authenticateUser } from './middleware/authMiddleware.js'
 import cookieParser from 'cookie-parser'
+import userRouter from './routers/userRoutes.js'
 
 dotenv.config()
 
@@ -23,6 +24,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(cookieParser())
 app.use('/api/v1/achievements', authenticateUser, achievementRouter)
 app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/users', authenticateUser, userRouter)
 
 app.use('*', (req, res) => {
   res.status(404).json({ msg: 'not found' })
