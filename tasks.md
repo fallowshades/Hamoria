@@ -150,7 +150,7 @@ Story: advanced navigation
 [x]Loaders (redirect before page render)
 ---[x]encapsulate the mounted useEffect
 [x]getCurrent (common cause = jwt issues)
----[]what is passed down Outlet with useLoaderData
+---[x]what is passed down Outlet with useLoaderData
 
 ### Jobs page v0.2.2
 
