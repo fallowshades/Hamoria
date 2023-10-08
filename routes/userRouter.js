@@ -1,4 +1,6 @@
 import { Router } from 'express'
+import { validateUpdateUserInput } from '../middleware/validationMiddleware.js'
+
 const router = Router()
 
 import {
@@ -9,5 +11,5 @@ import {
 
 router.get('/current-user', getCurrentUser)
 router.get('/admin/app-stats', getApplicationStats)
-router.patch('/update-user', updateUser)
+router.patch('/update-user', validateUpdateUserInput, updateUser)
 export default router

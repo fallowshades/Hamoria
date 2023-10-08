@@ -122,6 +122,7 @@ Story: advanced navigation
 
 ### Identifying workload v0.1.4
 
-[]User privilaged actions
+[x]User privilaged actions
+---[x]Test, patch,get user/data
 []Fullstack development
 ---[]Test call backend through proxy
