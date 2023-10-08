@@ -6,7 +6,7 @@ import { StatusCodes } from 'http-status-codes'
 export const getAllAchievements = async (req, res) => {
   console.log(req)
   const achievements = await Achievement.find({})
-  res.status(StatusCodes.CREATED).json({ achievements })
+  res.status(StatusCodes.OK).json({ achievements })
 }
 
 export const createAchievement = async (req, res) => {
