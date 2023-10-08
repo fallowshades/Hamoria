@@ -124,6 +124,6 @@ Story: advanced navigation
 
 [x]User privilaged actions
 ---[x]Test, patch,get user/data
-[]Fullstack development
+[x]Fullstack development
 ---[x]Test call backend through proxy
----[]test custom instance
+---[x]test custom instance axios
