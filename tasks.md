@@ -122,6 +122,8 @@ Story: advanced navigation
 
 ### Identifying workload v0.1.4
 
-[]User privilaged actions
-[]Fullstack development
----[]Test call backend through proxy
+[x]User privilaged actions
+---[x]Test, patch,get user/data
+[x]Fullstack development
+---[x]Test call backend through proxy
+---[x]test custom instance axios
