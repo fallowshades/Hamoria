@@ -3,6 +3,7 @@ import User from '../models/userModel.js'
 import bcrypt from 'bcryptjs'
 import { hashPassword, comparePassword } from '../utils/passwordUtils.js'
 import { UnauthenticatedError } from '../errors/customErrors.js'
+import { createJWT } from '../utils/tokenUtils.js'
 
 export const register = async (req, res) => {
   // first registered user is an admin
@@ -26,6 +27,9 @@ export const login = async (req, res) => {
     user && (await comparePassword(req.body.password, user.password))
 
   if (!isValidUser) throw new UnauthenticatedError('invalid credentials')
+
+  const token = createJWT({ userId: user._id, role: user.role })
+  console.log(token)
 
   res.send('login route')
 }
