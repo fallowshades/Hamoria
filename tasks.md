@@ -127,3 +127,74 @@ Story: advanced navigation
 [x]Fullstack development
 ---[x]Test call backend through proxy
 ---[x]test custom instance axios
+
+## Privileged pages
+
+### Register Page v0.2.0
+
+[]vertical scaling
+-[]action handled by parent router
+-[]errors encapsulated managment with hook (less catch code in context)
+-[]respons data is interprited from Object.fromEntities
+-[]vertical session encapsulated in require attribute (register user)
+[]horizontal scaling
+-[]horizontal sessiion encapsulated in useNavigate hook and disable attribute (navigational state)
+-[]horizontal scaling not encapsulated is caught feedback. (Readt toastify)
+
+### Dashboard page v0.2.1
+
+-[]Log in user (unChecked errors, 3rd type error)
+---[]navigational effect caused by response redirect.
+---[]is second child element in parent router with similar session managment
+-[]useAction data hook (checked errors)
+---[]checked session errors conditional password length return caught as feedback.
+
+-[]Loaders (redirect before page render)
+---[]encapsulate the mounted useEffect
+-[]getCurrent (common cause = jwt issues)
+---[]what is passed down Outlet with useLoaderData
+
+### Jobs page v0.2.2
+
+---[]support tree transfor objects
+---[]create transfor lifeCycle
+---[]context map presentational data dynamically
+
+### Admin page v0.2.3
+
+[]special network Application
+---[]use dashboardContext to access role
+---[]state item with user data as input (from loader data)
+
+### Profile page v0.2.4
+
+[]both front and backend together with backend acting as control of upload
+---[]concern in time of development and production
+---[]concern local space notification \_Directory
+---[]how does server controll data with string
+[]path to presentatioal destination
+---[]accept attribute
+---[]challanges with size pressentational ctrl session and content type
+[]Source transmition
+---[]ready dst to persist data, since hosted server limitation.
+---[]a method to transmit (mb callback)
+---[]connected onto additional node (name, key, secrete)
+---[]redundancy
+[]test user
+---[]front static async
+---[]back accumulate extra user properties for later checking.
+
+### stats page v0.2.5
+
+tool to extract table data
+---[]1 column (reduce)
+---[]set of columns (map)
+
+### All Jobs page v0.2.6
+
+[]params to send request
+---[]interactive session ctrl link to url reset.
+---[]automatic session search value set with context hook
+[]pagination of response data
+---[]consideration of existence.
+---[]shifted array/range is dependent on url
