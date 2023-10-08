@@ -1,400 +1,530 @@
-# Iteration 3 layer 2 Effective validate data
+# Identiying workload
 
-## 1 layer behave as 2 layer existence check
+## secure data identification
 
-### Valid value in closed range
+### secure identity on DB
 
-#### 1. Validation Layer
+#### 1. Hash Passwords
 
-[Express Validator](https://express-validator.github.io/docs/)
+[bcryptjs](https://www.npmjs.com/package/bcryptjs)
 
 ```sh
-npm i express-validator@7.0.1
+npm i bcryptjs@2.4.3
+
 ```
-
-#### 2. Test Route
-
-server.js
-
-```js
-app.post('/api/v1/test', (req, res) => {
-  const { name } = req.body
-  res.json({ msg: `hello ${name}` })
-})
-```
-
-#### 3. Express Validator
-
-```js
-import { body, validationResult } from 'express-validator'
-
-app.post(
-  '/api/v1/test',
-  [body('name').notEmpty().withMessage('name is required')],
-  (req, res) => {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      const errorMessages = errors.array().map((error) => error.msg)
-      return res.status(400).json({ errors: errorMessages })
-    }
-    next()
-  },
-  (req, res) => {
-    const { name } = req.body
-    res.json({ msg: `hello ${name}` })
-  }
-)
-```
-
-#### 4. Validation Middleware
-
-middleware/validationMiddleware.js
-
-```js
-import { body, validationResult } from 'express-validator'
-import { BadRequestError } from '../errors/customErrors'
-const withValidationErrors = (validateValues) => {
-  return [
-    validateValues,
-    (req, res, next) => {
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        const errorMessages = errors.array().map((error) => error.msg)
-        throw new BadRequestError(errorMessages)
-      }
-      next()
-    },
-  ]
-}
-
-export const validateTest = withValidationErrors([
-  body('name')
-    .notEmpty()
-    .withMessage('name is required')
-    .isLength({ min: 3, max: 50 })
-    .withMessage('name must be between 3 and 50 characters long')
-    .trim(),
-])
-```
-
-belive he console.log
-
-#### 5. Remove Test Case From Server
-
-### check achievement
-
-#### 6. Setup Constants
-
-utils/constants.js
-
-```js
-export const ACHIEVEMENT_STATUS = {
-  INACTIVE: 'inactive',
-  ACTIVATED: 'activated',
-  COMPLETE: 'complete',
-}
-
-export const ACHIEVEMENT_TYPE = {
-  PROGRESSIVE: 'progressive',
-  EXPLORATION: 'exploration',
-  TIME_BASED: 'time-based',
-  SKILL_BASED: 'skill-based',
-  SOCIAL: 'social',
-  COLLECTION: 'collection',
-  STORYLINE: 'storyline',
-  EVENT: 'event',
-  HIDDEN: 'hidden',
-  LIFETIME: 'lifetime',
-}
-```
-
-models/AchievementModel.js
-
-```js
-import mongoose from 'mongoose'
-import { ACHIEVEMENT_STATUS, ACHIEVEMENT_TYPE } from '../utils/constants.js'
-const AchievementSchema = new mongoose.Schema(
-  {
-    description: String,
-    //uh mb later
-    status: {
-      type: String,
-      enum: [ACHIEVEMENT_STATUS],
-      default: ACHIEVEMENT_STATUS.INACTIVE,
-    },
-    points: {
-      type: Number,
-      default: 0,
-    },
-
-    type: {
-      type: String,
-      enum: [ACHIEVEMENT_STATUS],
-      default: ACHIEVEMENT_TYPE.EXPLORATION,
-    },
-    dateOfCompletion: {
-      type: Date,
-      default: null,
-    },
-  },
-  { timestamps: true }
-)
-```
-
-#### 7. Validate Create Achievement
-
-validationMiddleware.js
-
-```js
-import { ACHIEVEMENT_STATUS, ACHIEVEMENT_TYPE } from '../utils/constants.js'
-
-export const validateAchievementInput = withValidationErrors([
-  body('description').notEmpty().withMessage('description is required'),
-  body('completion_status')
-    .isIn(Object.values(ACHIEVEMENT_STATUS))
-    .withMessage('invalid status value'),
-  body('jobType')
-    .isIn(Object.values(ACHIEVEMENT_TYPE))
-    .withMessage('invalid job type'),
-])
-```
-
-```js
-import { validateAchievementInput } from '../middleware/validationMiddleware.js'
-
-router
-  .route('/')
-  .get(getAllAchievements)
-  .post(validateAchievementInput, createAchievement)
-
-router
-  .route('/:id')
-  .get(getAchievement)
-  .delete(deleteAchievement)
-  .patch(validateAchievementInput, updateAchievement)
-```
-
-- create Achievement request
-
-```json
-{
-  "company": "coding addict",
-  "position": "backend-end",
-  "jobStatus": "pending",
-  "jobType": "full-time",
-  "jobLocation": "florida"
-}
-```
-
-#### 8. Validate ID Parameter
-
-validationMiddleware.js
-
-```js
-import mongoose from 'mongoose'
-import { param } from 'express-validator'
-
-export const validateIdParam = withValidationErrors([
-  param('id')
-    .custom((value) => mongoose.Types.ObjectId.isValid(value))
-    .withMessage('invalid MongoDB id'),
-])
-```
-
-```js
-export const validateIdParam = withValidationErrors([
-  param('id').custom(async (value) => {
-    const isValidId = mongoose.Types.ObjectId.isValid(value)
-    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
-    const achievement = await Achievement.findById(value)
-    if (!achievement)
-      throw new NotFoundError(`no achievement with id : ${value}`)
-  }),
-])
-```
-
-```js
-import { body, param, validationResult } from 'express-validator'
-import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
-import { ACHIEVEMENT_STATUS, ACHIEVEMENT_TYPE } from '../utils/constants.js'
-import mongoose from 'mongoose'
-import Achievement from '../models/achievementModel.js'
-
-const withValidationErrors = (validateValues) => {
-  return [
-    validateValues,
-    (req, res, next) => {
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        const errorMessages = errors.array().map((error) => error.msg)
-        if (errorMessages[0].startsWith('no achievement')) {
-          throw new NotFoundError(errorMessages)
-        }
-        throw new BadRequestError(errorMessages)
-      }
-      next()
-    },
-  ]
-}
-```
-
-achievementRouter.js
-
-```js
-import {
-  validateAchievementInput,
-  validateIdParam,
-} from '../middleware/validationMiddleware.js'
-
-router
-  .route('/:id')
-  .get(validateIdParam, getAchievement)
-  .delete(validateIdParam, deleteAchievement)
-```
-
-- remove NotFoundError from getJob, updateJob, deleteJob controllers
-
-#### 9. Clean DB
-
-## user 1 element existence check may throw
-
-### identifiable data on DB (common, admin)
-
-#### .10 User Model
-
-models/UserModel.js
-
-```js
-import mongoose from 'mongoose'
-
-const UserSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  password: String,
-  lastName: {
-    type: String,
-    default: 'lastName',
-  },
-  location: {
-    type: String,
-    default: 'my city',
-  },
-  role: {
-    type: String,
-    enum: ['user', 'admin'],
-    default: 'user',
-  },
-})
-
-export default mongoose.model('User', UserSchema)
-```
-
-#### 11. User Controller and Router
-
-controllers/authController.js
-
-```js
-export const register = async (req, res) => {
-  res.send('register')
-}
-export const login = async (req, res) => {
-  res.send('login')
-}
-```
-
-routers/authRouter.js
-
-```js
-import { Router } from 'express'
-import { register, login } from '../controllers/authController.js'
-const router = Router()
-
-router.post('/register', register)
-router.post('/login', login)
-
-export default router
-```
-
-server.js
-
-```js
-import authRouter from './routes/authRouter.js'
-
-app.use('/api/v1/auth', authRouter)
-```
-
-#### 12. Create User - Initial Setup
 
 authController.js
 
 ```js
-import { StatusCodes } from 'http-status-codes'
-import User from '../models/UserModel.js'
+import bcrypt from 'bcryptjs'
 
-export const register = async (req, res) => {
+const register = async (req, res) => {
+  // a random value that is added to the password before hashing
+  const salt = await bcrypt.genSalt(10)
+  const hashedPassword = await bcrypt.hash(req.body.password, salt)
+  req.body.password = hashedPassword
+
   const user = await User.create(req.body)
-  res.status(StatusCodes.CREATED).json({ user })
 }
 ```
 
-- register user request
+const salt = await bcrypt.genSalt(10);
+This line generates a random "salt" value that will be used to hash the password. A salt is a random value that is added to the password before hashing, which helps to make the resulting hash more resistant to attacks like dictionary attacks and rainbow table attacks. The genSalt() function in bcrypt generates a random salt value using a specified "cost" value. The cost value determines how much CPU time is needed to calculate the hash, and higher cost values result in stronger hashes that are more resistant to attacks.
+
+In this example, a cost value of 10 is used to generate the salt. This is a good default value that provides a good balance between security and performance. However, you may need to adjust the cost value based on the specific needs of your application.
+
+const hashedPassword = await bcrypt.hash(password, salt);
+This line uses the generated salt value to hash the password. The hash() function in bcrypt takes two arguments: the password to be hashed, and the salt value to use for the hash. It then calculates the hash value using a one-way hash function and the specified salt value.
+
+The resulting hash value is a string that represents the hashed password. This string can then be stored in a database or other storage mechanism to be compared against the user's password when they log in.
+
+By using a salt value and a one-way hash function, bcrypt helps to ensure that user passwords are stored securely and are resistant to attacks like password cracking and brute-force attacks.
+
+##### 2. BCRYPT VS BCRYPTJS
+
+bcrypt and bcryptjs are both popular libraries for hashing passwords in Node.js applications. However, bcryptjs is considered to be a better choice for a few reasons:
+
+Cross-platform compatibility: bcrypt is a native Node.js module that uses C++ bindings, which can make it difficult to install and use on some platforms. bcryptjs, on the other hand, is a pure JavaScript implementation that works on any platform.
+
+Security: While both bcrypt and bcryptjs use the same underlying algorithm for hashing passwords, bcryptjs is designed to be more resistant to certain types of attacks, such as side-channel attacks.
+
+Ease of use: bcryptjs has a simpler and more intuitive API than bcrypt, which can make it easier to use and integrate into your application.
+
+Overall, while bcrypt and bcryptjs are both good choices for hashing passwords in Node.js applications, bcryptjs is considered to be a better choice for its cross-platform compatibility, improved security, ease of use, and ongoing maintenance.
+
+#### 3. Setup Password Utils
+
+utils/passwordUtils.js
+
+```js
+import bcrypt from 'bcryptjs'
+
+export async function hashPassword(password) {
+  const salt = await bcrypt.genSalt(10)
+  const hashedPassword = await bcrypt.hash(password, salt)
+  return hashedPassword
+}
+```
+
+authController.js
+
+```js
+import { hashPassword } from '../utils/passwordUtils.js'
+
+const register = async (req, res) => {
+  const hashedPassword = await hashPassword(req.body.password)
+  req.body.password = hashedPassword
+
+  const user = await User.create(req.body)
+  res.status(StatusCodes.CREATED).json({ msg: 'user created' })
+}
+```
+
+#### 4. Login User
+
+- login user request
 
 ```json
 {
-  "name": "name",
-  "email": "name@gmail.com",
-  "password": "secret123",
-  "lastName": "lastName",
-  "location": "my city"
+  "email": "john@gmail.com",
+  "password": "secret123"
 }
 ```
-
-#### 13. Validate User
 
 validationMiddleware.js
 
 ```js
-import User from '../models/UserModel.js'
-
-export const validateRegisterInput = withValidationErrors([
-  body('name').notEmpty().withMessage('name is required'),
+export const validateLoginInput = withValidationErrors([
   body('email')
     .notEmpty()
     .withMessage('email is required')
     .isEmail()
-    .withMessage('invalid email format')
-    .custom(async (email) => {
-      const user = await User.findOne({ email })
-      if (user) {
-        throw new BadRequestError('email already exists')
-      }
-    }),
-  body('password')
-    .notEmpty()
-    .withMessage('password is required')
-    .isLength({ min: 8 })
-    .withMessage('password must be at least 8 characters long'),
-  body('location').notEmpty().withMessage('location is required'),
-  body('lastName').notEmpty().withMessage('last name is required'),
+    .withMessage('invalid email format'),
+  body('password').notEmpty().withMessage('password is required'),
 ])
 ```
 
 authRouter.js
 
 ```js
-import { validateRegisterInput } from '../middleware/validationMiddleware.js'
+import { validateLoginInput } from '../middleware/validationMiddleware.js'
 
-router.post('/register', validateRegisterInput, register)
+router.post('/login', validateLoginInput, login)
 ```
 
-#### 14. Admin Role
+#### 5. Unauthenticated Error
 
 authController.js
 
 ```js
-// first registered user is an admin
-const isFirstAccount = (await User.countDocuments()) === 0
-req.body.role = isFirstAccount ? 'admin' : 'user'
+import { UnauthenticatedError } from '../errors/customErrors.js'
 
-const user = await User.create(req.body)
+const login = async (req, res) => {
+  // check if user exists
+  // check if password is correct
+
+  const user = await User.findOne({ email: req.body.email })
+  if (!user) throw new UnauthenticatedError('invalid credentials')
+
+  res.send('login route')
+}
+```
+
+#### 6. Compare Password
+
+passwordUtils.js
+
+```js
+export async function comparePassword(password, hashedPassword) {
+  const isMatch = await bcrypt.compare(password, hashedPassword)
+  return isMatch
+}
+```
+
+authController.js
+
+```js
+import { hashPassword, comparePassword } from '../utils/passwordUtils.js'
+
+const login = async (req, res) => {
+  // check if user exists
+  // check if password is correct
+
+  const user = await User.findOne({ email: req.body.email })
+
+  if (!user) throw new UnauthenticatedError('invalid credentials')
+
+  const isPasswordCorrect = await comparePassword(
+    req.body.password,
+    user.password
+  )
+
+  if (!isPasswordCorrect) throw new UnauthenticatedError('invalid credentials')
+  res.send('login route')
+}
+```
+
+Refactor
+
+```js
+const isValidUser =
+  user && (await comparePassword(req.body.password, user.password))
+if (!isValidUser) throw new UnauthenticatedError('invalid credentials')
+```
+
+### bind token to cookie and item subsets to user
+
+#### 7. JSON Web Token
+
+A JSON Web Token (JWT) is a compact and secure way of transmitting data between parties. It is often used to authenticate and authorize users in web applications and APIs. JWTs contain information about the user and additional metadata, and can be used to securely transmit this information
+
+[Useful Resource](https://jwt.io/introduction)
+
+```sh
+npm i jsonwebtoken@9.0.0
+```
+
+utils/tokenUtils.js
+
+```js
+import jwt from 'jsonwebtoken'
+
+export const createJWT = (payload) => {
+  const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  })
+  return token
+}
+```
+
+JWT_SECRET represents the secret key used to sign the JWT. When creating a JWT, the payload (data) is signed with this secret key to generate a unique token. The secret key should be kept secure and should not be disclosed to unauthorized parties.
+
+JWT_EXPIRES_IN specifies the expiration time for the JWT. It determines how long the token remains valid before it expires. The value of JWT_EXPIRES_IN is typically provided as a duration, such as "1h" for one hour or "7d" for seven days. Once the token expires, it is no longer considered valid and can't be used for authentication or authorization purposes.
+
+These environment variables (JWT_SECRET and JWT_EXPIRES_IN) are read from the system environment during runtime, allowing for flexibility in configuration without modifying the code.
+
+authController.js
+
+```js
+import { createJWT } from '../utils/tokenUtils.js'
+
+const token = createJWT({ userId: user._id, role: user.role })
+console.log(token)
+```
+
+#### 8. Test JWT (optional)
+
+[JWT](https://jwt.io/)
+
+#### 9. ENV Variables
+
+- RESTART SERVER!!!!
+
+.env
+
+```js
+JWT_SECRET=
+JWT_EXPIRES_IN=
+```
+
+#### 10. HTTP Only Cookie
+
+An HTTP-only cookie is a cookie that can't be accessed by JavaScript running in the browser. It is designed to help prevent cross-site scripting (XSS) attacks, which can be used to steal cookies and other sensitive information.
+
+##### 11. HTTP Only Cookie VS Local Storage
+
+An HTTP-only cookie is a type of cookie that is designed to be inaccessible to JavaScript running in the browser. It is primarily used for authentication purposes and is a more secure way of storing sensitive information like user tokens. Local storage, on the other hand, is a browser-based storage mechanism that is accessible to JavaScript, and is used to store application data like preferences or user-generated content. While local storage is convenient, it is not a secure way of storing sensitive information as it can be accessed and modified by JavaScript running in the browser.
+
+authControllers.js
+
+```js
+const oneDay = 1000 * 60 * 60 * 24
+
+res.cookie('token', token, {
+  httpOnly: true,
+  expires: new Date(Date.now() + oneDay),
+  secure: process.env.NODE_ENV === 'production',
+})
+
+res.status(StatusCodes.CREATED).json({ msg: 'user logged in' })
+```
+
+```js
+const oneDay = 1000 * 60 * 60 * 24
+```
+
+This line defines a constant oneDay that represents the number of milliseconds in a day. This value is used later to set the expiration time for the cookie.
+
+```js
+res.cookie('token', token, {...});:
+```
+
+This line sets a cookie with the name "token" and a value of token, which is the JWT that was generated for the user. The ... represents an object containing additional options for the cookie.
+
+httpOnly: true: This option makes the cookie inaccessible to JavaScript running in the browser. This helps to prevent cross-site scripting (XSS) attacks, which can be used to steal cookies and other sensitive information.
+
+expires: new Date(Date.now() + oneDay): This option sets the expiration time for the cookie. In this case, the cookie will expire one day from the current time (as represented by Date.now() + oneDay).
+
+secure: process.env.NODE_ENV === 'production': This option determines whether the cookie should be marked as secure or not. If the NODE_ENV environment variable is set to "production", then the cookie is marked as secure, which means it can only be transmitted over HTTPS. This helps to prevent man-in-the-middle (MITM) attacks, which can intercept and modify cookies that are transmitted over unsecured connections.
+
+AchievementController.js
+
+```js
+export const getAllAchievements = async (req, res) => {
+  console.log(req)
+  const achivement = await Achivement.find({})
+  res.status(StatusCodes.OK).json({ achivement })
+}
+```
+
+#### 12. Clean DB
+
+#### 13. Connect User and Job
+
+models/User.js
+
+```js
+const JobSchema = new mongoose.Schema(
+  {
+    ....
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+    },
+  },
+  { timestamps: true }
+);
+```
+
+controllers/achievementController.js
+
+```js
+dont try to create yet, need to access user first.
+```
+
+## Higher order data concern (boundary pts)
+
+### identifiable data set is accessible
+
+#### 14. Auth Middleware
+
+middleware/authMiddleware.js
+
+```js
+export const authenticateUser = async (req, res, next) => {
+  console.log('auth middleware')
+  next()
+}
+```
+
+server.js
+
+```js
+import { authenticateUser } from './middleware/authMiddleware.js'
+
+app.use('/api/v1/achievements', authenticateUser, achievementRouter)
+```
+
+##### 15. Cookie Parser
+
+[Cookie Parser](https://www.npmjs.com/package/cookie-parser)
+
+```sh
+npm i cookie-parser@1.4.6
+```
+
+server.js
+
+```js
+import cookieParser from 'cookie-parser'
+app.use(cookieParser())
+```
+
+#### 16. Access Token
+
+authMiddleware.js
+
+```js
+import { UnauthenticatedError } from '../customErrors.js'
+
+export const authenticateUser = async (req, res, next) => {
+  const { token } = req.cookies
+  if (!token) {
+    throw new UnauthenticatedError('authentication invalid')
+  }
+  next()
+}
+```
+
+#### 17. Verify Token
+
+utils/tokenUtils.js
+
+```js
+export const verifyJWT = (token) => {
+  const decoded = jwt.verify(token, process.env.JWT_SECRET)
+  return decoded
+}
+```
+
+authMiddleware.js
+
+```js
+import { UnauthenticatedError } from '../errors/customErrors.js'
+import { verifyJWT } from '../utils/tokenUtils.js'
+
+export const authenticateUser = async (req, res, next) => {
+  const { token } = req.cookies
+  if (!token) {
+    throw new UnauthenticatedError('authentication invalid')
+  }
+
+  try {
+    const { userId, role } = verifyJWT(token)
+    req.user = { userId, role }
+    next()
+  } catch (error) {
+    throw new UnauthenticatedError('authentication invalid')
+  }
+}
+```
+
+AchievementController.js
+
+```js
+export const getAllAchievements = async (req, res) => {
+  console.log(req.user)
+  const achievement = await Achievement.find({ createdBy: req.user.userId })
+  res.status(StatusCodes.OK).json({ achievement })
+}
+```
+
+```js
+export const createAchievement = async (req, res) => {
+  req.body.createdBy = req.user.userId
+  const achievement = await Achievement.create(req.body)
+  res.status(StatusCodes.CREATED).json({ achievement })
+}
+```
+
+- use user to construct a create Achievement request
+
+```json
+{
+  "description": "create first achievement",
+  "completion_status": "pending",
+  "createdBy": "6516a4d160d4b2424112c614"
+}
+```
+
+### Permission lifeCycle
+
+#### 18. Check Permissions
+
+validationMiddleware.js
+
+```js
+const withValidationErrors = (validateValues) => {
+  return [
+    validateValues,
+    (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+       ...
+        if (errorMessages[0].startsWith('not authorized')) {
+          throw new UnauthorizedError('not authorized to access this route');
+        }
+
+        throw new BadRequestError(errorMessages);
+      }
+      next();
+    },
+  ];
+};
+```
+
+```js
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from '../errors/customErrors.js'
+
+export const validateIdParam = withValidationErrors([
+  param('id').custom(async (value, { req }) => {
+    const isValidMongoId = mongoose.Types.ObjectId.isValid(value)
+    if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id')
+    const job = await Job.findById(value)
+    if (!job) throw new NotFoundError(`no job with id ${value}`)
+    const isAdmin = req.user.role === 'admin'
+    const isOwner = req.user.userId === job.createdBy.toString()
+    if (!isAdmin && !isOwner)
+      throw UnauthorizedError('not authorized to access this route')
+  }),
+])
+```
+
+- need log in correct user before access
+
+create user
+
+```json
+{
+  "description": "create first achievement",
+  "completion_status": "pending",
+  "createdBy": "6516a4d160d4b2424112c614"
+}
+```
+
+Log in user
+
+```json
+{
+  "email": "name5@gmail.com",
+  "password": "secret123"
+}
+```
+
+create achievements --> can access
+
+```json
+{
+  "description": "create first achievement",
+  "completion_status": "pending",
+  "createdBy": "6516c7e3d81989b44aa337d2"
+}
+```
+
+identifying workload must include createdBy
+
+```json
+{
+  "createdBy": "6516c7e3d81989b44aa337d2"
+}
+```
+
+#### 19. Logout User
+
+controllers/authController.js
+
+```js
+const logout = (req, res) => {
+  res.cookie('token', 'logout', {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  })
+  res.status(StatusCodes.OK).json({ msg: 'user logged out!' })
+}
+```
+
+routes/authRouter.js
+
+```js
+import { Router } from 'express'
+const router = Router()
+import { logout } from '../controllers/authController.js'
+
+router.get('/logout', logout)
+
+export default router
 ```
