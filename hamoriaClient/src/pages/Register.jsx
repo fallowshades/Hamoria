@@ -3,8 +3,20 @@ import Wrapper from '../assets/wrappers/RegisterAndLoginPage'
 import { Link } from 'react-router-dom'
 import { Form, redirect, useNavigation } from 'react-router-dom'
 
-export const action = async (data) => {
-  return null
+import customFetch from '../utils/customFetch'
+import { toast } from 'react-toastify'
+
+export const action = async ({ request }) => {
+  const formData = await request.formData()
+  const data = Object.fromEntries(formData)
+  try {
+    await customFetch.post('/auth/register', data)
+    toast.success('Registration successful')
+    return redirect('/login')
+  } catch (error) {
+    toast.error(error?.response?.data?.msg)
+    return error
+  }
 }
 
 const Register = () => {
@@ -13,12 +25,25 @@ const Register = () => {
       <Form method="post" className="form">
         <Logo />
         <h4>Register</h4>
-        <FormRow type="text" name="name" />
-        <FormRow type="text" name="lastName" labelText="last name" />
-        <FormRow type="text" name="location" />
-        <FormRow type="email" name="email" />
+        <FormRow type="text" name="name" defaultValue="fallow" />
+        <FormRow
+          type="text"
+          name="lastName"
+          labelText="last name"
+          defaultValue="shade"
+        />
+        <FormRow type="text" name="location" defaultValue="here" />
+        <FormRow
+          type="email"
+          name="email"
+          defaultValue="fallowshades@gmail.com"
+        />
 
-        <FormRow type="password" name="password" />
+        <FormRow
+          type="password"
+          name="password"
+          defaultValue="secretDuckTape"
+        />
 
         <button type="submit" className="btn btn-block">
           submit
