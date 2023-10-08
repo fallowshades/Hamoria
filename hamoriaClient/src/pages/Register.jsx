@@ -1,11 +1,16 @@
 import { Logo, FormRow } from '../components'
 import Wrapper from '../assets/wrappers/RegisterAndLoginPage'
 import { Link } from 'react-router-dom'
+import { Form, redirect, useNavigation } from 'react-router-dom'
+
+export const action = async (data) => {
+  return null
+}
 
 const Register = () => {
   return (
     <Wrapper>
-      <form className="form">
+      <Form method="post" className="form">
         <Logo />
         <h4>Register</h4>
         <FormRow type="text" name="name" />
@@ -24,7 +29,7 @@ const Register = () => {
             Login
           </Link>
         </p>
-      </form>
+      </Form>
     </Wrapper>
   )
 }
