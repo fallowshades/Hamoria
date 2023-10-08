@@ -4,7 +4,6 @@ import { NotFoundError } from '../errors/customErrors.js'
 import { StatusCodes } from 'http-status-codes'
 
 export const getAllAchievements = async (req, res) => {
-  console.log(req)
   const achievements = await Achievement.find({ createdBy: req.user.userId })
   res.status(StatusCodes.OK).json({ achievements })
 }
