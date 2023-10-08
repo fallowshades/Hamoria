@@ -10,7 +10,7 @@ import { body, validationResult } from 'express-validator'
 import authRouter from './routes/authRouter.js'
 import { authenticateUser } from './middleware/authMiddleware.js'
 import cookieParser from 'cookie-parser'
-import userRouter from './routers/userRoutes.js'
+import userRouter from './routes/userRouter.js'
 
 dotenv.config()
 
