@@ -21,6 +21,7 @@ import {
 import { action as registerAction } from './pages/Register'
 import { action as loginAction } from './pages/Login'
 import { loader as dashboardLoader } from './pages/DashboardLayout'
+import { action as addAchievementAction } from './pages/AddAchievement'
 
 const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem('darkTheme') === 'true'
@@ -58,6 +59,7 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <AddAchievement />,
+            action: addAchievementAction,
           },
           { path: 'stats', element: <Stats /> },
           {
