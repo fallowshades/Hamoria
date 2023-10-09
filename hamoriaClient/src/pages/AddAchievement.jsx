@@ -5,7 +5,7 @@ import { ACHIEVEMENT_STATUS, ACHIEVEMENT_TYPE } from '../../../utils/constants'
 import { Form, useNavigation, redirect } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import customFetch from '../utils/customFetch'
-
+import FormRowSelect from '../components/FormRowSelect'
 const AddAchievement = () => {
   const { user } = useOutletContext()
   const navigation = useNavigation()
@@ -22,7 +22,21 @@ const AddAchievement = () => {
             type="text"
             labelText="achievement user attachment"
             name="createdBy"
-            defaultValue={user.createdBy}
+            defaultValue={user._id}
+          />
+          <div className="form-row">
+            <FormRowSelect
+              labelText="achievement  status"
+              name="status"
+              defaultValue={ACHIEVEMENT_STATUS.INACTIVE}
+              list={Object.values(ACHIEVEMENT_STATUS)}
+            />
+          </div>
+          <FormRowSelect
+            name="type"
+            labelText="achievement type"
+            defaultValue={ACHIEVEMENT_TYPE.EXPLORATION}
+            list={Object.values(ACHIEVEMENT_TYPE)}
           />
 
           <button
