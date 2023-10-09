@@ -9,3 +9,4 @@ export { default as AchievementsContainer } from './AchievementsContainer'
 export { default as FormRowSelect } from './FormRowSelect'
 
 export { default as StatItem } from './StatItem'
+export { default as SubmitBtn } from './SubmitBtn'

@@ -2,7 +2,7 @@ import { FormRow, FormRowSelect } from '../components'
 import Wrapper from '../assets/wrappers/DashboardFormPage'
 import { useLoaderData } from 'react-router-dom'
 import { ACHIEVEMENT_STATUS, ACHIEVEMENT_TYPE } from '../../../utils/constants'
-import { Form, useNavigation, redirect } from 'react-router-dom'
+import { Form, redirect } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import customFetch from '../utils/customFetch'
 
@@ -31,9 +31,6 @@ export const action = async ({ request, params }) => {
 
 const EditAchievement = () => {
   const { achievement } = useLoaderData()
-
-  const navigation = useNavigation()
-  const isSubmitting = navigation.state === 'submitting'
 
   return (
     <Wrapper>
@@ -69,13 +66,7 @@ const EditAchievement = () => {
             defaultValue={achievement.type}
             list={Object.values(ACHIEVEMENT_TYPE)}
           />
-          <button
-            type="submit"
-            className="btn btn-block form-btn "
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'submitting...' : 'submit'}
-          </button>
+          <SubmitBtn formBtn />
         </div>
       </Form>
     </Wrapper>
