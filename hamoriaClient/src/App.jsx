@@ -16,11 +16,19 @@ import {
   Stats,
   Profile,
   Admin,
+  EditAchievement,
 } from './pages'
 
 import { action as registerAction } from './pages/Register'
 import { action as loginAction } from './pages/Login'
 import { loader as dashboardLoader } from './pages/DashboardLayout'
+import { action as addAchievementAction } from './pages/AddAchievement'
+import { loader as allAchievementLoader } from './pages/AllAchievements'
+
+import { loader as editAchievementLoader } from './pages/EditAchievement'
+import { action as editAchievementAction } from './pages/EditAchievement'
+
+import { action as deleteAchievementAction } from './pages/DeleteAchievement'
 
 const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem('darkTheme') === 'true'
@@ -58,11 +66,13 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <AddAchievement />,
+            action: addAchievementAction,
           },
           { path: 'stats', element: <Stats /> },
           {
             path: 'all-achievements',
             element: <AllAchievements />,
+            loader: allAchievementLoader,
           },
 
           {
@@ -73,6 +83,13 @@ const router = createBrowserRouter([
             path: 'admin',
             element: <Admin />,
           },
+          {
+            path: 'edit-achievement/:id',
+            element: <EditAchievement />,
+            loader: editAchievementLoader,
+            action: editAchievementAction,
+          },
+          { path: 'delete-achievement/:id', action: deleteAchievementAction },
         ],
       },
     ],

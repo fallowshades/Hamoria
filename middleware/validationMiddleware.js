@@ -42,7 +42,7 @@ export const validateAchievementInput = withValidationErrors([
 ])
 
 export const validateIdParam = withValidationErrors([
-  param('id').custom(async (value) => {
+  param('id').custom(async (value, { req }) => {
     const isValidId = mongoose.Types.ObjectId.isValid(value)
     if (!isValidId) throw new BadRequestError('invalid MongoDB id')
     const achievement = await Achievement.findById(value)
@@ -50,9 +50,9 @@ export const validateIdParam = withValidationErrors([
       throw new NotFoundError(`no achievement with id : ${value}`)
 
     const isAdmin = req.user.role === 'admin'
-    const isOwner = req.user.userId === job.createdBy.toString()
+    const isOwner = req.user.userId === achievement.createdBy.toString()
     if (!isAdmin && !isOwner)
-      throw UnauthorizedError('not authorized to access this route')
+      throw UnauthenticatedError('not authorized to access this route')
   }),
 ])
 export const validateRegisterInput = withValidationErrors([
