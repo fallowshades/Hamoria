@@ -21,12 +21,13 @@ const AllAchievement = () => {
   const { data } = useLoaderData()
 
   return (
-    <>
+    <AllAchievementsContext.Provider value={{ data }}>
       <SearchContainer />
       <AchievementsContainer />
-    </>
+    </AllAchievementsContext.Provider>
   )
 }
 export default AllAchievement
 
-export const useAllAchievementContext = () => useContext(AllAchievementsContext)
+export const useAllAchievementsContext = () =>
+  useContext(AllAchievementsContext)
