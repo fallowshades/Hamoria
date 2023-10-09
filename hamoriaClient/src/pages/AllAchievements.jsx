@@ -15,6 +15,7 @@ export const loader = async ({ request }) => {
     return error
   }
 }
+const AllAchievementsContext = createContext()
 
 const AllAchievement = () => {
   const { data } = useLoaderData()
@@ -27,3 +28,5 @@ const AllAchievement = () => {
   )
 }
 export default AllAchievement
+
+export const useAllAchievementContext = () => useContext(AllAchievementsContext)
