@@ -155,14 +155,14 @@ Story: advanced navigation
 ### Jobs page v0.2.2
 
 ---[x]support tree transfor objects
----[]create transfor lifeCycle
----[]context map presentational data dynamically
+---[x]create transfor lifeCycle
+---[x]context map presentational data dynamically
 
 ### Admin page v0.2.3
 
-[]special network Application
----[]use dashboardContext to access role
----[]state item with user data as input (from loader data)
+[x]special network Application
+---[x]use dashboardContext to access role
+---[x]state item with user data as input (from loader data)
 
 ### Profile page v0.2.4
 

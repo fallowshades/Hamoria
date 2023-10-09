@@ -7,3 +7,5 @@ export { default as SmallSidebar } from './SmallSidebar'
 export { default as SearchContainer } from './SearchContainer'
 export { default as AchievementsContainer } from './AchievementsContainer'
 export { default as FormRowSelect } from './FormRowSelect'
+
+export { default as StatItem } from './StatItem'
