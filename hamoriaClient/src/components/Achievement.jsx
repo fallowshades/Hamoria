@@ -29,6 +29,9 @@ const Achievement = ({
       </header>
       <div className="content">
         <div className="content-center">
+          <AchievementInfo icon={<FaLocationArrow />} text={type} />
+          <AchievementInfo icon={<FaCalendarAlt />} text={date} />
+          <AchievementInfo icon={<FaBriefcase />} text={type} />
           <div className={`status ${status}`}>{status}</div>
         </div>
 
