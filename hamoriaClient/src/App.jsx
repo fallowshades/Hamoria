@@ -31,6 +31,8 @@ import { action as editAchievementAction } from './pages/EditAchievement'
 import { action as deleteAchievementAction } from './pages/DeleteAchievement'
 import { loader as adminLoader } from './pages/Admin'
 
+import { action as profileAction } from './pages/Profile'
+
 const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem('darkTheme') === 'true'
   document.body.classList.toggle('dark-theme', isDarkTheme)
@@ -79,6 +81,7 @@ const router = createBrowserRouter([
           {
             path: 'profile',
             element: <Profile />,
+            action: profileAction,
           },
           {
             path: 'admin',

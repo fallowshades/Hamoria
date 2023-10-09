@@ -17,13 +17,14 @@ import { fileURLToPath } from 'url'
 import path from 'path'
 import cloudinary from 'cloudinary'
 
+dotenv.config()
+
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
 })
 
-dotenv.config()
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const app = express()
 app.use(express.static(path.resolve(__dirname, './public')))
