@@ -7,6 +7,7 @@ import { useContext, createContext } from 'react'
 export const loader = async ({ request }) => {
   try {
     const { data } = await customFetch.get('/achievements')
+    console.log(data)
     return {
       data,
     }
