@@ -24,6 +24,9 @@ import { loader as dashboardLoader } from './pages/DashboardLayout'
 import { action as addAchievementAction } from './pages/AddAchievement'
 import { loader as allAchievementLoader } from './pages/AllAchievements'
 
+import { loader as editAchievementLoader } from './pages/EditAchievement'
+import { action as editAchievementAction } from './pages/EditAchievement'
+
 const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem('darkTheme') === 'true'
   document.body.classList.toggle('dark-theme', isDarkTheme)
@@ -76,6 +79,12 @@ const router = createBrowserRouter([
           {
             path: 'admin',
             element: <Admin />,
+          },
+          {
+            path: 'edit-achievement/:id',
+            element: <EditAchievement />,
+            loader: editAchievementLoader,
+            action: editAchievementAction,
           },
         ],
       },
