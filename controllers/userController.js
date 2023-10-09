@@ -5,7 +5,7 @@ import Achievement from '../models/achievementModel.js'
 export const getCurrentUser = async (req, res) => {
   const user = await User.findOne({ _id: req.user.userId })
   const userWithoutPassword = user.toJSON()
-  res.status(StatusCodes.OK).json({ msg: 'get current user' })
+  res.status(StatusCodes.OK).json(userWithoutPassword)
 }
 
 export const getApplicationStats = async (req, res) => {

@@ -10,9 +10,11 @@ import customFetch from '../utils/customFetch'
 
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+
 export const loader = async () => {
   try {
     const { data } = await customFetch('/users/current-user')
+
     return data
   } catch (error) {
     return redirect('/')
