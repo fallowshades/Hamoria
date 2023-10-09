@@ -28,6 +28,8 @@ import { loader as allAchievementLoader } from './pages/AllAchievements'
 import { loader as editAchievementLoader } from './pages/EditAchievement'
 import { action as editAchievementAction } from './pages/EditAchievement'
 
+import { action as deleteAchievementAction } from './pages/DeleteAchievement'
+
 const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem('darkTheme') === 'true'
   document.body.classList.toggle('dark-theme', isDarkTheme)
@@ -87,6 +89,7 @@ const router = createBrowserRouter([
             loader: editAchievementLoader,
             action: editAchievementAction,
           },
+          { path: 'delete-achievement/:id', action: deleteAchievementAction },
         ],
       },
     ],
