@@ -14,7 +14,7 @@ export const action = async ({ request }) => {
   try {
     await customFetch.post('/achievements', data)
     toast.success('achievement added successfully')
-    return null
+    return redirect('all-achievements')
   } catch (error) {
     toast.error(error?.response?.data?.msg)
     return error
