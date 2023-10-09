@@ -29,6 +29,7 @@ import { loader as editAchievementLoader } from './pages/EditAchievement'
 import { action as editAchievementAction } from './pages/EditAchievement'
 
 import { action as deleteAchievementAction } from './pages/DeleteAchievement'
+import { loader as adminLoader } from './pages/Admin'
 
 const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem('darkTheme') === 'true'
@@ -82,6 +83,7 @@ const router = createBrowserRouter([
           {
             path: 'admin',
             element: <Admin />,
+            loader: adminLoader,
           },
           {
             path: 'edit-achievement/:id',
