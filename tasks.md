@@ -154,7 +154,7 @@ Story: advanced navigation
 
 ### Jobs page v0.2.2
 
----[]support tree transfor objects
+---[x]support tree transfor objects
 ---[]create transfor lifeCycle
 ---[]context map presentational data dynamically
 
