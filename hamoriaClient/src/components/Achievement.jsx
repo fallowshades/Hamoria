@@ -24,7 +24,7 @@ const Achievement = ({
         <div className="main-icon">{description?.charAt(0)}</div>
         <div className="info">
           <h5>{description}</h5>
-          <p>{points}</p>
+          <p>{_id}</p>
         </div>
       </header>
       <div className="content">

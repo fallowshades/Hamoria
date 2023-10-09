@@ -16,6 +16,7 @@ import {
   Stats,
   Profile,
   Admin,
+  EditAchievement,
 } from './pages'
 
 import { action as registerAction } from './pages/Register'

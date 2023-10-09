@@ -29,7 +29,6 @@ const AchievementsContainer = () => {
         />
 
         {achievements.map((achievement) => {
-          console.log(achievement)
           return <Achievement key={achievement._id} {...achievement} />
         })}
       </div>
