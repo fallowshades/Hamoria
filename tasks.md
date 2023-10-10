@@ -178,17 +178,20 @@ Story: advanced navigation
 ---[z]a method to transmit (mb callback)
 ---[z]connected onto additional node (name, key, secrete)
 ---[z]redundancy
+
+### test user v0.2.5
+
 [z]test user
 ---[z]front static async
 ---[z]back accumulate extra user properties for later checking.
 
-### stats page v0.2.5
+### stats page v0.2.6
 
 tool to extract table data
 ---[]1 column (reduce)
 ---[]set of columns (map)
 
-### All Jobs page v0.2.6
+### All Jobs page v0.2.7
 
 []params to send request
 ---[]interactive session ctrl link to url reset.

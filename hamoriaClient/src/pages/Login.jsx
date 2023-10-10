@@ -7,6 +7,7 @@ import customFetch from '../utils/customFetch'
 import { toast } from 'react-toastify'
 import { useActionData } from 'react-router-dom'
 import { SubmitBtn } from '../components'
+import { useNavigate } from 'react-router-dom'
 
 export const action = async ({ request }) => {
   const formData = await request.formData()
@@ -28,8 +29,22 @@ export const action = async ({ request }) => {
 }
 
 const Login = () => {
+  const navigate = useNavigate()
   const errors = useActionData()
 
+  const loginDemoUser = async () => {
+    const data = {
+      email: 'test@test.com',
+      password: 'secret123',
+    }
+    try {
+      await customFetch.post('/auth/login', data)
+      toast.success('take a test drive')
+      navigate('/dashboard')
+    } catch (error) {
+      toast.error(error?.response?.data?.msg)
+    }
+  }
   return (
     <Wrapper>
       <Form method="post" className="form">
@@ -47,7 +62,7 @@ const Login = () => {
           defaultValue="secretDuckTape"
         />
         <SubmitBtn />
-        <button type="button" className="btn btn-block">
+        <button type="button" className="btn btn-block" onClick={loginDemoUser}>
           explore the app
         </button>
         <p>
