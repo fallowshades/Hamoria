@@ -188,8 +188,8 @@ Story: advanced navigation
 ### stats page v0.2.6
 
 tool to extract table data
----[]1 column (reduce)
----[]set of columns (map)
+---[x]1 column (reduce)
+---[x]set of columns (map)
 
 ### All Jobs page v0.2.7
 
