@@ -12,8 +12,10 @@ import {
   createAchievement,
   updateAchievement,
   deleteAchievement,
+  showStats,
 } from '../controllers/achievementController.js'
 
+router.route('/stats').get(showStats)
 router
   .route('/')
   .get(getAllAchievements)

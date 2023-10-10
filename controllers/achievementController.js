@@ -3,6 +3,9 @@ import 'express-async-errors'
 import { NotFoundError } from '../errors/customErrors.js'
 import { StatusCodes } from 'http-status-codes'
 
+import mongoose from 'mongoose'
+import day from 'dayjs'
+
 export const getAllAchievements = async (req, res) => {
   const achievements = await Achievement.find({ createdBy: req.user.userId })
   res.status(StatusCodes.OK).json({ achievements })
@@ -36,4 +39,28 @@ export const deleteAchievement = async (req, res) => {
   const removedAchievement = await Achievement.findByIdAndDelete(id)
 
   res.status(StatusCodes.OK).json({ achievement: removedAchievement })
+}
+
+export const showStats = async (req, res) => {
+  const defaultStats = {
+    pending: 22,
+    interview: 11,
+    declined: 4,
+  }
+
+  let monthlyApplications = [
+    {
+      date: 'May 23',
+      count: 12,
+    },
+    {
+      date: 'Jun 23',
+      count: 9,
+    },
+    {
+      date: 'Jul 23',
+      count: 3,
+    },
+  ]
+  res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications })
 }
