@@ -1,11 +1,12 @@
 import { Logo, FormRow } from '../components'
 import Wrapper from '../assets/wrappers/RegisterAndLoginPage'
 
-import { Link, Form, redirect, useNavigation } from 'react-router-dom'
+import { Link, Form, redirect } from 'react-router-dom'
 
 import customFetch from '../utils/customFetch'
 import { toast } from 'react-toastify'
 import { useActionData } from 'react-router-dom'
+import { SubmitBtn } from '../components'
 
 export const action = async ({ request }) => {
   const formData = await request.formData()
@@ -28,8 +29,6 @@ export const action = async ({ request }) => {
 
 const Login = () => {
   const errors = useActionData()
-  const navigation = useNavigation()
-  const isSubmitting = navigation.state === 'submitting'
 
   return (
     <Wrapper>
@@ -47,9 +46,7 @@ const Login = () => {
           name="password"
           defaultValue="secretDuckTape"
         />
-        <button type="submit" className="btn btn-block" disabled={isSubmitting}>
-          {isSubmitting ? 'submitting...' : 'submit'}
-        </button>
+        <SubmitBtn />
         <button type="button" className="btn btn-block">
           explore the app
         </button>
