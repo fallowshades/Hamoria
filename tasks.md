@@ -166,21 +166,21 @@ Story: advanced navigation
 
 ### Profile page v0.2.4
 
-[]both front and backend together with backend acting as control of upload
----[]concern in time of development and production
----[]concern local space notification \_Directory
----[]how does server controll data with string
-[]path to presentatioal destination
----[]accept attribute
----[]challanges with size pressentational ctrl session and content type
-[]Source transmition
----[]ready dst to persist data, since hosted server limitation.
----[]a method to transmit (mb callback)
----[]connected onto additional node (name, key, secrete)
----[]redundancy
-[]test user
----[]front static async
----[]back accumulate extra user properties for later checking.
+[z]both front and backend together with backend acting as control of upload
+---[z]concern in time of development and production
+---[z]concern local space notification \_Directory
+---[z]how does server controll data with string
+[z]path to presentatioal destination
+---[z]accept attribute
+---[z]challanges with size pressentational ctrl session and content type
+[z]Source transmition
+---[z]ready dst to persist data, since hosted server limitation.
+---[z]a method to transmit (mb callback)
+---[z]connected onto additional node (name, key, secrete)
+---[z]redundancy
+[z]test user
+---[z]front static async
+---[z]back accumulate extra user properties for later checking.
 
 ### stats page v0.2.5
 

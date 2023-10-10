@@ -291,7 +291,7 @@ export default SubmitBtn
 
 ### (3)Connect onto additional node ( redundancy?)
 
-#### Upload Image As Buffer
+#### Upload Image As Buffer (for deploy)
 
 - remove public folder
 
