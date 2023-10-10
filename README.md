@@ -1,343 +1,505 @@
-# Iteration 3 layer 5
+# iteration3 layer 6 roles in profile
 
-## both front/back is in control
+## Test user
 
-### (1)Concern deevelopment || production
+### (1)Front static async
 
-#### Avatar Image
+#### 1. Test User
 
-- get two images from pexels
+- create test user
+- feel free to use one of the chatGPT options
 
-[pexels](https://www.pexels.com/search/person/)
+```json
+{
+  "name": "Zippy",
+  "email": "test@test.com",
+  "password": "secret123",
+  "lastName": "ShakeAndBake",
+  "location": "Codeville"
+}
+{
+  "name": "Chuckleberry",
+  "email": "test@test.com",
+  "password": "secret123",
+  "lastName": "Gigglepants",
+  "location": "Laughterland"
+}
 
-#### Setup Public Folder
+{
+  "name": "Bubbles McLaughster",
+  "email": "test@test.com",
+  "password": "secret123",
+  "lastName": "Ticklebottom",
+  "location": "Giggle City"
+}
 
-server.js
 
-```js
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-import path from 'path'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
-
-app.use(express.static(path.resolve(__dirname, './public')))
+{
+  "name": "Gigglesworth",
+  "email": "test@test.com",
+  "password": "secret123",
+  "lastName": "Snickerdoodle",
+  "location": "Chuckleburg"
+}
 ```
 
-- http://localhost:5100/imageName
-
-### (2)Concerns over local space / \_Directory
-
-#### Profile Page - Initial Setup
-
-- remove jobs,users from DB
-- add avatar property in the user model
-
-models/UserModel.js
+#### 2. Test User - Login Page
 
 ```js
-const UserSchema = new mongoose.Schema({
-  avatar: String,
-  avatarPublicId: String,
-})
-```
+import { useNavigate } from 'react-router-dom';
 
-#### Profile Page - Structure
-
-pages/Profile.jsx
-
-```js
-import { FormRow } from '../components'
-import Wrapper from '../assets/wrappers/DashboardFormPage'
-import { useOutletContext } from 'react-router-dom'
-import { useNavigation, Form } from 'react-router-dom'
-import customFetch from '../utils/customFetch'
-import { toast } from 'react-toastify'
-
-const Profile = () => {
-  const { user } = useOutletContext()
-  const { name, lastName, email, location } = user
-  const navigation = useNavigation()
-  const isSubmitting = navigation.state === 'submitting'
+const Login = () => {
+  const navigate = useNavigate();
+  const loginDemoUser = async () => {
+    const data = {
+      email: 'test@test.com',
+      password: 'secret123',
+    };
+    try {
+      await customFetch.post('/auth/login', data);
+      toast.success('take a test drive');
+      navigate('/dashboard');
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+    }
+  };
   return (
     <Wrapper>
-      <Form method="post" className="form" encType="multipart/form-data">
-        <h4 className="form-title">profile</h4>
-
-        <div className="form-center">
-          <div className="form-row">
-            <label htmlFor="image" className="form-label">
-              Select an image file (max 0.5 MB):
-            </label>
-            <input
-              type="file"
-              id="avatar"
-              name="avatar"
-              className="form-input"
-              accept="image/*"
-            />
-          </div>
-          <FormRow type="text" name="name" defaultValue={name} />
-          <FormRow
-            type="text"
-            labelText="last name"
-            name="lastName"
-            defaultValue={lastName}
-          />
-          <FormRow type="email" name="email" defaultValue={email} />
-          <FormRow type="text" name="location" defaultValue={location} />
-          <button
-            className="btn btn-block form-btn"
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'submitting...' : 'save changes'}
-          </button>
-        </div>
+      ...
+        <button type='button' className='btn btn-block' onClick={loginDemoUser}>
+          explore the app
+        </button>
+        ...
       </Form>
+    </Wrapper>
+  );
+};
+export default Login;
+```
+
+#### 3. Test User - Restrict Access
+
+authMiddleware
+
+```js
+import {
+  BadRequestError,
+} from '../errors/customErrors.js';
+
+export const authenticateUser = (req, res, next) => {
+  ...
+  try {
+    const { userId, role } = verifyJWT(token);
+    const testUser = userId === 'testUserId';
+    req.user = { userId, role, testUser };
+    next();
+  }
+  ....
+};
+
+export const checkForTestUser = (req, res, next) => {
+  if (req.user.testUser) {
+    throw new BadRequestError('Demo User. Read Only!');
+  }
+  next();
+};
+
+```
+
+- add to updateUser, createJob, updateJob, deleteJob
+
+### (2)backend accumulate \* users before ctrl
+
+#### 4. Mock Data
+
+[Mockaroo ](https://www.mockaroo.com/)
+
+```json
+{
+  "company": "Cogidoo",
+  "position": "Help Desk Technician",
+  "jobLocation": "Vyksa",
+  "jobStatus": "pending",
+  "jobType": "part-time",
+  "createdAt": "2022-07-25T21:26:23Z"
+}
+```
+
+- rename and save json in utils
+
+#### 5. Populate DB
+
+- create populate.js
+- setup for test user and admin
+
+```js
+import { readFile } from 'fs/promises'
+import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+dotenv.config()
+
+import Job from './models/JobModel.js'
+import User from './models/UserModel.js'
+try {
+  await mongoose.connect(process.env.MONGO_URL)
+  // const user = await User.findOne({ email: 'john@gmail.com' });
+  const user = await User.findOne({ email: 'test@test.com' })
+
+  const jsonJobs = JSON.parse(
+    await readFile(new URL('./utils/mockData.json', import.meta.url))
+  )
+  const jobs = jsonJobs.map((job) => {
+    return { ...job, createdBy: user._id }
+  })
+  await Job.deleteMany({ createdBy: user._id })
+  await Job.create(jobs)
+  console.log('Success!!!')
+  process.exit(0)
+} catch (error) {
+  console.log(error)
+  process.exit(1)
+}
+```
+
+## Stats
+
+### (1) Populate /stat set up
+
+#### 6. Stats - Setup
+
+- create controller
+- setup route and thunder client
+- install/setup dayjs on the server
+
+jobController.js
+
+```js
+import mongoose from 'mongoose'
+import day from 'dayjs'
+
+export const showStats = async (req, res) => {
+  const defaultStats = {
+    pending: 22,
+    interview: 11,
+    declined: 4,
+  }
+
+  let monthlyApplications = [
+    {
+      date: 'May 23',
+      count: 12,
+    },
+    {
+      date: 'Jun 23',
+      count: 9,
+    },
+    {
+      date: 'Jul 23',
+      count: 3,
+    },
+  ]
+  res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications })
+}
+```
+
+#### 7. Stats - Complete Server Functionality
+
+[MongoDB Docs](https://www.mongodb.com/docs/manual/core/aggregation-pipeline/)
+
+The MongoDB aggregation pipeline is like a factory line for data. Data enters, it goes through different stages like cleaning, sorting, or grouping, and comes out at the end changed in some way. It's a way to process data inside MongoDB.
+
+jobController.js
+
+```js
+export const showStats = async (req, res) => {
+  let stats = await Job.aggregate([
+    { $match: { createdBy: new mongoose.Types.ObjectId(req.user.userId) } },
+    { $group: { _id: '$jobStatus', count: { $sum: 1 } } },
+  ])
+  stats = stats.reduce((acc, curr) => {
+    const { _id: title, count } = curr
+    acc[title] = count
+    return acc
+  }, {})
+
+  const defaultStats = {
+    pending: stats.pending || 0,
+    interview: stats.interview || 0,
+    declined: stats.declined || 0,
+  }
+
+  let monthlyApplications = await Job.aggregate([
+    { $match: { createdBy: new mongoose.Types.ObjectId(req.user.userId) } },
+    {
+      $group: {
+        _id: { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { '_id.year': -1, '_id.month': -1 } },
+    { $limit: 6 },
+  ])
+  monthlyApplications = monthlyApplications
+    .map((item) => {
+      const {
+        _id: { year, month },
+        count,
+      } = item
+
+      const date = day()
+        .month(month - 1)
+        .year(year)
+        .format('MMM YY')
+      return { date, count }
+    })
+    .reverse()
+
+  res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications })
+}
+```
+
+#### Commentary
+
+```js
+let stats = await Job.aggregate([
+  { $match: { createdBy: new mongoose.Types.ObjectId(req.user.userId) } },
+  { $group: { _id: '$jobStatus', count: { $sum: 1 } } },
+])
+```
+
+let stats = await Job.aggregate([ ... ]); This line says we're going to perform an aggregation operation on the Job collection in MongoDB and save the result in a variable called stats. The await keyword is used to wait for the operation to finish before continuing, as the operation is asynchronous (i.e., it runs in the background).
+
+{ $match: { createdBy: new mongoose.Types.ObjectId(req.user.userId) } } This is the first stage of the pipeline. It filters the jobs so that only the ones created by the user specified by req.user.userId are passed to the next stage. The new mongoose.Types.ObjectId(req.user.userId) part converts req.user.userId into an ObjectId (which is the format MongoDB uses for ids).
+
+{ $group: { _id: '$jobStatus', count: { $sum: 1 } } } This is the second stage of the pipeline. It groups the remaining jobs by their status (the jobStatus field). For each group, it calculates the count of jobs by adding 1 for each job ({ $sum: 1 }), and stores this in a field called count.
+
+```js
+let monthlyApplications = await Job.aggregate([
+  { $match: { createdBy: new mongoose.Types.ObjectId(req.user.userId) } },
+  {
+    $group: {
+      _id: { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } },
+      count: { $sum: 1 },
+    },
+  },
+  { $sort: { '_id.year': -1, '_id.month': -1 } },
+  { $limit: 6 },
+])
+```
+
+let monthlyApplications = await Job.aggregate([ ... ]); This line indicates that an aggregation operation will be performed on the Job collection in MongoDB. The result will be stored in the variable monthlyApplications. The await keyword ensures that the code waits for this operation to complete before proceeding, as it is an asynchronous operation.
+
+{ $match: { createdBy: new mongoose.Types.ObjectId(req.user.userId) } } This is the first stage of the pipeline. It filters the jobs to only those created by the user identified by req.user.userId.
+
+{ $group: { _id: { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } }, count: { $sum: 1 } } } This is the second stage of the pipeline. It groups the remaining jobs based on the year and month when they were created. For each group, it calculates the count of jobs by adding 1 for each job in the group.
+
+{ $sort: { '\_id.year': -1, '\_id.month': -1 } } This is the third stage of the pipeline. It sorts the groups by year and month in descending order. The -1 indicates descending order. So it starts with the most recent year and month.
+
+{ $limit: 6 } This is the fourth and last stage of the pipeline. It limits the output to the top 6 groups, after sorting. This is effectively getting the job count for the last 6 months.
+
+So, monthlyApplications will be an array with up to 6 elements, each representing the number of jobs created by the user in a specific month and year. The array will be sorted by year and month, starting with the most recent.
+
+### (2) map loading stats
+
+#### 8. Stats - Front-End Setup
+
+- create four components
+- StatsContainer and ChartsContainer (import/export)
+- AreaChart, BarChart (local)
+
+pages/Stats.jsx
+
+```js
+import { ChartsContainer, StatsContainer } from '../components'
+import customFetch from '../utils/customFetch'
+import { useLoaderData } from 'react-router-dom'
+export const loader = async () => {
+  try {
+    const response = await customFetch.get('/jobs/stats')
+    return response.data
+  } catch (error) {
+    return error
+  }
+}
+
+const Stats = () => {
+  const { defaultStats, monthlyApplications } = useLoaderData()
+  return (
+    <>
+      <StatsContainer defaultStats={defaultStats} />
+      {monthlyApplications?.length > 0 && (
+        <ChartsContainer data={monthlyApplications} />
+      )}
+    </>
+  )
+}
+export default Stats
+```
+
+#### 9. Stats Container
+
+```js
+import { FaSuitcaseRolling, FaCalendarCheck, FaBug } from 'react-icons/fa'
+import Wrapper from '../assets/wrappers/StatsContainer'
+import StatItem from './StatItem'
+const StatsContainer = ({ defaultStats }) => {
+  const stats = [
+    {
+      title: 'pending applications',
+      count: defaultStats?.pending || 0,
+      icon: <FaSuitcaseRolling />,
+      color: '#f59e0b',
+      bcg: '#fef3c7',
+    },
+    {
+      title: 'interviews scheduled',
+      count: defaultStats?.interview || 0,
+      icon: <FaCalendarCheck />,
+      color: '#647acb',
+      bcg: '#e0e8f9',
+    },
+    {
+      title: 'jobs declined',
+      count: defaultStats?.declined || 0,
+      icon: <FaBug />,
+      color: '#d66a6a',
+      bcg: '#ffeeee',
+    },
+  ]
+  return (
+    <Wrapper>
+      {stats.map((item) => {
+        return <StatItem key={item.title} {...item} />
+      })}
+    </Wrapper>
+  )
+}
+export default StatsContainer
+```
+
+### (3) charts container
+
+### charts
+
+#### 10. ChartsContainer
+
+```js
+import { useState } from 'react'
+
+import BarChart from './BarChart'
+import AreaChart from './AreaChart'
+import Wrapper from '../assets/wrappers/ChartsContainer'
+
+const ChartsContainer = ({ data }) => {
+  const [barChart, setBarChart] = useState(true)
+
+  return (
+    <Wrapper>
+      <h4>Monthly Applications</h4>
+      <button type="button" onClick={() => setBarChart(!barChart)}>
+        {barChart ? 'Area Chart' : 'Bar Chart'}
+      </button>
+      {barChart ? <BarChart data={data} /> : <AreaChart data={data} />}
     </Wrapper>
   )
 }
 
-export default Profile
+export default ChartsContainer
 ```
 
-#### Profile Page - Action
+#### 11. Charts
 
-- import/export action (App.jsx)
+[recharts](https://recharts.org/en-US/)
 
-```js
-export const action = async ({ request }) => {
-  const formData = await request.formData()
-
-  const file = formData.get('avatar')
-  if (file && file.size > 500000) {
-    toast.error('Image size too large')
-    return null
-  }
-
-  try {
-    await customFetch.patch('/users/update-user', formData)
-    toast.success('Profile updated successfully')
-  } catch (error) {
-    toast.error(error?.response?.data?.msg)
-  }
-  return null
-}
-```
-
-## Path to presentational dst
-
-### (1)How ctrl data w string to Cloudinary
-
-#### Update User - Server
+- in the client
 
 ```sh
-npm i multer@1.4.5
+npm i recharts@2.5.0
 ```
 
-Multer is a popular middleware package for handling multipart/form-data in Node.js web applications. It is commonly used for handling file uploads. Multer simplifies the process of accepting and storing files submitted through HTTP requests by providing an easy-to-use API. It integrates seamlessly with Express.js and allows developers to define upload destinations, file size limits, and other configurations.
-
-- create middleware/multerMiddleware.js
-- setup multer
+#### 12. Area Chart
 
 ```js
-import multer from 'multer'
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+} from 'recharts'
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    // set the directory where uploaded files will be stored
-    cb(null, 'public/uploads')
-  },
-  filename: (req, file, cb) => {
-    const fileName = file.originalname
-    // set the name of the uploaded file
-    cb(null, fileName)
-  },
-})
-const upload = multer({ storage })
-
-export default upload
-```
-
-routes/userRouter.js
-
-```js
-import upload from '../middleware/multerMiddleware.js'
-
-router.patch(
-  '/update-user',
-  upload.single('avatar'),
-  validateUpdateUserInput,
-  updateUser
-)
-```
-
-First, the multer package is imported.
-
-Then, a storage object is created using multer.diskStorage(). This object specifies the configuration for storing uploaded files. In this case, the destination function determines the directory where the uploaded files will be saved, which is set to 'public/uploads'. The filename function defines the name of the uploaded file, which is set to the original filename.
-
-Next, a multer middleware is created by passing the storage object as a configuration option. This multer middleware will be used to handle file uploads in the application.
-
-In this case, upload is an instance of the Multer middleware that was created earlier. The .single() method is called on this instance to indicate that only one file will be uploaded. The argument 'avatar' specifies the name of the field in the HTTP request that corresponds to the uploaded file.
-
-When this middleware is used in an HTTP route handler, it will process the incoming request and extract the file attached to the 'avatar' field. Multer will then save the file according to the specified storage configuration, which includes the destination directory and filename logic defined earlier. The uploaded file can be accessed in the route handler using req.file.
-
-#### Cloudinary - Create Account/Get API Keys
-
-[Cloudinary](https://cloudinary.com/)
-
-Cloudinary is a cloud-based media management platform that helps businesses store, optimize, and deliver images and videos across the web. It provides developers with an easy way to upload, manipulate, and serve media assets, enabling faster and more efficient delivery of visual content on websites and applications. Cloudinary also offers features like automatic resizing, format conversion, and responsive delivery to ensure optimal user experiences across different devices and network conditions.
-
-.env
-
-```sh
-CLOUD_NAME=
-CLOUD_API_KEY=
-CLOUD_API_SECRET=
-```
-
-#### Cloudinary - Setup Instance
-
-```sh
-npm i cloudinary@1.37.3
-```
-
-server
-
-```js
-import cloudinary from 'cloudinary'
-
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET,
-})
-```
-
-#### Update User Controller
-
-controllers/userController.js
-
-```js
-import cloudinary from 'cloudinary'
-import { promises as fs } from 'fs'
-
-export const updateUser = async (req, res) => {
-  const newUser = { ...req.body }
-  delete newUser.password
-  if (req.file) {
-    const response = await cloudinary.v2.uploader.upload(req.file.path)
-    await fs.unlink(req.file.path)
-    newUser.avatar = response.secure_url
-    newUser.avatarPublicId = response.public_id
-  }
-
-  const updatedUser = await User.findByIdAndUpdate(req.user.userId, newUser)
-
-  if (req.file && updatedUser.avatarPublicId) {
-    await cloudinary.v2.uploader.destroy(updatedUser.avatarPublicId)
-  }
-  res.status(StatusCodes.OK).json({ msg: 'update user' })
-}
-```
-
-### (2)Accept attribute
-
-#### Logout Container
-
-```js
-{
-  user.avatar ? (
-    <img src={user.avatar} alt="avatar" className="img" />
-  ) : (
-    <FaUserCircle />
-  )
-}
-```
-
-#### Submit Btn Component
-
-- create component SubmitBtn (export/import)
-- add all classes, including'.form-btn'
-- setup in Register,Login, AddJob, EditJob, Profile
-- make sure to add formBtn prop
-
-```js
-import { useNavigation } from 'react-router-dom'
-const SubmitBtn = ({ formBtn }) => {
-  const navigation = useNavigation()
-  const isSubmitting = navigation.state === 'submitting'
+const AreaChartComponent = ({ data }) => {
   return (
-    <button
-      type="submit"
-      className={`btn btn-block ${formBtn && 'form-btn'}`}
-      disabled={isSubmitting}
-    >
-      {isSubmitting ? 'submitting...' : 'submit'}
-    </button>
+    <ResponsiveContainer width="100%" height={300}>
+      <AreaChart data={data} margin={{ top: 50 }}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="date" />
+        <YAxis allowDecimals={false} />
+        <Tooltip />
+        <Area type="monotone" dataKey="count" stroke="#2cb1bc" fill="#bef8fd" />
+      </AreaChart>
+    </ResponsiveContainer>
   )
 }
-export default SubmitBtn
+
+export default AreaChartComponent
 ```
 
-## Src transmition (um other approach)
-
-(3)Challange size presentational (content type ctrl session)'
-
-### (1)Rdy dst persist -> bc hosted limitations
-
-### (2)Method to transmit (callback)
-
-### (3)Connect onto additional node ( redundancy?)
-
-#### Upload Image As Buffer (for deploy)
-
-- remove public folder
-
-```sh
-npm i datauri@4.1.0
-```
-
-middleware/multerMiddleware.js
+#### 13. Bar Chart
 
 ```js
-import multer from 'multer'
-import DataParser from 'datauri/parser.js'
-import path from 'path'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts'
 
-const storage = multer.memoryStorage()
-const upload = multer({ storage })
-
-const parser = new DataParser()
-
-export const formatImage = (file) => {
-  const fileExtension = path.extname(file.originalname).toString()
-  return parser.format(fileExtension, file.buffer).content
+const BarChartComponent = ({ data }) => {
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart data={data} margin={{ top: 50 }}>
+        <CartesianGrid strokeDasharray="3 3 " />
+        <XAxis dataKey="date" />
+        <YAxis allowDecimals={false} />
+        <Tooltip />
+        <Bar dataKey="count" fill="#2cb1bc" barSize={75} />
+      </BarChart>
+    </ResponsiveContainer>
+  )
 }
 
-export default upload
+export default BarChartComponent
 ```
 
-controller/userController.js
+#### 14. Charts CSS (optional)
+
+wrappers/ChartsContainer.js
 
 ```js
-import { formatImage } from '../middleware/multerMiddleware.js'
+import styled from 'styled-components'
 
-export const updateUser = async (req, res) => {
-  const newUser = { ...req.body }
-  delete newUser.password
-  if (req.file) {
-    const file = formatImage(req.file)
-    const response = await cloudinary.v2.uploader.upload(file)
-    newUser.avatar = response.secure_url
-    newUser.avatarPublicId = response.public_id
+const Wrapper = styled.section`
+  margin-top: 4rem;
+  text-align: center;
+  button {
+    background: transparent;
+    border-color: transparent;
+    text-transform: capitalize;
+    color: var(--primary-5ma00);
+    font-size: 1.25rem;
+    cursor: pointer;
   }
-  const updatedUser = await User.findByIdAndUpdate(req.user.userId, newUser)
+  h4 {
+    text-align: center;
+    margin-bottom: 0.75rem;
+  }
+`
 
-  if (req.file && updatedUser.avatarPublicId) {
-    await cloudinary.v2.uploader.destroy(updatedUser.avatarPublicId)
-  }
-  res.status(StatusCodes.OK).json({ msg: 'update user' })
-}
+export default Wrapper
 ```

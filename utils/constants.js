@@ -16,3 +16,6 @@ export const ACHIEVEMENT_TYPE = {
   HIDDEN: 'hidden',
   LIFETIME: 'lifetime',
 }
+
+//mock generation food: inactive, activated, complete
+//for achievement: progressive, exploration, time-based, skill-based, social, collection, storyline, event,hidden, lifetime

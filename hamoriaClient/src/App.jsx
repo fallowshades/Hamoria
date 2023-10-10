@@ -33,6 +33,8 @@ import { loader as adminLoader } from './pages/Admin'
 
 import { action as profileAction } from './pages/Profile'
 
+import { loader as statsLoader } from './pages/Stats'
+
 const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem('darkTheme') === 'true'
   document.body.classList.toggle('dark-theme', isDarkTheme)
@@ -71,7 +73,7 @@ const router = createBrowserRouter([
             element: <AddAchievement />,
             action: addAchievementAction,
           },
-          { path: 'stats', element: <Stats /> },
+          { path: 'stats', element: <Stats />, loader: statsLoader },
           {
             path: 'all-achievements',
             element: <AllAchievements />,
