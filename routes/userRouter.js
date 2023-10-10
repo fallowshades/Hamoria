@@ -3,6 +3,8 @@ import { validateUpdateUserInput } from '../middleware/validationMiddleware.js'
 import { authorizePermissions } from '../middleware/authMiddleware.js'
 import upload from '../middleware/multerMiddleware.js'
 
+import { checkForTestUserd } from '../middleware/authMiddleware.js'
+
 const router = Router()
 
 import {
@@ -18,6 +20,7 @@ router.get(
   getApplicationStats
 )
 router.patch(
+  checkForTestUserd,
   '/update-user',
   upload.single('avatar'),
   validateUpdateUserInput,
