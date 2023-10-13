@@ -10,7 +10,6 @@ export const loader = async ({ request }) => {
       ...new URL(request.url).searchParams.entries(),
     ])
     const { data } = await customFetch.get('/achievements', { params })
-    console.log(params)
     return {
       data,
       searchValues: { ...params },

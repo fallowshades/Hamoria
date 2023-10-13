@@ -9,6 +9,7 @@ import {
 import { useAllAchievementsContext } from '../pages/AllAchievements'
 
 const SearchContainer = () => {
+  const submit = useSubmit()
   return (
     <Wrapper>
       <Form className="form">
@@ -16,12 +17,22 @@ const SearchContainer = () => {
         <div className="form-center">
           {/* search position */}
 
-          <FormRow type="search" name="search" defaultValue="a" />
+          <FormRow
+            type="search"
+            name="search"
+            defaultValue="a"
+            onChange={(e) => {
+              submit(e.currentTarget.form)
+            }}
+          />
           <FormRowSelect
             labelText="achievement status"
             name="achievementStatus"
             list={['all', ...Object.values(ACHIEVEMENT_STATUS)]}
             defaultValue="all"
+            onChange={(e) => {
+              submit(e.currentTarget.form)
+            }}
           />
           <FormRowSelect
             labelText="achievements type"
@@ -33,6 +44,9 @@ const SearchContainer = () => {
             name="sort"
             defaultValue="newest"
             list={[...Object.values(ACHIEVEMENT_SORT_BY)]}
+            onChange={(e) => {
+              submit(e.currentTarget.form)
+            }}
           />
 
           <Link
@@ -42,7 +56,6 @@ const SearchContainer = () => {
             Reset Search Values
           </Link>
           {/* TEMP!!!! */}
-          <SubmitBtn formBtn />
         </div>
       </Form>
     </Wrapper>
