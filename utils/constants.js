@@ -19,3 +19,10 @@ export const ACHIEVEMENT_TYPE = {
 
 //mock generation food: inactive, activated, complete
 //for achievement: progressive, exploration, time-based, skill-based, social, collection, storyline, event,hidden, lifetime
+
+export const ACHIEVEMENT_SORT_BY = {
+  NEWEST_FIRST: 'newest',
+  OLDEST_FIRST: 'oldest',
+  ASCENDING: 'a-z',
+  DESCENDING: 'z-a',
+}
