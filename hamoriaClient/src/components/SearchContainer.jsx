@@ -8,6 +8,17 @@ import {
 } from '../../../utils/constants'
 import { useAllAchievementsContext } from '../pages/AllAchievements'
 
+const debounce = (onChange) => {
+  let timeout
+  return (e) => {
+    const form = e.currentTarget.form
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      onChange(form), 2000
+    })
+  }
+}
+
 const SearchContainer = () => {
   const submit = useSubmit()
   return (
@@ -21,9 +32,9 @@ const SearchContainer = () => {
             type="search"
             name="search"
             defaultValue="a"
-            onChange={(e) => {
-              submit(e.currentTarget.form)
-            }}
+            onChange={debounce((form) => {
+              submit(form)
+            })}
           />
           <FormRowSelect
             labelText="achievement status"
