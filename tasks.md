@@ -42,13 +42,21 @@ Story: advanced navigation
 
 []global context
 
+parts: App, dashboard layout, Navbar
+
 []partitioned logic of nav and body
----[x]Layout fixed/relative 2 column set up
----[x]main wrapper for m/n scaled prop drilling and nav privilege
----[x]m-scaled navigation of existing content extend context
+---[x]Layout fixed/relative 2 column set up (app, dashboard)
+---[x]main wrapper for m/n scaled prop drilling and nav privilege (dashboard, navbar)
+---[x]m-scaled navigation of existing content extend context (utils/link, smalSidebar, navLinks)
+
 ---[]Conditional Containers
------[x] nav links are aware of non default sidebar
------[x]nav toggle sidebar default/non default and set conditional user?.name for logout container
+-----[x] nav links are aware of non default sidebar (smalsidebar, navlinks)
+-----[x]nav toggle sidebar default/non default and set conditional user?.name for logout container (navbar, logoutContainer)
+
+---
+
+parts: (navbar, ThemeToggle, DachboardContext, index.css, app)
+
 [x]Navigate and local storage
 ---[x]insert theam when app access local storage
 
@@ -58,12 +66,16 @@ Story: advanced navigation
 
 #### White box is monitored
 
+pages: (server, package.json, -rm test.js)
+
 [x]set up server
 ---[x]Test log
 [x]es6 modules
 ---[x]test named imports
 
 #### Remote black boxes
+
+pages: (server, .env .package.json)
 
 [x]Nodemon and express
 ---[x]Test: server is running
@@ -76,18 +88,28 @@ Story: advanced navigation
 
 #### successive Flow
 
+pages: (server)
+
 [x]basic Crud with Middleware
 ---[x]Test: all crud methods as if was server
 
 #### Erroneous flow
 
+pages: (server)
+
 [x]white and black box error flow support routes
 ---[x]Test something went wrong
 ---[c]set up routes
+
+pages: (server, model)
+
 [x]Connection dependence
 ---[x]constants with domain restrictions
 ---[x]Test create model
-[x]Expressive module application with middleware
+
+pages: (ErrorHandlerMiddleware, customError, AuthController)
+
+[x]Expressive module application with middleware (type,status domain restrictions)
 ---[x]status codes
 ---[x]errorHandlerMiddleware
 ---[x]CustomError bad requests
@@ -96,25 +118,33 @@ Story: advanced navigation
 
 #### type Domain restriction
 
+pages: (server, validationMiddleware, achievementRouter, utils/constants/achievementModel, )
+
 [x]general validation
 ---[x]creation validation
 ---[x]validate id
 
 #### user Domain restrictions
 
+Pages: (userModel, routeStructure, validationMiddleware, auth router/controller)
+
 [x]Validate initial user
 [x]validate different types of users
 
 ### Identifying structure v0.1.3
 
-#### Higher order user concerns
+#### Higher order user concerns (secure data identification)
+
+Pages: ()
 
 [x]hash security for success and errors
 ---[x]Test: registered password is encrypted
 [x]comparator and certificate for user
 [x]Store connected tables/documents
 
-#### proper remote set up for public documents/tables
+#### proper remote set up for public documents/tables (identiable data/permission LifeCycle)
+
+Pages: ()
 
 [x]Middleware interpretation
 ---[x]Identity is extracted from cookie
@@ -132,12 +162,14 @@ Story: advanced navigation
 
 ### Register Page v0.2.0
 
+Pages: (Register, DashboardLayout, Login)
+
 [x]vertical scaling
 ---[x]action handled by parent router
 
 []horizontal scaling
 ---[x]errors encapsulated managment with hook (less catch code in context)
----[x]respons data is interprited from Object.fromEntities
+---[x]response data is interprited from Object.fromEntities
 ---[x]vertical session encapsulated in require attribute (register user)
 ---[x]horizontal sessiion encapsulated in useNavigate hook and disable attribute (navigational state)
 ---[x]horizontal scaling not encapsulated is caught feedback. (Readt toastify) -[x]Log in user (unChecked errors, 3rd type error)
@@ -147,6 +179,8 @@ Story: advanced navigation
 
 ### Dashboard page v0.2.1
 
+Pages (DashboardLayout)
+
 [x]Loaders (redirect before page render)
 ---[x]encapsulate the mounted useEffect
 [x]getCurrent (common cause = jwt issues)
@@ -154,11 +188,15 @@ Story: advanced navigation
 
 ### Jobs page v0.2.2
 
+Pages: (AddAchievement, App, AllAchievements, SearchContainer, EditAchievement, DeleteAchievement)
+
 ---[x]support tree transfor objects
 ---[x]create transfor lifeCycle
 ---[x]context map presentational data dynamically
 
 ### Admin page v0.2.3
+
+Pages: (Admin, App, NavLink, Stat Item, StatItemWrapper)
 
 [x]special network Application
 ---[x]use dashboardContext to access role
@@ -166,36 +204,155 @@ Story: advanced navigation
 
 ### Profile page v0.2.4
 
+#### Connecction using string format
+
+Pages: (util/public, server, userModel)
+di
 [z]both front and backend together with backend acting as control of upload
 ---[z]concern in time of development and production
 ---[z]concern local space notification \_Directory
 ---[z]how does server controll data with string
+
+#### reception to response
+
+Pages: (Profile, MulterMiddleware, userRouter)
+
 [z]path to presentatioal destination
 ---[z]accept attribute
 ---[z]challanges with size pressentational ctrl session and content type
+
+#### Life Cycle
+
+Pages: (.env, server, userController, LogoutContainer, submitBtn )
+
 [z]Source transmition
 ---[z]ready dst to persist data, since hosted server limitation.
 ---[z]a method to transmit (mb callback)
 ---[z]connected onto additional node (name, key, secrete)
 ---[z]redundancy
 
+#### opt deploy
+
+Pages (multerMiddleware, userController)
+
 ### test user v0.2.5
+
+Pages: (PostMan, Login)
 
 [z]test user
 ---[z]front static async
+
+Pages: (AuthMiddleware, populate)
+
+[]require
 ---[z]back accumulate extra user properties for later checking.
 
 ### stats page v0.2.6
 
-tool to extract table data
----[x]1 column (reduce)
----[x]set of columns (map)
+Pages: (AchievementController, stats, app, statsContainer, chartsContainer, areaChart, barChart)
+
+[]tool to extract table data
+---[x]1 column (reduce) (count, default)
+---[x]set of columns (map) (date, conditional active)
 
 ### All Jobs page v0.2.7
 
-[]params to send request
----[]interactive session ctrl link to url reset.
----[]automatic session search value set with context hook
-[]pagination of response data
----[]consideration of existence.
----[]shifted array/range is dependent on url
+#### req.url and params
+
+Pages: (AchievementController, pages/AllAchievements, searchContainer, FormRow, Debounce)
+
+[x]params to send request
+---[x]interactive session ctrl link to url reset.
+---[x]automatic session search value set with context hook
+
+#### from() multiple return
+
+Pages: (AchievementContainer, PageBtnContainer)
+
+[x]pagination of response data
+---[x]consideration of existence.
+---[x]shifted array/range is dependent on url
+
+## Deployable
+
+### Deploy v0.3.0
+
+[]Local vs production build
+---[]no default values
+[]consider img upload
+
+### Query optimization v0.3.1
+
+[]set up optimization'
+---[]default options
+[]Dashboard showMe invalidation
+---[] Login/dashboard/profile
+[]achievement
+---[]what static/dynamic
+---[]who axios interceptors
+
+### update FrontNode 0th layer v0.3.2
+
+### update FrontNode update 1st layer v0.3.3
+
+### Hero and nav Links v0.3.4
+
+[]Hero setup parts
+[]link btn and content (presentation ref dependencies)
+[]usestate with useref Na enough: style= gridTemplateColumns conditional length
+[]Build and delete
+
+### 3 column layout v0.3.5
+
+[]Hero extend
+[]pages
+[]personal
+[]footer
+[]navbar
+
+### refracture achievements to personal part v0.3.6
+
+## All signs
+
+### create sign v0.4.1
+
+[]
+
+### create order v0.4.2
+
+### Featured signes v0.4.3
+
+### signs get all v0.4.4
+
+[]destruct id,image,title: enum, dollarsAmount:int, company: string
+id
+img
+
+---Active_hand
+---Active-hand2
+---Passive-hand2
+---Single-handform
+---transform
+[]signs single (buy handgesture)
+
+    'Tumhand', 'hold', 'spret', 'measure', 'krok2', 'nyp','klo', 'r', 'krok', 'g','i', 'vinkel', 'n', 'v', 'e','d','straightMeasure','j','tupp','l', 'p','hand4','t','h','a','o','s','tumvinkel','b','flyg'
+
+### signs single sign v0.4.5
+
+[]featured products
+[]format price
+[]single product
+
+## auth transactions
+
+### transaction bag v0.5.0
+
+\_parts: CartSlice, store, main, singleSign, navbar
+
+### authStore v0.5.1
+
+### doCheckout v0.5.2
+
+### orders v0.5.3
+
+### optimize v0.5.4
