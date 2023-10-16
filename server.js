@@ -40,7 +40,7 @@ app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/users', authenticateUser, userRouter)
 
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './hamoriaClient/dst', 'index.html'))
+  res.sendFile(path.resolve(__dirname, './hamoriaClient/dist', 'index.html'))
 })
 
 app.use('*', (req, res) => {
