@@ -34,17 +34,9 @@ const Register = () => {
           defaultValue="shade"
         />
         <FormRow type="text" name="location" defaultValue="here" />
-        <FormRow
-          type="email"
-          name="email"
-          defaultValue="fallowshades@gmail.com"
-        />
+        <FormRow type="email" />
 
-        <FormRow
-          type="password"
-          name="password"
-          defaultValue="secretDuckTape"
-        />
+        <FormRow type="password" name="password" />
 
         <SubmitBtn />
         <p>
