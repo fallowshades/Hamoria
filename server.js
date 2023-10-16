@@ -27,7 +27,7 @@ cloudinary.config({
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const app = express()
-app.use(express.static(path.resolve(__dirname, './client/dist')))
+app.use(express.static(path.resolve(__dirname, './hamoriaClient/dist')))
 app.use(express.json())
 
 if (process.env.NODE_ENV === 'development') {
@@ -40,7 +40,7 @@ app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/users', authenticateUser, userRouter)
 
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './client/dist', 'index.html'))
+  res.sendFile(path.resolve(__dirname, './hamoriaClient/dist', 'index.html'))
 })
 
 app.use('*', (req, res) => {
