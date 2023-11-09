@@ -36,7 +36,7 @@ import { action as profileAction } from './pages/Profile'
 import { loader as statsLoader } from './pages/Stats'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-
+import { ErrorElement } from './components'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -82,7 +82,12 @@ const router = createBrowserRouter([
             element: <AddAchievement />,
             action: addAchievementAction,
           },
-          { path: 'stats', element: <Stats />, loader: statsLoader },
+          {
+            path: 'stats',
+            element: <Stats />,
+            loader: statsLoader,
+            errorElement: <ErrorElement />,
+          },
           {
             path: 'all-achievements',
             element: <AllAchievements />,
