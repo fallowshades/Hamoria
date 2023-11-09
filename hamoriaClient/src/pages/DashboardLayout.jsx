@@ -11,6 +11,8 @@ import customFetch from '../utils/customFetch'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
+import { Loading } from '../components'
+
 export const loader = async () => {
   try {
     const { data } = await customFetch('/users/current-user')
@@ -23,6 +25,8 @@ export const loader = async () => {
 const DashboardContext = createContext()
 const DashboardLayout = ({ isDarkThemeEnabled }) => {
   const navigate = useNavigate()
+
+  const isPageLoading = navigation.state === 'loading'
   // temp
   const user = useLoaderData()
 
@@ -63,7 +67,7 @@ const DashboardLayout = ({ isDarkThemeEnabled }) => {
           <div>
             <Navbar />
             <div className="dashboard-page">
-              <Outlet context={{ user }} />
+              {isPageLoading ? <Loading /> : <Outlet context={{ user }} />}
             </div>
           </div>
         </main>
