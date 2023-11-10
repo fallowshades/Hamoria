@@ -96,7 +96,7 @@ const router = createBrowserRouter([
           {
             path: 'all-achievements',
             element: <AllAchievements />,
-            loader: allAchievementLoader,
+            loader: allAchievementLoader(queryClient),
           },
 
           {
