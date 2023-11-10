@@ -3,7 +3,7 @@ import { Outlet, useNavigation } from 'react-router-dom'
 import Wrapper from '../assets/wrappers/Dashboard'
 import { Navbar, BigSidebar, SmallSidebar } from '../components'
 
-import { useState, createContext, useContext } from 'react'
+import { useState, createContext, useContext, useEffect } from 'react'
 
 import { redirect, useLoaderData } from 'react-router-dom'
 import customFetch from '../utils/customFetch'
@@ -32,6 +32,7 @@ export const loader = (queryClient) => async () => {
 }
 const DashboardContext = createContext()
 const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
+  const [isAuthError, setIsAuthError] = useState(false)
   const navigate = useNavigate()
   const navigation = useNavigation()
 
@@ -62,11 +63,27 @@ const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
   }
 
   const logoutUser = async () => {
-    navigate('/')
     await customFetch.get('/auth/logout')
     queryClient.invalidateQueries()
     toast.success('Logging out...')
+    navigate('/')
   }
+  customFetch.interceptors.response.use(
+    (response) => {
+      return response
+    },
+    (error) => {
+      if (error?.response?.status === 401) {
+        setIsAuthError(true)
+      }
+      return Promise.reject(error)
+    }
+  )
+  useEffect(() => {
+    if (!isAuthError) return
+    logoutUser()
+  }, [isAuthError])
+
   return (
     <DashboardContext.Provider
       value={{
