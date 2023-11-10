@@ -112,7 +112,7 @@ const router = createBrowserRouter([
           {
             path: 'edit-achievement/:id',
             element: <EditAchievement />,
-            loader: editAchievementLoader,
+            loader: editAchievementLoader(queryClient),
             action: editAchievementAction(queryClient),
           },
           {

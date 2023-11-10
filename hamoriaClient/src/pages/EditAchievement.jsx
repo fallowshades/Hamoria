@@ -7,15 +7,28 @@ import { toast } from 'react-toastify'
 import customFetch from '../utils/customFetch'
 import { SubmitBtn } from '../components'
 
-export const loader = async ({ params }) => {
-  try {
-    const { data } = await customFetch.get(`/achievements/${params.id}`)
-    return data
-  } catch (error) {
-    toast.error(error.response.data.msg)
-    return redirect('/dashboard/all-achievements')
+import { useQuery } from '@tanstack/react-query'
+
+const singleAchievementQuery = (id) => {
+  return {
+    queryKey: ['achievement', id],
+    queryFn: async () => {
+      const { data } = await customFetch.get(`/achievements/${id}`)
+      return data
+    },
   }
 }
+export const loader =
+  (queryClient) =>
+  async ({ params }) => {
+    try {
+      await queryClient.ensureQueryData(singleAchievementQuery(params.id))
+      return params.id
+    } catch (error) {
+      toast.error(error?.response?.data?.msg)
+      return redirect('/dashboard/all-achievements')
+    }
+  }
 export const action =
   (queryClient) =>
   async ({ request, params }) => {
@@ -34,7 +47,11 @@ export const action =
   }
 
 const EditAchievement = () => {
-  const { achievement } = useLoaderData()
+  const id = useLoaderData()
+
+  const {
+    data: { achievement },
+  } = useQuery(singleAchievementQuery(id))
 
   return (
     <Wrapper>
