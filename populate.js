@@ -3,8 +3,8 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 dotenv.config()
 
-import Achievement from './models/AchievementModel.js'
-import User from './models/UserModel.js'
+import Achievement from './models/achievementModel.js'
+import User from './models/userModel.js'
 try {
   await mongoose.connect(process.env.MONGO_URL)
   // const user = await User.findOne({ email: 'john@gmail.com' });
