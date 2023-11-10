@@ -5,6 +5,7 @@ import { useAllAchievementsContext } from '../pages/AllAchievements'
 
 const AchievementsContainer = () => {
   const { data } = useAllAchievementsContext()
+  console.log(data)
   const { achievements, totalAchievements, numOfPages } = data
   if (achievements.length === 0) {
     return (

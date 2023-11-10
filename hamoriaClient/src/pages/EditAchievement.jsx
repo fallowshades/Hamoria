@@ -5,32 +5,53 @@ import { ACHIEVEMENT_STATUS, ACHIEVEMENT_TYPE } from '../../../utils/constants'
 import { Form, redirect } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import customFetch from '../utils/customFetch'
+import { SubmitBtn } from '../components'
 
-export const loader = async ({ params }) => {
-  try {
-    const { data } = await customFetch.get(`/achievements/${params.id}`)
-    return data
-  } catch (error) {
-    toast.error(error.response.data.msg)
-    return redirect('/dashboard/all-achievements')
+import { useQuery } from '@tanstack/react-query'
+
+const singleAchievementQuery = (id) => {
+  return {
+    queryKey: ['achievement', id],
+    queryFn: async () => {
+      const { data } = await customFetch.get(`/achievements/${id}`)
+      return data
+    },
   }
 }
-export const action = async ({ request, params }) => {
-  const formData = await request.formData()
-  const data = Object.fromEntries(formData)
-
-  try {
-    await customFetch.patch(`/achievements/${params.id}`, data)
-    toast.success('Achievement edited successfully')
-    return redirect('/dashboard/all-achievements')
-  } catch (error) {
-    toast.error(error.response.data.msg)
-    return error
+export const loader =
+  (queryClient) =>
+  async ({ params }) => {
+    try {
+      await queryClient.ensureQueryData(singleAchievementQuery(params.id))
+      return params.id
+    } catch (error) {
+      toast.error(error?.response?.data?.msg)
+      return redirect('/dashboard/all-achievements')
+    }
   }
-}
+export const action =
+  (queryClient) =>
+  async ({ request, params }) => {
+    const formData = await request.formData()
+    const data = Object.fromEntries(formData)
+
+    try {
+      await customFetch.patch(`/achievements/${params.id}`, data)
+      queryClient.invalidateQueries(['achievements'])
+      toast.success('Achievement edited successfully')
+      return redirect('/dashboard/all-achievements')
+    } catch (error) {
+      toast.error(error.response.data.msg)
+      return error
+    }
+  }
 
 const EditAchievement = () => {
-  const { achievement } = useLoaderData()
+  const id = useLoaderData()
+
+  const {
+    data: { achievement },
+  } = useQuery(singleAchievementQuery(id))
 
   return (
     <Wrapper>
