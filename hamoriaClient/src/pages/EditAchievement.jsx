@@ -5,6 +5,7 @@ import { ACHIEVEMENT_STATUS, ACHIEVEMENT_TYPE } from '../../../utils/constants'
 import { Form, redirect } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import customFetch from '../utils/customFetch'
+import { SubmitBtn } from '../components'
 
 export const loader = async ({ params }) => {
   try {
@@ -15,19 +16,22 @@ export const loader = async ({ params }) => {
     return redirect('/dashboard/all-achievements')
   }
 }
-export const action = async ({ request, params }) => {
-  const formData = await request.formData()
-  const data = Object.fromEntries(formData)
+export const action =
+  (queryClient) =>
+  async ({ request, params }) => {
+    const formData = await request.formData()
+    const data = Object.fromEntries(formData)
 
-  try {
-    await customFetch.patch(`/achievements/${params.id}`, data)
-    toast.success('Achievement edited successfully')
-    return redirect('/dashboard/all-achievements')
-  } catch (error) {
-    toast.error(error.response.data.msg)
-    return error
+    try {
+      await customFetch.patch(`/achievements/${params.id}`, data)
+      queryClient.invalidateQueries(['achievements'])
+      toast.success('Achievement edited successfully')
+      return redirect('/dashboard/all-achievements')
+    } catch (error) {
+      toast.error(error.response.data.msg)
+      return error
+    }
   }
-}
 
 const EditAchievement = () => {
   const { achievement } = useLoaderData()

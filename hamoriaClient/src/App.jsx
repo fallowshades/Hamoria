@@ -85,7 +85,7 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <AddAchievement />,
-            action: addAchievementAction,
+            action: addAchievementAction(queryClient),
           },
           {
             path: 'stats',
@@ -113,9 +113,12 @@ const router = createBrowserRouter([
             path: 'edit-achievement/:id',
             element: <EditAchievement />,
             loader: editAchievementLoader,
-            action: editAchievementAction,
+            action: editAchievementAction(queryClient),
           },
-          { path: 'delete-achievement/:id', action: deleteAchievementAction },
+          {
+            path: 'delete-achievement/:id',
+            action: deleteAchievementAction(queryClient),
+          },
         ],
       },
     ],

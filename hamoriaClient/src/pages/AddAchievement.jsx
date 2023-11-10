@@ -8,19 +8,22 @@ import customFetch from '../utils/customFetch'
 import FormRowSelect from '../components/FormRowSelect'
 import { SubmitBtn } from '../components'
 
-export const action = async ({ request }) => {
-  const formData = await request.formData()
-  const data = Object.fromEntries(formData)
+export const action =
+  (queryClient) =>
+  async ({ request }) => {
+    const formData = await request.formData()
+    const data = Object.fromEntries(formData)
 
-  try {
-    await customFetch.post('/achievements', data)
-    toast.success('achievement added successfully')
-    return redirect('all-achievements')
-  } catch (error) {
-    toast.error(error?.response?.data?.msg)
-    return error
+    try {
+      await customFetch.post('/achievements', data)
+      queryClient.invalidateQueries(['achievements'])
+      toast.success('achievement added successfully')
+      return redirect('all-achievements')
+    } catch (error) {
+      toast.error(error?.response?.data?.msg)
+      return error
+    }
   }
-}
 const AddAchievement = () => {
   const { user } = useOutletContext()
 
