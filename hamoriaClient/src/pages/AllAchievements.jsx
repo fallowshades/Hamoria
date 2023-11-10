@@ -30,19 +30,12 @@ export const loader =
   (queryClient) =>
   async ({ request }) => {
     try {
-      const url = new URL(request.url)
-      const search = url.searchParams.get('search')
-      const status = url.searchParams.get('status')
-      const type = url.searchParams.get('type')
-      const sort = url.searchParams.get('sort')
-      const page = url.searchParams.get('page')
-      const params = { status, type, sort, page }
-      if (search) {
-        params.search = search
-      }
+      const params = Object.fromEntries([
+        ...new URL(request.url).searchParams.entries(),
+      ])
       await queryClient.ensureQueryData(allAchievementsQuery(params))
       return {
-        searchValues: { search },
+        searchValues: { ...params },
       }
     } catch (error) {
       toast.error(error?.response?.data?.msg)
