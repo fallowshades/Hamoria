@@ -34,7 +34,7 @@ const Register = () => {
           defaultValue="shade"
         />
         <FormRow type="text" name="location" defaultValue="here" />
-        <FormRow type="email" />
+        <FormRow type="email" name="email" />
 
         <FormRow type="password" name="password" />
 
