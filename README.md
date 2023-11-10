@@ -4,7 +4,7 @@
 
 ###
 
-#### setup
+#### setup tailwind
 
 - add tailwind
 
@@ -57,7 +57,7 @@ tailwind.config.js
 }
 ```
 
-#### Install All Libraries
+#### Install Libraries
 
 ```sh
 npm i dayjs@1.11.9 @reduxjs/toolkit@1.9.5  react-icons@4.10.1 react-redux@8.1.2
@@ -82,7 +82,6 @@ export { default as FeatureHome } from './FeatureHome'
 export { default as SingleSign } from './SingleSign'
 export { default as Signs } from './Signs'
 export { default as SignList } from './SignList'
-export { default as Error } from './Error'
 export { default as About } from './About'
 export { default as Login } from './Login'
 export { default as Register } from './Register'
@@ -96,7 +95,6 @@ App.jsx
 import {
   HomeLayout,
   FeatureHome,
-  Error,
   Signs,
   SingleSign,
   SignList,

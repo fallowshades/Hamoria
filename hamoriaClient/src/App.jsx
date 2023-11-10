@@ -19,6 +19,18 @@ import {
   EditAchievement,
 } from './pages'
 
+import {
+  FeatureHome,
+  AllSigns,
+  SingleSign,
+  SignList,
+  About,
+  RegisterInterior,
+  LoginInterior,
+  Checkout,
+  Orders,
+} from './pages'
+
 import { action as registerAction } from './pages/Register'
 import { action as loginAction } from './pages/Login'
 import { loader as dashboardLoader } from './pages/DashboardLayout'
@@ -84,6 +96,10 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
+            element: <FeatureHome />,
+          },
+          {
+            path: 'add-achievement',
             element: <AddAchievement />,
             action: addAchievementAction(queryClient),
           },
@@ -118,6 +134,35 @@ const router = createBrowserRouter([
           {
             path: 'delete-achievement/:id',
             action: deleteAchievementAction(queryClient),
+          },
+          {
+            path: 'all-signs',
+            element: <AllSigns />,
+          },
+          {
+            path: 'signs/:id',
+            element: <SingleSign />,
+          },
+          {
+            path: 'sign-list',
+            element: <SignList />,
+          },
+          { path: 'about', element: <About /> },
+          {
+            path: 'checkout',
+            element: <Checkout />,
+          },
+          {
+            path: 'orders',
+            element: <Orders />,
+          },
+          {
+            path: 'login-interior',
+            element: <LoginInterior />,
+          },
+          {
+            path: 'register-interior',
+            element: <RegisterInterior />,
           },
         ],
       },
