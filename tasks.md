@@ -277,40 +277,23 @@ Pages: (AchievementContainer, PageBtnContainer)
 
 ### Deploy v0.3.0
 
-[]Local vs production build
----[]no default values
-[]consider img upload
+[x]Local vs production build
+---[x]no default values
+[x]consider img upload
 
 ### Query optimization v0.3.1
 
-[]set up optimization'
----[]default options
-[]Dashboard showMe invalidation
----[] Login/dashboard/profile
-[]achievement
----[]what static/dynamic
----[]who axios interceptors
+[x]set up optimization'
+---[x]default options
+[x]Dashboard showMe invalidation
+---[x] Login/dashboard/profile
+[x]achievement
+---[x]what static/dynamic
+---[x]who axios interceptors
 
-### update FrontNode 0th layer v0.3.2
+### test layer 1 v0.3.2
 
-### update FrontNode update 1st layer v0.3.3
-
-### Hero and nav Links v0.3.4
-
-[]Hero setup parts
-[]link btn and content (presentation ref dependencies)
-[]usestate with useref Na enough: style= gridTemplateColumns conditional length
-[]Build and delete
-
-### 3 column layout v0.3.5
-
-[]Hero extend
-[]pages
-[]personal
-[]footer
-[]navbar
-
-### refracture achievements to personal part v0.3.6
+### test layer 2 v0.3.3
 
 ## All signs
 
@@ -356,3 +339,24 @@ img
 ### orders v0.5.3
 
 ### optimize v0.5.4
+
+### update FrontNode 0th layer v0.?.?
+
+### update FrontNode update 1st layer v0.?.?
+
+### Hero and nav Links v0.?.?
+
+[]Hero setup parts
+[]link btn and content (presentation ref dependencies)
+[]usestate with useref Na enough: style= gridTemplateColumns conditional length
+[]Build and delete
+
+### 3 column layout v0.?.?
+
+[]Hero extend
+[]pages
+[]personal
+[]footer
+[]navbar
+
+### refracture achievements to personal part v0.?.?
