@@ -19,3 +19,12 @@ const links = [
 ]
 
 export default links
+
+const whatlinks = [
+  { id: 1, path: '/', text: 'home', icon: <IoBarChartSharp /> },
+  { id: 2, path: 'about', text: 'about', icon: <IoBarChartSharp /> },
+  { id: 3, path: 'signs', text: 'signs', icon: <IoBarChartSharp /> },
+  { id: 4, path: 'cart', text: 'cart', icon: <IoBarChartSharp /> },
+  { id: 5, path: 'checkout', text: 'checkout', icon: <IoBarChartSharp /> },
+  { id: 6, path: 'orders', text: 'orders', icon: <IoBarChartSharp /> },
+]
