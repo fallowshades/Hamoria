@@ -3,7 +3,13 @@ import { Outlet, useNavigation } from 'react-router-dom'
 import Wrapper from '../assets/wrappers/Dashboard'
 import { Navbar, BigSidebar, SmallSidebar } from '../components'
 
-import { useState, createContext, useContext, useEffect } from 'react'
+import {
+  useState,
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+} from 'react'
 
 import { redirect, useLoaderData } from 'react-router-dom'
 import customFetch from '../utils/customFetch'
@@ -59,10 +65,38 @@ const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
     localStorage.setItem('darkTheme', newDarkTheme)
   }
 
-  const toggleSidebar = () => {
-    setShowSidebar(!showSidebar)
+  const [activeLeftSidebar, setActiveLeftSidebar] = useState(true)
+
+  const toggleSidebar = (buttonValue) => {
+    if (activeLeftSidebar == true) {
+      if (buttonValue == 'leftButton') {
+        setShowSidebar(!showSidebar)
+      }
+
+      if (buttonValue == 'rightButton') {
+        if (showSidebar == false) {
+          setShowSidebar(true)
+        }
+
+        setActiveLeftSidebar(false)
+      }
+    }
+    if (activeLeftSidebar == false) {
+      if (buttonValue == 'leftButton') {
+        if (showSidebar == false) {
+          setShowSidebar(true)
+        }
+
+        setActiveLeftSidebar(true)
+      }
+
+      if (buttonValue == 'rightButton') {
+        setShowSidebar(!showSidebar)
+      }
+    }
   }
 
+  useEffect(() => {}, [activeLeftSidebar])
   const logoutUser = async () => {
     await customFetch.get('/auth/logout')
     queryClient.invalidateQueries()
@@ -85,30 +119,42 @@ const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
     logoutUser()
   }, [isAuthError])
 
-  // <SmallSidebar />
   return (
     <DashboardContext.Provider
       value={{
         user,
         showSidebar,
         isDarkTheme,
+        activeLeftSidebar,
         toggleDarkTheme,
         toggleSidebar,
         logoutUser,
       }}
     >
-      <Wrapper>
+      <Wrapper
+        activeLeft={activeLeftSidebar ? 'auto' : null}
+        activeRight={activeLeftSidebar ? null : 'auto'}
+      >
         {user.name == 'Chuckleberry' ? <Header /> : null}
         <main className="dashboard">
-          <BigSidebar />
+          {activeLeftSidebar ? (
+            <div>
+              <SmallSidebar />
+              <BigSidebar />
+            </div>
+          ) : null}
           <div>
             <Navbar />
             <div className="dashboard-page">
               {isPageLoading ? <Loading /> : <Outlet context={{ user }} />}
             </div>
           </div>
-          <WhatSidebar />
-          <WhatSidebarBig />
+          {activeLeftSidebar ? null : (
+            <div>
+              <WhatSidebar />
+              <WhatSidebarBig />
+            </div>
+          )}
         </main>
       </Wrapper>
     </DashboardContext.Provider>

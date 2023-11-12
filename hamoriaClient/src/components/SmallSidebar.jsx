@@ -3,7 +3,7 @@ import { FaTimes } from 'react-icons/fa'
 
 import Logo from './Logo'
 import NavLinks from './NavLinks'
-import links from '../utils/links'
+import { links } from '../utils/links'
 import { useDashboardContext } from '../pages/DashboardLayout'
 
 const SmallSidebar = () => {

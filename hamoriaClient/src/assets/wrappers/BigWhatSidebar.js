@@ -10,7 +10,7 @@ const Wrapper = styled.aside`
       min-height: 100vh;
       height: 100%;
       width: 250px;
-      margin-left: -250px;
+      margin-right: -250px;
       transition: margin-left 0.3s ease-in-out;
     }
     .content {
@@ -18,7 +18,7 @@ const Wrapper = styled.aside`
       top: 0;
     }
     .show-sidebar {
-      margin-left: 0;
+      margin-right 0;
     }
     header {
       height: 6rem;

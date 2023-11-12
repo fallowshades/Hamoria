@@ -12,7 +12,8 @@ const Wrapper = styled.section`
   }
   @media (min-width: 992px) {
     .dashboard {
-      grid-template-columns: auto 1fr auto};
+      grid-template-columns: ${(props) => props.activeLeft} 1fr ${(props) =>
+  props.activeRight}};
     } 
     .dashboard-page {
       width: 90%;x
