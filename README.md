@@ -106,7 +106,7 @@ import {
 } from './pages'
 ```
 
-### in box pages
+#### in box pages
 
 App.jsx
 
@@ -196,7 +196,7 @@ Login_interior.jsx
 import { FormInput, SubmitBtn } from '../components'
 import { Form, Link } from 'react-router-dom'
 
-const Login_interior = () => {
+const LoginInterior = () => {
   return (
     <section className="h-screen grid place-items-center">
       <Form
@@ -215,7 +215,7 @@ const Login_interior = () => {
         <p className="text-center">
           Not a member yet?
           <Link
-            to="/register"
+            to="/register-interior"
             className="ml-2 link link-hover link-primary capitalize"
           >
             register
@@ -225,14 +225,14 @@ const Login_interior = () => {
     </section>
   )
 }
-export default Login
+export default LoginInterior
 ```
 
 SubmitBtn.jsx
 
 ```js
 import { useNavigation } from 'react-router-dom'
-const SubmitBtn = ({ text }) => {
+const SubmitBtnSpecialText = () => {
   const navigation = useNavigation()
   const isSubmitting = navigation.state === 'submitting'
   return (
@@ -252,7 +252,7 @@ const SubmitBtn = ({ text }) => {
     </button>
   )
 }
-export default SubmitBtn
+export default SubmitBtnSpecialText
 ```
 
 #### Register page
@@ -261,7 +261,7 @@ export default SubmitBtn
 import { FormInput, SubmitBtn } from '../components'
 import { Form, Link } from 'react-router-dom'
 
-const Register = () => {
+const RegisterInterior = () => {
   return (
     <section className="h-screen grid place-items-center">
       <Form
@@ -279,7 +279,7 @@ const Register = () => {
         <p className="text-center">
           Already a member?
           <Link
-            to="/login"
+            to="/login-interior"
             className="ml-2 link link-hover link-primary capitalize"
           >
             login
@@ -289,7 +289,7 @@ const Register = () => {
     </section>
   )
 }
-export default Register
+export default RegisterInterior
 
 ## Layer 3
 ```

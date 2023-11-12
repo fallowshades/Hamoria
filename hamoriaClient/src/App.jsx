@@ -156,15 +156,15 @@ const router = createBrowserRouter([
             path: 'orders',
             element: <Orders />,
           },
-          {
-            path: 'login-interior',
-            element: <LoginInterior />,
-          },
-          {
-            path: 'register-interior',
-            element: <RegisterInterior />,
-          },
         ],
+      },
+      {
+        path: 'login-interior',
+        element: <LoginInterior />,
+      },
+      {
+        path: 'register-interior',
+        element: <RegisterInterior />,
       },
     ],
   },
