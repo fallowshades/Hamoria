@@ -38,7 +38,11 @@ export const loader = (queryClient) => async () => {
   }
 }
 const DashboardContext = createContext()
-const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
+const DashboardLayout = ({
+  isDarkThemeEnabled,
+  queryClient,
+  isLeftSidebarEnabled,
+}) => {
   const [isAuthError, setIsAuthError] = useState(false)
   const navigate = useNavigate()
   const navigation = useNavigation()
@@ -65,7 +69,8 @@ const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
     localStorage.setItem('darkTheme', newDarkTheme)
   }
 
-  const [activeLeftSidebar, setActiveLeftSidebar] = useState(true)
+  const [activeLeftSidebar, setActiveLeftSidebar] =
+    useState(isLeftSidebarEnabled)
 
   const toggleSidebar = (buttonValue) => {
     if (activeLeftSidebar == true) {
@@ -79,6 +84,7 @@ const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
         }
 
         setActiveLeftSidebar(false)
+        localStorage.setItem('isLeftSidebarActive', 'false')
       }
     }
     if (activeLeftSidebar == false) {
@@ -88,6 +94,7 @@ const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
         }
 
         setActiveLeftSidebar(true)
+        localStorage.setItem('isLeftSidebarActive', 'true')
       }
 
       if (buttonValue == 'rightButton') {
@@ -96,7 +103,6 @@ const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
     }
   }
 
-  useEffect(() => {}, [activeLeftSidebar])
   const logoutUser = async () => {
     await customFetch.get('/auth/logout')
     queryClient.invalidateQueries()

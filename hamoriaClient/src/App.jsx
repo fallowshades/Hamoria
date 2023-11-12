@@ -62,7 +62,12 @@ const checkDefaultTheme = () => {
   return isDarkTheme
 }
 
+const checkDefaultSidebar = () => {
+  return localStorage.getItem('isLeftSidebarActive') === 'true'
+}
+
 const isDarkThemeEnabled = checkDefaultTheme()
+const isLeftSidebarActive = checkDefaultSidebar()
 
 const router = createBrowserRouter([
   {
@@ -90,6 +95,7 @@ const router = createBrowserRouter([
           <DashboardLayout
             isDarkThemeEnabled={isDarkThemeEnabled}
             queryClient={queryClient}
+            isLeftSidebarEnabled={isLeftSidebarActive}
           />
         ),
         loader: dashboardLoader,
