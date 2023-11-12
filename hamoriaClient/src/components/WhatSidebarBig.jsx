@@ -1,4 +1,4 @@
-import NavLinks from './NavLinks'
+import WhatNavLinks from './WhatNavLinks'
 import { Logo } from '../components'
 import Wrapper from '../assets/wrappers/BigWhatSidebar'
 import { useDashboardContext } from '../pages/DashboardLayout'
@@ -16,6 +16,7 @@ const WhatSidebarBig = () => {
           <header>
             <Logo />
           </header>
+          <WhatNavLinks isBigSidebar />
         </div>
       </div>
     </Wrapper>

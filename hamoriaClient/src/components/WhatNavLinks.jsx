@@ -2,7 +2,7 @@ import { useDashboardContext } from '../pages/DashboardLayout'
 import whatlinks from '../utils/links'
 import { NavLink } from 'react-router-dom'
 
-const WhatNavLinks = () => {
+const WhatNavLinks = ({ isBigSidebar }) => {
   return (
     <div className="nav-links">
       {whatlinks.map((whatlinks) => {
@@ -12,7 +12,7 @@ const WhatNavLinks = () => {
           <NavLink
             to={path}
             key={text}
-            onClick={toggleSidebar}
+            onClick={isBigSidebar ? null : toggleSidebar}
             className="nav-link"
             end
           >
