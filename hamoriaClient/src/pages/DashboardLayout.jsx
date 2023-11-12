@@ -13,7 +13,7 @@ import { toast } from 'react-toastify'
 
 import { Loading } from '../components'
 import { useQuery } from '@tanstack/react-query'
-import { Header, WhatSidebar } from '../components'
+import { Header, WhatSidebar, WhatSidebarBig } from '../components'
 
 const userQuery = {
   queryKey: ['user'],
@@ -85,6 +85,7 @@ const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
     logoutUser()
   }, [isAuthError])
 
+  // <SmallSidebar />
   return (
     <DashboardContext.Provider
       value={{
@@ -99,7 +100,6 @@ const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
       <Wrapper>
         {user.name == 'Chuckleberry' ? <Header /> : null}
         <main className="dashboard">
-          <SmallSidebar />
           <BigSidebar />
           <div>
             <Navbar />
@@ -108,6 +108,7 @@ const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
             </div>
           </div>
           <WhatSidebar />
+          <WhatSidebarBig />
         </main>
       </Wrapper>
     </DashboardContext.Provider>
