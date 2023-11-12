@@ -1,5 +1,5 @@
 import Wrapper from '../assets/wrappers/Navbar'
-import { FaAlignLeft } from 'react-icons/fa'
+import { FaAlignLeft, FaAlignRight } from 'react-icons/fa'
 import Logo from './Logo'
 import LogoutContainer from './LogoutContainer'
 import ThemeToggle from './ThemeToggle'
@@ -22,6 +22,9 @@ const Navbar = () => {
           <ThemeToggle />
         </div>
       </div>
+      <button type="button" className="toggle-btn" onClick={toggleSidebar}>
+        <FaAlignRight />
+      </button>
     </Wrapper>
   )
 }

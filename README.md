@@ -228,7 +228,7 @@ const LoginInterior = () => {
 export default LoginInterior
 ```
 
-SubmitBtn.jsx
+SubmitBtnSpecialText.jsx
 
 ```js
 import { useNavigation } from 'react-router-dom'
@@ -290,8 +290,6 @@ const RegisterInterior = () => {
   )
 }
 export default RegisterInterior
-
-## Layer 3
 ```
 
 ## layer 3
