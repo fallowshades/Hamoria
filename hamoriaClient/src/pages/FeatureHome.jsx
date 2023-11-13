@@ -1,7 +1,7 @@
 import Wrapper from '../assets/wrappers/FeatureHome'
 import { Hero } from '../components'
 
-import { convenientFetch } from '../utils/corsFetdh'
+import { convenientFetch } from '../utils/corsFetch'
 const url = 'products?featured=true'
 
 export const loader = async () => {
