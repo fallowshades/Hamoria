@@ -291,6 +291,31 @@ Pages: (AchievementContainer, PageBtnContainer)
 ---[x]what static/dynamic
 ---[x]who axios interceptors
 
+### new iteration1 within v0.3.2
+
+[x] css extended with tailwind and daisyui
+---[x]files to scan
+---[x]plugins require daisyui
+
+---
+
+[x]confirm content scan for auth components (fixed)¨
+
+---
+
+[x]global state (navigation)
+---[x]conditional header
+---[x] sidebar with tiny changes to css
+---[x]navLink component that fetch different data what/who
+---[x]default sidebar
+
+### setup convenient db to setup frontend v0.3.3
+
+[]set up practice data
+---[]aboute page
+---[]hero carossel
+---[]url
+
 ### test layer 1 v0.3.2
 
 ### test layer 2 v0.3.3

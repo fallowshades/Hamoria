@@ -1,623 +1,409 @@
-# Iteration 4 layer: 2 Optimization
+# new_iteration1_within
 
-## Stacked logic of 2 layers
+## Layer 1
 
-### (1)f() in arg for shared behavior
+###
 
-#### Setup Global Loading
+#### setup tailwind
 
-- create loading component (import/export)
-- check for loading in DashboardLayout page
+- add tailwind
 
-components/Loading.jsx
-
-```js
-const Loading = () => {
-  return <div className="loading"></div>
-}
-
-export default Loading
+```sh
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
 ```
 
-DashboardLayout.jsx
+- rename to tailwind.config.cjs
+- add following content
+
+tailwind.config.cjs
+
+```js
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+- Add the Tailwind directives to your CSS
+
+index.css
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+Tailwind directives are instructions that decide how Tailwind CSS creates the styles for your website. They control the global styles, component styles, and utility classes.
+
+#### Setup DaisyUI
+
+[DaisyUI](https://daisyui.com/)
+
+```sh
+npm i  -D daisyui@latest @tailwindcss/typography
+```
+
+tailwind.config.js
+
+```js
+{
+ plugins: [require('@tailwindcss/typography'), require('daisyui')],
+}
+```
+
+#### Install Libraries
+
+```sh
+npm i dayjs@1.11.9 @reduxjs/toolkit@1.9.5  react-icons@4.10.1 react-redux@8.1.2
+
+```
+
+#### get assets
+
+4 webp for hifi prototyping
+
+## Layer 2
+
+### pages
+
+#### create extra pages
+
+pages/index.js
+
+```js
+export { default as HomeLayout } from './HomeLayout'
+export { default as FeatureHome } from './FeatureHome'
+export { default as SingleSign } from './SingleSign'
+export { default as Signs } from './Signs'
+export { default as SignList } from './SignList'
+export { default as About } from './About'
+export { default as Login } from './Login'
+export { default as Register } from './Register'
+export { default as Checkout } from './Checkout'
+export { default as Orders } from './Orders'
+```
+
+App.jsx
+
+```js
+import {
+  HomeLayout,
+  FeatureHome,
+  Signs,
+  SingleSign,
+  SignList,
+  About,
+  RegisterInterior,
+  LoginInterior,
+  Checkout,
+  Orders,
+} from './pages'
+```
+
+#### in box pages
+
+App.jsx
+
+```js
+
+path: '/',
+    element: <HomeLayout />,
+    errorElement: <Error />,
+    children: [
+      {
+        index: true,
+        element: <FeatureHome />,
+      },
+      {
+        path: 'signs',
+        element: <Signs />,
+      },
+      {
+        path: 'signs/:id',
+        element: <SingleSign />,
+      },
+      {
+        path: 'sigtn-list',
+        element: <SignList />,
+      },
+      { path: 'about', element: <About /> },
+      {
+        path: 'checkout',
+        element: <Checkout />,
+      },
+      {
+        path: 'orders',
+        element: <Orders />,
+      },
+        {
+    path: '/loginInterior',
+    element: <Login />,
+    errorElement: <Error />,
+  },
+  {
+    path: '/registerInterior',
+    element: <Register />,
+    errorElement: <Error />,
+  },
+    ],
+  },
+
+])
+```
+
+### interior auth
+
+#### input field component
+
+components/index.js
+
+```js
+export { default as FormInput } from './FormInput'
+```
+
+FormInput.jsx
+
+```js
+const FormInput = ({ label, name, type, defaultValue }) => {
+  return (
+    <div className="form-control ">
+      <label className="label">
+        <span className="label-text capitalize">{label}</span>
+      </label>
+      <input
+        type={type}
+        name={name}
+        defaultValue={defaultValue}
+        className="input input-bordered "
+      />
+    </div>
+  )
+}
+export default FormInput
+```
+
+#### login page
+
+Login_interior.jsx
+
+```js
+import { FormInput, SubmitBtn } from '../components'
+import { Form, Link } from 'react-router-dom'
+
+const LoginInterior = () => {
+  return (
+    <section className="h-screen grid place-items-center">
+      <Form
+        method="post"
+        className="card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4"
+      >
+        <h4 className="text-center text-3xl font-bold">Login</h4>
+        <FormInput type="email" label="email" name="identifier" />
+        <FormInput type="password" label="password" name="password" />
+        <div className="mt-4">
+          <SubmitBtn text="login" />
+        </div>
+        <button type="button" className="btn btn-secondary btn-block">
+          guest user
+        </button>
+        <p className="text-center">
+          Not a member yet?
+          <Link
+            to="/register-interior"
+            className="ml-2 link link-hover link-primary capitalize"
+          >
+            register
+          </Link>
+        </p>
+      </Form>
+    </section>
+  )
+}
+export default LoginInterior
+```
+
+SubmitBtnSpecialText.jsx
 
 ```js
 import { useNavigation } from 'react-router-dom'
-import { Loading } from '../components'
-
-const DashboardLayout = ({ isDarkThemeEnabled }) => {
+const SubmitBtnSpecialText = () => {
   const navigation = useNavigation()
-  const isPageLoading = navigation.state === 'loading'
-
+  const isSubmitting = navigation.state === 'submitting'
   return (
-    <Wrapper>
-      ...
-      <div className="dashboard-page">
-        {isPageLoading ? <Loading /> : <Outlet context={{ user }} />}
-      </div>
-      ...
-    </Wrapper>
-  )
-}
-```
-
-#### React Query
-
-React Query is a powerful library that simplifies data fetching, caching, and synchronization in React applications. It provides a declarative and intuitive way to manage remote data by abstracting away the complex logic of fetching and caching data from APIs. React Query offers features like automatic background data refetching, optimistic updates, pagination support, and more, making it easier to build performant and responsive applications that rely on fetching and manipulating data.
-
-[React Query Docs](https://tanstack.com/query/v4/docs/react/overview)
-
-- in the client
-
-```sh
-npm i @tanstack/react-query@4.29.5 @tanstack/react-query-devtools@4.29.6
-```
-
-App.jsx
-
-```js
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5,
-    },
-  },
-})
-
-const App = () => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  )
-}
-```
-
-#### Page Error Element
-
-- create components/ErrorElement
-
-```js
-import { useRouteError } from 'react-router-dom'
-
-const Error = () => {
-  const error = useRouteError()
-  console.log(error)
-  return <h4>There was an error...</h4>
-}
-export default ErrorElement
-```
-
-Stats.jsx
-
-```js
-export const loader = async () => {
-  const response = await customFetch.get('/achievements/stats')
-  return response.data
-}
-```
-
-App.jsx
-
-```js
-{
-  path: 'stats',
-  element: <Stats />,
-  loader: statsLoader,
-  errorElement: <h4>There was an error...</h4>
-},
-```
-
-```js
-{
-  path: 'stats',
-  element: <Stats />,
-  loader: statsLoader,
-  errorElement: <ErrorElement />,
-},
-```
-
-### (2)connect
-
-### (3)dashboard when data null
-
-#### First Query
-
-- navigate to stats
-
-Stats.jsx
-
-```js
-import { ChartsContainer, StatsContainer } from '../components'
-import customFetch from '../utils/customFetch'
-import { useLoaderData } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-
-export const loader = async () => {
-  return null
-}
-
-const Stats = () => {
-  const response = useQuery({
-    queryKey: ['stats'],
-    queryFn: () => customFetch.get('/achievements/stats'),
-  })
-  console.log(response)
-  if (response.isLoading) {
-    return <h1>Loading...</h1>
-  }
-  return <h1>react query</h1>
-  return (
-    <>
-      <StatsContainer defaultStats={defaultStats} />
-      {monthlyApplications?.length > 1 && (
-        <ChartsContainer data={monthlyApplications} />
+    <button
+      type="submit"
+      className="btn btn-primary btn-block"
+      disabled={isSubmitting}
+    >
+      {isSubmitting ? (
+        <>
+          <span className="loading loading-spinner"></span>
+          sending...
+        </>
+      ) : (
+        text || 'submit'
       )}
-    </>
+    </button>
   )
 }
-export default Stats
+export default SubmitBtnSpecialText
 ```
 
-```js
-const data = useQuery({
-  queryKey: ['stats'],
-  queryFn: () => customFetch.get('/achievements/stats'),
-})
-```
-
-const data = useQuery({ ... });: This line declares a constant variable named data and assigns it the result of the useQuery hook. The useQuery hook is provided by React Query and is used to perform data fetching.
-
-queryKey: ['stats'],: The queryKey property is an array that serves as a unique identifier for the query. In this case, the query key is set to ['stats'], indicating that this query is fetching statistics related to achievements.
-
-queryFn: () => customFetch.get('/achievements/stats'),: omFetch.get('/achievements/stats'). The customFetch object is likely a custom wrapper around the fetch function or an external HTTP client library, used to make the actual API request to retrieve achievement statistics.In React Query, the quThe queryFn property specifies the function that will be executed when the query is triggered. In this case, it uses an arrow function that calls custeryFn property expects a function that returns a promise. The promise should resolve with the data you want to fetch and store in the query cache.
-
-customFetch.get('/achievements/stats'): This line is making an HTTP GET request to the /achievements/stats endpoint, which is the API route that provides the achievement statistics data.
-
-#### Get Stats with React Query
+#### Register page
 
 ```js
-const statsQuery = {
-  queryKey: ['stats'],
-  queryFn: async () => {
-    const response = await customFetch.get('/achievements/stats')
-    return response.data
-  },
-}
+import { FormInput, SubmitBtn } from '../components'
+import { Form, Link } from 'react-router-dom'
 
-export const loader = async () => {
-  return null
-}
-
-const Stats = () => {
-  const { isLoading, isError, data } = useQuery(statsQuery)
-
-  if (isLoading) return <h4>Loading...</h4>
-  if (isError) return <h4>Error...</h4>
-  // after loading/error or ?.
-  const { defaultStats, monthlyApplications } = data
-
+const RegisterInterior = () => {
   return (
-    <>
-      <StatsContainer defaultStats={defaultStats} />
-      {monthlyApplications?.length > 1 && (
-        <ChartsContainer data={monthlyApplications} />
-      )}
-    </>
-  )
-}
-export default Stats
-```
-
-#### React Query in Stats Loader
-
-App.jsx
-
-```js
-{
-  path: 'stats',
-  element: <Stats />,
-  loader: statsLoader(queryClient),
-  errorElement: <ErrorElement />,
-},
-```
-
-Stats.jsx
-
-```js
-import { ChartsContainer, StatsContainer } from '../components'
-import customFetch from '../utils/customFetch'
-import { useQuery } from '@tanstack/react-query'
-
-const statsQuery = {
-  queryKey: ['stats'],
-  queryFn: async () => {
-    const response = await customFetch.get('/achievements/stats')
-    return response.data
-  },
-}
-
-export const loader = (queryClient) => async () => {
-  const data = await queryClient.ensureQueryData(statsQuery)
-  return data
-}
-
-const Stats = () => {
-  const { data } = useQuery(statsQuery)
-  const { defaultStats, monthlyApplications } = data
-
-  return (
-    <>
-      <StatsContainer defaultStats={defaultStats} />
-      {monthlyApplications?.length > 1 && (
-        <ChartsContainer data={monthlyApplications} />
-      )}
-    </>
-  )
-}
-export default Stats
-```
-
-#### React Query for Current User
-
-DashboardLayout.jsx
-
-```js
-const userQuery = {
-  queryKey: ['user'],
-  queryFn: async () => {
-    const { data } = await customFetch('/users/current-user')
-    return data
-  },
-}
-
-export const loader = (queryClient) => async () => {
-  try {
-    return await queryClient.ensureQueryData(userQuery)
-  } catch (error) {
-    return redirect('/')
-  }
-}
-
-const Dashboard = ({ prefersDarkMode, queryClient }) => {
-  const { user } = useQuery(userQuery)?.data
-}
-```
-
-## return handle load
-
-### ()
-
-#### Invalidate Queries
-
-Login.jsx
-
-```js
-export const action =
-  (queryClient) =>
-  async ({ request }) => {
-    const formData = await request.formData()
-    const data = Object.fromEntries(formData)
-    try {
-      await axios.post('/api/v1/auth/login', data)
-      queryClient.invalidateQueries()
-      toast.success('Login successful')
-      return redirect('/dashboard')
-    } catch (error) {
-      toast.error(error.response.data.msg)
-      return error
-    }
-  }
-```
-
-DashboardLayout.jsx
-
-```js
-const logoutUser = async () => {
-  navigate('/')
-  await customFetch.get('/auth/logout')
-  queryClient.invalidateQueries()
-  toast.success('Logging out...')
-}
-```
-
-Profile.jsx
-
-```js
-export const action =
-  (queryClient) =>
-  async ({ request }) => {
-    const formData = await request.formData()
-    const file = formData.get('avatar')
-    if (file && file.size > 500000) {
-      toast.error('Image size too large')
-      return null
-    }
-    try {
-      await customFetch.patch('/users/update-user', formData)
-      queryClient.invalidateQueries(['user'])
-      toast.success('Profile updated successfully')
-      return redirect('/dashboard')
-    } catch (error) {
-      toast.error(error?.response?.data?.msg)
-      return null
-    }
-  }
-```
-
-## all achievements
-
-#### All Achievements Query
-
-AllAchievements.jsx
-
-```js
-import { toast } from 'react-toastify'
-import { AchievementsContainer, SearchContainer } from '../components'
-import customFetch from '../utils/customFetch'
-import { useLoaderData } from 'react-router-dom'
-import { useContext, createContext } from 'react'
-import { useQuery } from '@tanstack/react-query'
-const AllAchievementsContext = createContext()
-
-const allAchievementsQuery = (params) => {
-  const { search, status, type, sort, page } = params
-  return {
-    queryKey: [
-      'achievements',
-      search ?? 'all',
-      atatus ?? 'all',
-      type ?? 'all',
-      sort ?? 'all',
-      page ?? 1,
-    ],
-    queryFn: async () => {
-      const { data } = await customFetch.get('/achievements', {
-        params,
-      })
-      return data
-    },
-  }
-}
-
-export const loader =
-  (queryClient) =>
-  async ({ request }) => {
-    try {
-      const url = new URL(request.url)
-      const search = url.searchParams.get('search')
-      const status = url.searchParams.get('status')
-      const type = url.searchParams.get('type')
-      const sort = url.searchParams.get('sort')
-      const page = url.searchParams.get('page')
-      const params = { status, type, sort, page }
-      if (search) {
-        params.search = search
-      }
-      await queryClient.ensureQueryData(allAchievementsQuery(params))
-
-      return {
-        searchValues: { search, status, type, sort, page },
-      }
-    } catch (error) {
-      toast.error(error.response.data.msg)
-      return error
-    }
-  }
-
-const AllAchievements = () => {
-  const { searchValues } = useLoaderData()
-  const { data } = useQuery(allAchievementsQuery(searchValues))
-  return (
-    <AllAchievementContext.Provider value={{ data, searchValues }}>
-      <SearchContainer />
-      <AchievementsContainer />
-    </AllAchievementContext.Provider>
-  )
-}
-export default AllAchievements
-
-export const useAllAchievementsContext = () =>
-  useContext(AllAchievementsContext)
-```
-
-#### Invalidate Achievements
-
-AddAchievement.jsx
-
-```js
-export const action =
-  (queryClient) =>
-  async ({ request }) => {
-    const formData = await request.formData()
-    const data = Object.fromEntries(formData)
-    try {
-      await customFetch.post('/achievements', data)
-      queryClient.invalidateQueries(['achievements'])
-      toast.success('achievement added successfully ')
-      return redirect('all-achievements')
-    } catch (error) {
-      toast.error(error?.response?.data?.msg)
-      return error
-    }
-  }
-```
-
-EditAchievement.jsx
-
-```js
-export const action =
-  (queryClient) =>
-  async ({ request, params }) => {
-    const formData = await request.formData()
-    const data = Object.fromEntries(formData)
-    try {
-      await customFetch.patch(`/achievements/${params.id}`, data)
-      queryClient.invalidateQueries(['achievements'])
-      toast.success('achievement edited successfully')
-      return redirect('/dashboard/all-achievements')
-    } catch (error) {
-      toast.error(error?.response?.data?.msg)
-      return error
-    }
-  }
-```
-
-DeleteAchievement.jsx
-
-```js
-export const action =
-  (queryClient) =>
-  async ({ params }) => {
-    try {
-      await customFetch.delete(`/achievements/${params.id}`)
-      queryClient.invalidateQueries(['achievements'])
-      toast.success('achievement deleted successfully')
-    } catch (error) {
-      toast.error(error?.response?.data?.msg)
-    }
-    return redirect('/dashboard/all-achievements')
-  }
-```
-
-#### Edit achievement Loader
-
-```js
-import { FormRow, FormRowSelect, SubmitBtn } from '../components'
-import Wrapper from '../assets/wrappers/DashboardFormPage'
-import { useLoaderData, useParams } from 'react-router-dom'
-import { STATUS, TYPE } from '../../../utils/constants'
-import { Form, redirect } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import customFetch from '../utils/customFetch'
-import { useQuery } from '@tanstack/react-query'
-
-const singleAchievementQuery = (id) => {
-  return {
-    queryKey: ['achievement', id],
-    queryFn: async () => {
-      const { data } = await customFetch.get(`/achievements/${id}`)
-      return data
-    },
-  }
-}
-
-export const loader =
-  (queryClient) =>
-  async ({ params }) => {
-    try {
-      await queryClient.ensureQueryData(singleAchievementQuery(params.id))
-      return params.id
-    } catch (error) {
-      toast.error(error?.response?.data?.msg)
-      return redirect('/dashboard/all-achievements')
-    }
-  }
-
-export const action =
-  (queryClient) =>
-  async ({ request, params }) => {
-    const formData = await request.formData()
-    const data = Object.fromEntries(formData)
-    try {
-      await customFetch.patch(`/achievements/${params.id}`, data)
-      queryClient.invalidateQueries(['achievements'])
-
-      toast.success('achievement edited successfully')
-      return redirect('/dashboard/all-achievements')
-    } catch (error) {
-      toast.error(error?.response?.data?.msg)
-      return error
-    }
-  }
-
-const EditAchievement = () => {
-  const id = useLoaderData()
-
-  const {
-    data: { achievement },
-  } = useQuery(singleAchievementQuery(id))
-
-  return (
-    <Wrapper>
-      <Form method="post" className="form">
-        <h4 className="form-title">edit achievement</h4>
-        <div className="form-center">
-          <FormRow
-            type="text"
-            name="position"
-            defaultValue={achievement.position}
-          />
-          <FormRow
-            type="text"
-            name="company"
-            defaultValue={achievement.company}
-          />
-          <FormRow
-            type="text"
-            name="location"
-            labelText="achievement location"
-            defaultValue={achievement.location}
-          />
-          <FormRowSelect
-            name="status"
-            labelText="achievement status"
-            defaultValue={achievement.status}
-            list={Object.values(STATUS)}
-          />
-          <FormRowSelect
-            name="type"
-            labelText="achievement type"
-            defaultValue={achievement.type}
-            list={Object.values(TYPE)}
-          />
-          <SubmitBtn formBtn />
+    <section className="h-screen grid place-items-center">
+      <Form
+        method="POST"
+        className="card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4"
+      >
+        <h4 className="text-center text-3xl font-bold">Register</h4>
+        <FormInput type="text" label="username" name="username" />
+        <FormInput type="email" label="email" name="email" />
+        <FormInput type="password" label="password" name="password" />
+        <div className="mt-4">
+          <SubmitBtn text="register" />
         </div>
+
+        <p className="text-center">
+          Already a member?
+          <Link
+            to="/login-interior"
+            className="ml-2 link link-hover link-primary capitalize"
+          >
+            login
+          </Link>
+        </p>
       </Form>
-    </Wrapper>
+    </section>
   )
 }
-export default EditAchievement
+export default RegisterInterior
 ```
 
-#### Axios Interceptors
+## layer 3
 
-DashboardLayout.jsx
+#### Solution (10) - Header Component in dashboard
 
 ```js
-const DashboardContext = createContext();
+import { Link } from 'react-router-dom'
 
-const DashboardLayout = ({ isDarkThemeEnabled }) => {
-  const [isAuthError, setIsAuthError] = useState(false);
-
-  const logoutUser = async () => {
-    await customFetch.get('/auth/logout');
-    toast.success('Logging out...');
-    navigate('/');
-  };
-
-  customFetch.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (error) => {
-      if (error?.response?.status === 401) {
-        setIsAuthError(true);
-      }
-      return Promise.reject(error);
-    }
-  );
-  useEffect(() => {
-    if (!isAuthError) return;
-    logoutUser();
-  }, [isAuthError]);
+const Header = () => {
   return (
-    ...
+    <header className=" bg-neutral py-2 text-neutral-content ">
+      <div className="align-element flex justify-center sm:justify-end ">
+        {/* USER */}
+        {/* LINKS */}
+        <div className="flex gap-x-6 justify-center items-center">
+          <Link to="/login" className="link link-hover text-xs sm:text-sm">
+            Sign in / Guest
+          </Link>
+          <Link to="/register" className="link link-hover text-xs sm:text-sm">
+            Create an Account
+          </Link>
+        </div>
+      </div>
+    </header>
   )
-};
+}
+export default Header
+```
 
+#### right sidebar
+
+```js
+import { BsCart3, BsMoonFill, BsSunFill } from 'react-icons/bs'
+import { FaBarsStaggered } from 'react-icons/fa6'
+import { NavLink } from 'react-router-dom'
+
+const WhatSidebar = () => {
+  return (
+    <nav className="bg-base-200">
+      <div className="navbar align-element ">
+        <div className="navbar-start">
+          {/* Title */}
+          <NavLink
+            to="/"
+            className="hidden lg:flex btn btn-primary text-3xl items-center "
+          >
+            C
+          </NavLink>
+          {/* DROPDOWN */}
+          <div className="dropdown">
+            <label tabIndex={0} className="btn btn-ghost lg:hidden">
+              <FaBarsStaggered className="h-6 w-6" />
+            </label>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52"
+            >
+              nav links
+            </ul>
+          </div>
+        </div>
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal ">nav links</ul>
+        </div>
+        <div className="navbar-end">
+          {/* THEME ICONS */}
+          {/* CART LINK*/}
+          <NavLink to="cart" className="btn btn-ghost btn-circle btn-md ml-4">
+            <div className="indicator">
+              <BsCart3 className="h-6 w-6" />
+              <span className="badge badge-sm badge-primary indicator-item">
+                8
+              </span>
+            </div>
+          </NavLink>
+        </div>
+      </div>
+    </nav>
+  )
+}
+export default whatSidebar
+```
+
+#### NavLinks
+
+NavLinks.jsx
+
+```js
+const links = [
+  { id: 1, url: '/', text: 'home' },
+  { id: 2, url: 'about', text: 'about' },
+  { id: 3, url: 'signs', text: 'signs' },
+  { id: 4, url: 'cart', text: 'cart' },
+  { id: 5, url: 'checkout', text: 'checkout' },
+  { id: 6, url: 'orders', text: 'orders' },
+]
+import { NavLink } from 'react-router-dom'
+
+const NavLinks = () => {
+  return (
+    <>
+      {links.map((link) => {
+        const { id, url, text } = link
+        return (
+          <li key={id}>
+            <NavLink className="capitalize" to={url}>
+              {text}
+            </NavLink>
+          </li>
+        )
+      })}
+    </>
+  )
+}
+export default NavLinks
 ```

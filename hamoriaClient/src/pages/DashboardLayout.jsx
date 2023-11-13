@@ -3,7 +3,13 @@ import { Outlet, useNavigation } from 'react-router-dom'
 import Wrapper from '../assets/wrappers/Dashboard'
 import { Navbar, BigSidebar, SmallSidebar } from '../components'
 
-import { useState, createContext, useContext, useEffect } from 'react'
+import {
+  useState,
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+} from 'react'
 
 import { redirect, useLoaderData } from 'react-router-dom'
 import customFetch from '../utils/customFetch'
@@ -13,6 +19,7 @@ import { toast } from 'react-toastify'
 
 import { Loading } from '../components'
 import { useQuery } from '@tanstack/react-query'
+import { Header, WhatSidebar, WhatSidebarBig } from '../components'
 
 const userQuery = {
   queryKey: ['user'],
@@ -31,7 +38,11 @@ export const loader = (queryClient) => async () => {
   }
 }
 const DashboardContext = createContext()
-const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
+const DashboardLayout = ({
+  isDarkThemeEnabled,
+  queryClient,
+  isLeftSidebarEnabled,
+}) => {
   const [isAuthError, setIsAuthError] = useState(false)
   const navigate = useNavigate()
   const navigation = useNavigation()
@@ -58,8 +69,38 @@ const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
     localStorage.setItem('darkTheme', newDarkTheme)
   }
 
-  const toggleSidebar = () => {
-    setShowSidebar(!showSidebar)
+  const [activeLeftSidebar, setActiveLeftSidebar] =
+    useState(isLeftSidebarEnabled)
+
+  const toggleSidebar = (buttonValue) => {
+    if (activeLeftSidebar == true) {
+      if (buttonValue == 'leftButton') {
+        setShowSidebar(!showSidebar)
+      }
+
+      if (buttonValue == 'rightButton') {
+        if (showSidebar == false) {
+          setShowSidebar(true)
+        }
+
+        setActiveLeftSidebar(false)
+        localStorage.setItem('isLeftSidebarActive', 'false')
+      }
+    }
+    if (activeLeftSidebar == false) {
+      if (buttonValue == 'leftButton') {
+        if (showSidebar == false) {
+          setShowSidebar(true)
+        }
+
+        setActiveLeftSidebar(true)
+        localStorage.setItem('isLeftSidebarActive', 'true')
+      }
+
+      if (buttonValue == 'rightButton') {
+        setShowSidebar(!showSidebar)
+      }
+    }
   }
 
   const logoutUser = async () => {
@@ -90,21 +131,36 @@ const DashboardLayout = ({ isDarkThemeEnabled, queryClient }) => {
         user,
         showSidebar,
         isDarkTheme,
+        activeLeftSidebar,
         toggleDarkTheme,
         toggleSidebar,
         logoutUser,
       }}
     >
-      <Wrapper>
+      <Wrapper
+        activeLeft={activeLeftSidebar ? 'auto' : null}
+        activeRight={activeLeftSidebar ? null : 'auto'}
+      >
+        {user.name == 'Chuckleberry' ? <Header /> : null}
         <main className="dashboard">
-          <SmallSidebar />
-          <BigSidebar />
+          {activeLeftSidebar ? (
+            <div>
+              <SmallSidebar />
+              <BigSidebar />
+            </div>
+          ) : null}
           <div>
             <Navbar />
             <div className="dashboard-page">
               {isPageLoading ? <Loading /> : <Outlet context={{ user }} />}
             </div>
           </div>
+          {activeLeftSidebar ? null : (
+            <div>
+              <WhatSidebar />
+              <WhatSidebarBig />
+            </div>
+          )}
         </main>
       </Wrapper>
     </DashboardContext.Provider>

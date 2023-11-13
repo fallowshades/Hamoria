@@ -6,7 +6,7 @@ import { FaWpforms } from 'react-icons/fa'
 import { ImProfile } from 'react-icons/im'
 import { MdAdminPanelSettings } from 'react-icons/md'
 
-const links = [
+export const links = [
   { text: 'add Achievement', path: '.', icon: <FaWpforms /> },
   {
     text: 'all Achievements',
@@ -18,4 +18,11 @@ const links = [
   { text: 'admin', path: 'admin', icon: <MdAdminPanelSettings /> },
 ]
 
-export default links
+export const whatlinks = [
+  { id: 1, path: '.', text: 'home', icon: <IoBarChartSharp /> },
+  { id: 2, path: 'about', text: 'about', icon: <IoBarChartSharp /> },
+  { id: 3, path: 'signs', text: 'signs', icon: <IoBarChartSharp /> },
+  { id: 4, path: 'cart', text: 'cart', icon: <IoBarChartSharp /> },
+  { id: 5, path: 'checkout', text: 'checkout', icon: <IoBarChartSharp /> },
+  { id: 6, path: 'orders', text: 'orders', icon: <IoBarChartSharp /> },
+]
