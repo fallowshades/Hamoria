@@ -51,6 +51,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ErrorElement } from './components'
 
 import { loader as featureLoader } from './pages/FeatureHome'
+import { loader as allSignsLoader } from './pages/AllSigns'
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -147,6 +149,7 @@ const router = createBrowserRouter([
           {
             path: 'all-signs',
             element: <AllSigns />,
+            loader: allSignsLoader,
           },
           {
             path: 'signs/:id',
