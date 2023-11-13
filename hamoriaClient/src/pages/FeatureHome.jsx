@@ -1,13 +1,13 @@
 import Wrapper from '../assets/wrappers/FeatureHome'
-import { Hero } from '../components'
+import { Hero, FeaturedSigns } from '../components'
 
 import { convenientFetch } from '../utils/corsFetch'
 const url = 'products?featured=true'
 
 export const loader = async () => {
   const response = await convenientFetch(url)
-  const convenient = response.data.data
-  return { convenient }
+  const products = response.data.data
+  return { products }
 
   return null
 }
@@ -15,7 +15,7 @@ const FeatureHome = () => {
   return (
     <Wrapper>
       <Hero />
-      <div>FeatureHome</div>
+      <FeaturedSigns />
     </Wrapper>
   )
 }

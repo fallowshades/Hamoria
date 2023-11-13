@@ -316,6 +316,21 @@ Pages: (AchievementContainer, PageBtnContainer)
 ---[x]hero carossel
 ---[x]url
 
+### set all what w provided db v0.3.4
+
+[x]feature home load
+---[x] container fill up load from featureHome
+---[x] filters add on params
+---[x] load return {key: value}
+
+### set single what provided db v0.3.5
+
+[]
+---[]grid view also vissible from feature home
+---[]path relative to single item
+
+### imitate backend v0.3.6
+
 ### test layer 1 v0.3.2
 
 ### test layer 2 v0.3.3

@@ -26,3 +26,5 @@ export { default as Hero } from './Hero'
 export { default as Filters } from './Filters'
 export { default as SignsContainer } from './SignsContainer'
 export { default as PaginationContainer } from './PaginationContainer'
+
+export { default as FeaturedSigns } from './FeaturedSigns'
