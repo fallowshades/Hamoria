@@ -17,6 +17,7 @@ import { fileURLToPath } from 'url'
 import path from 'path'
 import cloudinary from 'cloudinary'
 
+import signRouter from './routes/signRouter.js'
 dotenv.config()
 
 cloudinary.config({
@@ -38,6 +39,7 @@ app.use(cookieParser())
 app.use('/api/v1/achievements', authenticateUser, achievementRouter)
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/users', authenticateUser, userRouter)
+app.use('/api/v1/signs', signRouter)
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, './hamoriaClient/dst', 'index.html'))

@@ -87,7 +87,7 @@ import {
 // router.post('/', createJob);
 
 router.route('/').get(getAllSign).post(createSign)
-router.route('/:id').get(geSign).patch(updateSign).delete(deleteSign)
+router.route('/:id').get(getSign).patch(updateSign).delete(deleteSign)
 
 export default router
 ```
