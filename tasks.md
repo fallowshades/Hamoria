@@ -311,10 +311,10 @@ Pages: (AchievementContainer, PageBtnContainer)
 
 ### setup convenient db to setup frontend v0.3.3
 
-[]set up practice data
----[]aboute page
----[]hero carossel
----[]url
+[x]set up practice data
+---[x]aboute page
+---[x]hero carossel
+---[x]url
 
 ### test layer 1 v0.3.2
 

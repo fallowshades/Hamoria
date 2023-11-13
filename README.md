@@ -105,3 +105,70 @@ export const customFetch = axios.create({
   baseURL: productionUrl,
 })
 ```
+
+### Load with lazy axios .data.data approach and hero
+
+#### Challenge (19) - Landing Loader
+
+ErrorElement.jsx
+
+```js
+import { useRouteError } from 'react-router-dom'
+const ErrorElement = () => {
+  const error = useRouteError()
+  console.log(error)
+
+  return <h4 className="font-bold text-4xl">there was an error... </h4>
+}
+export default ErrorElement
+```
+
+App.jsx
+
+```js
+import { ErrorElement } from './components'
+// loaders
+import { loader as landingLoader } from './pages/Landing'
+// actions
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <HomeLayout />,
+    errorElement: <Error />,
+    children: [
+      {
+        index: true,
+        element: <Landing />,
+        loader: landingLoader,
+        errorElement: ErrorElement,
+      },
+    ],
+  },
+])
+```
+
+FeautureHome.js
+
+```js
+import { Hero } from '../components'
+
+import { customFetch } from '../utils'
+const url = '/products?featured=true'
+
+export const loader = async () => {
+  const response = await customFetch(url)
+  console.log(response)
+  const products = response.data.data
+  return { products }
+}
+
+const FeautureHome = () => {
+  return (
+    <>
+      <Hero />
+    </>
+  )
+}
+export default Landing
+```

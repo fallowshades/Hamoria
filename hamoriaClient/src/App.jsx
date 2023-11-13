@@ -49,6 +49,8 @@ import { loader as statsLoader } from './pages/Stats'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ErrorElement } from './components'
+
+import { loader as featureLoader } from './pages/FeatureHome'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -103,6 +105,7 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <FeatureHome />,
+            loader: featureLoader,
           },
           {
             path: 'add-achievement',
