@@ -52,6 +52,7 @@ import { ErrorElement } from './components'
 
 import { loader as featureLoader } from './pages/FeatureHome'
 import { loader as allSignsLoader } from './pages/AllSigns'
+import { loader as singleSignLoader } from './pages/SingleSign'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -154,6 +155,7 @@ const router = createBrowserRouter([
           {
             path: 'signs/:id',
             element: <SingleSign />,
+            loader: singleSignLoader,
           },
           {
             path: 'sign-list',
