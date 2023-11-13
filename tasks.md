@@ -331,6 +331,24 @@ Pages: (AchievementContainer, PageBtnContainer)
 
 ### imitate backend v0.3.6
 
+[]from e-commerence-api
+---[x]name-->title
+---[x]price
+---[x]description
+---[x]image
+---[x]category
+---[x]company
+---[x]colors
+---[x]featured
+---[x]freeShipping
+---[]inventory
+---[]avrageRating
+---[]numOfReviews
+---[]user
+---[x]timestamp
+[]extra
+---[]puublishedAt
+
 ### test layer 1 v0.3.2
 
 ### test layer 2 v0.3.3
