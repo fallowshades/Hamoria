@@ -21,6 +21,23 @@ const cartSlice = createSlice({
 
     removeItem: (state, action) => {},
     editItem: (state, action) => {},
+    addItem: (state, action) => {
+      console.log('here')
+      const { product } = action.payload
+
+      const item = state.cartItems.find((i) => i.cartID === product.cartID)
+      if (item) {
+        item.amount += product.amount
+      } else {
+        state.cartItems.push(product)
+      }
+      state.numItemsInCart += product.amount
+      state.cartTotal += product.price * product.amount
+      state.tax = 0.1 * state.cartTotal
+      state.orderTotal = state.cartTotal + state.shipping + state.tax
+      localStorage.setItem('cart', JSON.stringify(state))
+      toast.success('Item added to cart')
+    },
   },
 })
 

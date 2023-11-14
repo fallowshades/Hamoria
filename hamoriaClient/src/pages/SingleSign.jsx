@@ -31,7 +31,9 @@ const SingleSign = () => {
     company,
   }
 
-  const addToCart = () => {}
+  const addToCart = () => {
+    dispatch(addItem({ product: cartProduct }))
+  }
   const handleAmount = (e) => {
     setAmount(parseInt(e.target.value))
   }
