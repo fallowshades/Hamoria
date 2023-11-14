@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid'
+import Sign from '../models/signModel.js'
 
 let signs = [
   { id: nanoid(), description: 'start', track: 'front-end developer' },
@@ -9,14 +10,16 @@ export const getAllSigns = async (req, res) => {
 }
 
 export const createSign = async (req, res) => {
-  const { description, track } = req.body
+  const { title, price, description, category, company, colors } = req.body
+  const sign = await Sign.create({
+    title,
+    price,
+    description,
+    category,
+    company,
+    colors,
+  })
 
-  if (!description || !track) {
-    return res.status(400).json({ msg: 'please provide description and track' })
-  }
-  const id = nanoid(10)
-  const sign = { id, description, track }
-  signs.push(sign)
   res.status(200).json({ sign })
 }
 
