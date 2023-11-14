@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid'
 import Sign from '../models/signModel.js'
+import 'express-async-errors'
 
 let signs = [
   { id: nanoid(), description: 'start', track: 'front-end developer' },
