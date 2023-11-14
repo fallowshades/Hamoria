@@ -26,3 +26,15 @@ export const ACHIEVEMENT_SORT_BY = {
   ASCENDING: 'a-z',
   DESCENDING: 'z-a',
 }
+
+export const SIGN_CATEGORY = {
+  WORK: 'inactive',
+  EAT: 'activated',
+  SLEEP: 'complete',
+}
+
+export const SIGN_COMPANY = {
+  STANDARD: 'ikea',
+  FRIEND: 'liddy',
+  COMPETITOR: 'marcos',
+}
