@@ -4,7 +4,7 @@ import 'express-async-errors'
 
 export const getAllSigns = async (req, res) => {
   const signs = await Sign.find({})
-  res.status(200).json({ signs })
+  res.status(StatusCodes.OK).json({ signs })
 }
 
 export const createSign = async (req, res) => {
@@ -25,7 +25,7 @@ export const getSign = async (req, res) => {
   const { id } = req.params
   const sign = await Sign.findById(id)
   if (!sign) {
-    return res.status(404).json({ msg: `no sign with id ${id}` })
+    return res.status(StatusCodes.CREATED).json({ signs })
   }
   res.status(200).json({ sign })
 }
@@ -41,7 +41,7 @@ export const updateSign = async (req, res) => {
     return res.status(404).json({ msg: `no sign with id ${id}` })
   }
 
-  res.status(200).json({ description: updatedSign })
+  res.status(StatusCodes.OK).json({ description: updatedSign })
 }
 
 export const deleteSign = async (req, res) => {
@@ -51,5 +51,5 @@ export const deleteSign = async (req, res) => {
   if (!removedSign) {
     return res.status(404).json({ msg: `no job with id ${id}` })
   }
-  res.status(200).json({ sign: removedSign })
+  res.status(StatusCodes.OK).json({ sign: removedSign })
 }
