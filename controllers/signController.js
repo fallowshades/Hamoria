@@ -2,11 +2,8 @@ import { nanoid } from 'nanoid'
 import Sign from '../models/signModel.js'
 import 'express-async-errors'
 
-let signs = [
-  { id: nanoid(), description: 'start', track: 'front-end developer' },
-  { id: nanoid(), description: 'end', track: 'back-end developer' },
-]
 export const getAllSigns = async (req, res) => {
+  const signs = await Sign.find({})
   res.status(200).json({ signs })
 }
 
@@ -26,38 +23,33 @@ export const createSign = async (req, res) => {
 
 export const getSign = async (req, res) => {
   const { id } = req.params
-  const sign = signs.find((sign) => sign.id === id)
+  const sign = await Sign.findById(id)
   if (!sign) {
-    // throw new Error('no sign with that id');
     return res.status(404).json({ msg: `no sign with id ${id}` })
   }
   res.status(200).json({ sign })
 }
 
 export const updateSign = async (req, res) => {
-  const { description, track } = req.body
-  if (!description || !track) {
-    return res.status(400).json({ msg: 'please provide description and track' })
-  }
   const { id } = req.params
-  const sign = signs.find((sign) => sign.id === id)
-  if (!sign) {
+
+  const updatedSign = await Sign.findByIdAndUpdate(id, req.body, {
+    new: true,
+  })
+
+  if (!updatedSign) {
     return res.status(404).json({ msg: `no sign with id ${id}` })
   }
 
-  sign.description = description
-  sign.track = track
-  res.status(200).json({ msg: 'sign modified', sign })
+  res.status(200).json({ description: updatedSign })
 }
 
 export const deleteSign = async (req, res) => {
   const { id } = req.params
-  const sign = signs.find((sign) => sign.id === id)
-  if (!sign) {
-    return res.status(404).json({ msg: `no sign with id ${id}` })
-  }
-  const newSigns = signs.filter((sign) => sign.id !== id)
-  signs = newSigns
+  const removedSign = await Sign.findByIdAndDelete(id)
 
-  res.status(200).json({ msg: 'sign deleted' })
+  if (!removedSign) {
+    return res.status(404).json({ msg: `no job with id ${id}` })
+  }
+  res.status(200).json({ sign: removedSign })
 }
