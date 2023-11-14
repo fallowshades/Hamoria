@@ -1,5 +1,8 @@
 import { Router } from 'express'
-import { validateSignInput } from '../middleware/validateSignMiddleware.js'
+import {
+  validateSignInput,
+  validateIdParam,
+} from '../middleware/validateSignMiddleware.js'
 
 //import { validateSignInput } from '../middleware/validationMiddleware.js'
 const router = Router()
@@ -15,8 +18,8 @@ import {
 router.route('/').get(getAllSigns).post(validateSignInput, createSign)
 router
   .route('/:id')
-  .get(getSign)
+  .get(validateIdParam, getSign)
   .patch(validateSignInput, updateSign)
-  .delete(deleteSign)
+  .delete(validateIdParam, deleteSign)
 
 export default router
