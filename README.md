@@ -511,3 +511,24 @@ export class UnauthorizedError extends Error {
   }
 }
 ```
+
+#### format data return
+
+signsController.js
+
+```js
+const data = signs.map((sign) => {
+  const { _id, ...attributes } = sign.toObject()
+  return { id: _id, attributes }
+})
+res.status(StatusCodes.OK).json({ data })
+```
+
+test look the same for fetch loading
+
+```js
+import customFetch from '../utils/customFetch'
+
+const test = await customFetch('/signs')
+console.log(test)
+```

@@ -1,10 +1,15 @@
-import { nanoid } from 'nanoid'
 import Sign from '../models/signModel.js'
 import 'express-async-errors'
+import { StatusCodes } from 'http-status-codes'
+import { ObjectId } from 'mongoose'
 
 export const getAllSigns = async (req, res) => {
   const signs = await Sign.find({})
-  res.status(StatusCodes.OK).json({ signs })
+  const data = signs.map((sign) => {
+    const { _id, ...attributes } = sign.toObject()
+    return { id: _id, attributes }
+  })
+  res.status(StatusCodes.OK).json({ data })
 }
 
 export const createSign = async (req, res) => {
