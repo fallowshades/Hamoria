@@ -2,11 +2,14 @@ import Wrapper from '../assets/wrappers/FeatureHome'
 import { Hero, FeaturedSigns } from '../components'
 
 import { convenientFetch } from '../utils/corsFetch'
+import customFetch from '../utils/customFetch'
 const url = 'products?featured=true'
 
 export const loader = async () => {
   const response = await convenientFetch(url)
   const products = response.data.data
+  const test = await customFetch('/signs')
+  console.log(test)
   return { products }
 
   return null

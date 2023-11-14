@@ -87,7 +87,7 @@ import {
 // router.post('/', createJob);
 
 router.route('/').get(getAllSign).post(createSign)
-router.route('/:id').get(geSign).patch(updateSign).delete(deleteSign)
+router.route('/:id').get(getSign).patch(updateSign).delete(deleteSign)
 
 export default router
 ```
@@ -510,4 +510,25 @@ export class UnauthorizedError extends Error {
     this.statusCode = StatusCodes.FORBIDDEN
   }
 }
+```
+
+#### format data return
+
+signsController.js
+
+```js
+const data = signs.map((sign) => {
+  const { _id, ...attributes } = sign.toObject()
+  return { id: _id, attributes }
+})
+res.status(StatusCodes.OK).json({ data })
+```
+
+test look the same for fetch loading
+
+```js
+import customFetch from '../utils/customFetch'
+
+const test = await customFetch('/signs')
+console.log(test)
 ```
