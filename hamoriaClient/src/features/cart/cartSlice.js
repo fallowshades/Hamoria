@@ -10,19 +10,19 @@ const defaultState = {
   orderTotal: 0,
 }
 
+const getCartFromLocalStorage = () => {
+  return JSON.parse(localStorage.getItem('cart')) || defaultState
+}
+
 const cartSlice = createSlice({
   name: 'cart',
-  initialState: defaultState,
+  initialState: getCartFromLocalStorage,
   reducers: {
-    addItem: (state, action) => {
-      console.log(action.payload)
-    },
     clearCart: (state) => {},
 
     removeItem: (state, action) => {},
     editItem: (state, action) => {},
     addItem: (state, action) => {
-      console.log('here')
       const { product } = action.payload
 
       const item = state.cartItems.find((i) => i.cartID === product.cartID)
