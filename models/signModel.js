@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-
+import { SIGN_COMPANY, SIGN_CATEGORY } from '../utils/constants.js'
 const SignSchema = new mongoose.Schema(
   {
     title: {
@@ -25,15 +25,12 @@ const SignSchema = new mongoose.Schema(
     category: {
       type: String,
       required: [true, 'Please provide product category'],
-      enum: ['office', 'kitchen', 'bedroom'],
+      enum: [SIGN_CATEGORY],
     },
     company: {
       type: String,
       required: [true, 'Please provide company'],
-      enum: {
-        values: ['ikea', 'liddy', 'marcos'],
-        message: '{VALUE} is not supported',
-      },
+      enum: [SIGN_COMPANY],
     },
     colors: {
       type: [String],
