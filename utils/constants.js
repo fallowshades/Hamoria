@@ -28,9 +28,9 @@ export const ACHIEVEMENT_SORT_BY = {
 }
 
 export const SIGN_CATEGORY = {
-  WORK: 'inactive',
-  EAT: 'activated',
-  SLEEP: 'complete',
+  WORK: 'work',
+  EAT: 'eat',
+  SLEEP: 'sleep',
 }
 
 export const SIGN_COMPANY = {

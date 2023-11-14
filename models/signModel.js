@@ -30,10 +30,7 @@ const SignSchema = new mongoose.Schema(
     company: {
       type: String,
       required: [true, 'Please provide company'],
-      enum: {
-        values: [SIGN_COMPANY],
-        message: '{VALUE} is not supported',
-      },
+      enum: [SIGN_COMPANY],
     },
     colors: {
       type: [String],
