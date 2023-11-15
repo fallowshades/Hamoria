@@ -62,17 +62,11 @@ const queryClient = new QueryClient({
     },
   },
 })
-const checkDefaultTheme = () => {
-  const isDarkTheme = localStorage.getItem('darkTheme') === 'true'
-  document.body.classList.toggle('dark-theme', isDarkTheme)
-  return isDarkTheme
-}
 
 const checkDefaultSidebar = () => {
   return localStorage.getItem('isLeftSidebarActive') != 'true'
 }
 
-const isDarkThemeEnabled = checkDefaultTheme()
 const isLeftSidebarActive = checkDefaultSidebar()
 
 const router = createBrowserRouter([
@@ -99,7 +93,6 @@ const router = createBrowserRouter([
         path: 'dashboard',
         element: (
           <DashboardLayout
-            isDarkThemeEnabled={isDarkThemeEnabled}
             queryClient={queryClient}
             isLeftSidebarEnabled={isLeftSidebarActive}
           />

@@ -1,9 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 
+const themes = {
+  darkTheme: 'darkTheme',
+  default: 'dark-theme',
+}
+
+const checkDefaultTheme = () => {
+  const isDarkTheme = localStorage.getItem('darkTheme') === 'true'
+  document.body.classList.toggle('dark-theme', isDarkTheme)
+  return isDarkTheme
+}
+
+// const [isDarkTheme, setIsDarkTheme] = useState(isDarkThemeEnabled)
 const initialState = {
   user: { username: 'Chucklebery' },
-  theme: 'dark-theme',
+  isDarkTheme: checkDefaultTheme(),
 }
 
 const userSlice = createSlice({
@@ -17,7 +29,10 @@ const userSlice = createSlice({
       console.log('logout')
     },
     toggleTheme: (state) => {
-      console.log('toggle theme')
+      const newDarkTheme = !state.isDarkTheme
+      state.isDarkTheme = newDarkTheme
+      document.body.classList.toggle('dark-theme', newDarkTheme)
+      localStorage.setItem('darkTheme', newDarkTheme)
     },
   },
 })

@@ -1,9 +1,11 @@
 import { BsFillSunFill, BsFillMoonFill } from 'react-icons/bs'
 import Wrapper from '../assets/wrappers/ThemeToggle'
 import { useDashboardContext } from '../pages/DashboardLayout'
+import { useSelector } from 'react-redux/es/hooks/useSelector'
 
 const ThemeToggle = () => {
-  const { isDarkTheme, toggleDarkTheme } = useDashboardContext()
+  const isDarkTheme = useSelector((state) => state.userState.isDarkTheme)
+  const { toggleDarkTheme } = useDashboardContext()
   return (
     <Wrapper onClick={toggleDarkTheme}>
       {isDarkTheme ? (
