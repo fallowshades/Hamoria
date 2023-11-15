@@ -58,6 +58,7 @@ import { action as interiorRegisterAction } from './pages/RegisterInterior'
 
 import { action as interiorLoginAction } from './pages/LoginInterior'
 import { store } from './store'
+import { loader as checkoutLoader } from './pages/Checkout'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -163,6 +164,7 @@ const router = createBrowserRouter([
           {
             path: 'checkout',
             element: <Checkout />,
+            loader: checkoutLoader(store),
           },
           {
             path: 'orders',
