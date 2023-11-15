@@ -54,6 +54,7 @@ import { ErrorElement } from './components'
 import { loader as featureLoader } from './pages/FeatureHome'
 import { loader as allSignsLoader } from './pages/AllSigns'
 import { loader as singleSignLoader } from './pages/SingleSign'
+import { action as interiorRegisterAction } from './pages/RegisterInterior'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -173,6 +174,7 @@ const router = createBrowserRouter([
       {
         path: 'register-interior',
         element: <RegisterInterior />,
+        action: interiorRegisterAction,
       },
     ],
   },

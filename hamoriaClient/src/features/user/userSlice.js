@@ -14,7 +14,7 @@ const checkDefaultTheme = () => {
 
 // const [isDarkTheme, setIsDarkTheme] = useState(isDarkThemeEnabled)
 const initialState = {
-  user: { username: 'Chucklebery' },
+  user: { username: null },
   isDarkTheme: checkDefaultTheme(),
 }
 

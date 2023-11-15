@@ -11,8 +11,8 @@ const Header = () => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const user = useSelector((state) => state.userState.user)
-
+  const user = useSelector((state) => state.userState.user.username)
+  console.log(user)
   const handleLogout = () => {
     navigate('/')
     dispatch(clearCart())
@@ -49,10 +49,16 @@ const Header = () => {
           </div>
         ) : (
           <div className="flex gap-x-6 justify-center items-center">
-            <Link to="/login" className="link link-hover text-xs sm:text-sm">
+            <Link
+              to="/login-interior"
+              className="link link-hover text-xs sm:text-sm"
+            >
               Sign in / Guest
             </Link>
-            <Link to="/register" className="link link-hover text-xs sm:text-sm">
+            <Link
+              to="/register-interior"
+              className="link link-hover text-xs sm:text-sm"
+            >
               Create an Account
             </Link>
           </div>
