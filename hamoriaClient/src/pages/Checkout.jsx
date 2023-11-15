@@ -9,7 +9,7 @@ export const loader = (store) => async () => {
 
   if (!user) {
     toast.warn('You must be logged in to checkout')
-    return redirect('/login-interior')
+    return redirect('(login-interior')
   }
   return null
 }

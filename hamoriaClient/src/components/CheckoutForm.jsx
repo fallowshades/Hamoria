@@ -41,6 +41,8 @@ export const action =
         'there was an error placing your order'
 
       toast.error(errorMessage)
+      if (error?.response?.status === 401 || 403)
+        return redirect('/interior-login')
       return null
     }
   }
