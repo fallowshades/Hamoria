@@ -29,6 +29,7 @@ import {
   LoginInterior,
   Checkout,
   Orders,
+  Cart,
 } from './pages'
 
 import { action as registerAction } from './pages/Register'
@@ -68,7 +69,7 @@ const checkDefaultTheme = () => {
 }
 
 const checkDefaultSidebar = () => {
-  return localStorage.getItem('isLeftSidebarActive') === 'true'
+  return localStorage.getItem('isLeftSidebarActive') != 'true'
 }
 
 const isDarkThemeEnabled = checkDefaultTheme()
@@ -158,8 +159,8 @@ const router = createBrowserRouter([
             loader: singleSignLoader,
           },
           {
-            path: 'sign-list',
-            element: <SignList />,
+            path: 'cart',
+            element: <Cart />,
           },
           { path: 'about', element: <About /> },
           {
