@@ -21,12 +21,14 @@ import { Loading } from '../components'
 import { useQuery } from '@tanstack/react-query'
 import { Header, WhatSidebar, WhatSidebarBig } from '../components'
 
+import { useDispatch } from 'react-redux'
+import { toggleTheme } from '../features/user/userSlice'
 const userQuery = {
   queryKey: ['user'],
   queryFn: async () => {
-    const { data } = await customFetch.get('/users/current-user')
+    //const { data } = await customFetch.get('/users/current-user')
 
-    return data
+    return null
   },
 }
 export const loader = (queryClient) => async () => {
@@ -60,13 +62,9 @@ const DashboardLayout = ({
   }
 
   const [showSidebar, setShowSidebar] = useState(false)
-  const [isDarkTheme, setIsDarkTheme] = useState(isDarkThemeEnabled)
-
+  const dispatch = useDispatch()
   const toggleDarkTheme = () => {
-    const newDarkTheme = !isDarkTheme
-    setIsDarkTheme(newDarkTheme)
-    document.body.classList.toggle('dark-theme', newDarkTheme)
-    localStorage.setItem('darkTheme', newDarkTheme)
+    dispatch(toggleTheme())
   }
 
   const [activeLeftSidebar, setActiveLeftSidebar] =
@@ -130,7 +128,6 @@ const DashboardLayout = ({
       value={{
         user,
         showSidebar,
-        isDarkTheme,
         activeLeftSidebar,
         toggleDarkTheme,
         toggleSidebar,
