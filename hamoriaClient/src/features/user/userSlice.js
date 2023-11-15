@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 
+const getUserFromLocalStorage = () => {
+  return JSON.parse(localStorage.getItem('user')) || null
+}
+
 const themes = {
   darkTheme: 'darkTheme',
   default: 'dark-theme',
@@ -14,7 +18,7 @@ const checkDefaultTheme = () => {
 
 // const [isDarkTheme, setIsDarkTheme] = useState(isDarkThemeEnabled)
 const initialState = {
-  user: { username: null },
+  user: getUserFromLocalStorage(),
   isDarkTheme: checkDefaultTheme(),
 }
 
@@ -23,7 +27,9 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     loginUser: (state, action) => {
-      console.log('login')
+      const user = { ...action.payload.user, token: action.payload.jwt }
+      state.user = user
+      localStorage.setItem('user', JSON.stringify(user))
     },
     logoutUser: (state) => {
       state.user = null
