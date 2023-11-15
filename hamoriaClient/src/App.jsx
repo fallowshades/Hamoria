@@ -56,6 +56,9 @@ import { loader as allSignsLoader } from './pages/AllSigns'
 import { loader as singleSignLoader } from './pages/SingleSign'
 import { action as interiorRegisterAction } from './pages/RegisterInterior'
 
+import { action as interiorLoginAction } from './pages/LoginInterior'
+import { store } from './store'
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -170,6 +173,7 @@ const router = createBrowserRouter([
       {
         path: 'login-interior',
         element: <LoginInterior />,
+        action: interiorLoginAction(store),
       },
       {
         path: 'register-interior',
