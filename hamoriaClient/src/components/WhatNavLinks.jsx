@@ -5,14 +5,14 @@ import { useSelector } from 'react-redux'
 
 const WhatNavLinks = ({ isBigSidebar }) => {
   const { toggleSidebar } = useDashboardContext()
-  const user = useSelector((state) => state.userState.user)
+  const user = useSelector((state) => state.userState.user.username)
   return (
     <div className="nav-links">
       {whatlinks.map((whatlinks) => {
         const { text, path, icon } = whatlinks
         {
         }
-        if ((path == 'checkout' || path == 'orders') && user) {
+        if ((path == 'checkout' || path == 'orders') && !user) {
           console.log(user)
           return null
         }
