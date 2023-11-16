@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { logoutUser } from '../features/user/userSlice'
 import { clearCart } from '../features/cart/cartSlice'
 import { useSelector, useDispatch } from 'react-redux'
+import { useQueryClient } from '@tanstack/react-query'
 
 const Header = () => {
   const numItemsInCart = useSelector((state) => state.cartState.numItemsInCart)
@@ -12,11 +13,12 @@ const Header = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector((state) => state.userState.user)
-  console.log(user)
+  const queryClient = useQueryClient()
   const handleLogout = () => {
     navigate('/dashboard')
     dispatch(clearCart())
     dispatch(logoutUser())
+    queryClient.removeQueries()
   }
 
   return (
@@ -30,7 +32,7 @@ const Header = () => {
           <div className="indicator">
             <BsCart3 className="h-5 w-5" />
             <span className="badge badge-sm badge-primary indicator-item">
-              8
+              {numItemsInCart}
             </span>
           </div>
         </NavLink>
