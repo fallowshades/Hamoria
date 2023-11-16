@@ -1,6 +1,6 @@
 import { redirect, useLoaderData } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { customFetch } from '../utils'
+import { convenientFetch } from '../utils/corsFetch'
 import { OrdersList, PaginationContainer, SectionTitle } from '../components'
 
 export const loader =
@@ -16,7 +16,7 @@ export const loader =
       ...new URL(request.url).searchParams.entries(),
     ])
     try {
-      const response = await customFetch.get('/orders', {
+      const response = await convenientFetch.get('/orders', {
         params,
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -37,6 +37,18 @@ export const loader =
     }
   }
 const Orders = () => {
-  return <div>Orders</div>
+  const { meta } = useLoaderData()
+
+  if (meta.pagination.total < 1) {
+    return <SectionTitle text="Please make an order" />
+  }
+
+  return (
+    <>
+      <SectionTitle text="Your Orders" />
+      <OrdersList />
+      <PaginationContainer />
+    </>
+  )
 }
 export default Orders

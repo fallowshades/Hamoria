@@ -60,7 +60,7 @@ import { action as interiorLoginAction } from './pages/LoginInterior'
 import { store } from './store'
 import { loader as checkoutLoader } from './pages/Checkout'
 import { action as checkoutAction } from './components/CheckoutForm'
-import { loader as orderLoader } from './pages/Orders'
+import { loader as ordersLoader } from './pages/Orders'
 
 const queryClient = new QueryClient({
   defaultOptions: {
