@@ -60,6 +60,8 @@ import { action as interiorLoginAction } from './pages/LoginInterior'
 import { store } from './store'
 import { loader as checkoutLoader } from './pages/Checkout'
 import { action as checkoutAction } from './components/CheckoutForm'
+import { loader as orderLoader } from './pages/Orders'
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -170,6 +172,7 @@ const router = createBrowserRouter([
           {
             path: 'orders',
             element: <Orders />,
+            loader: ordersLoader(store),
           },
         ],
       },
