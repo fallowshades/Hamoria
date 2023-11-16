@@ -1,182 +1,27 @@
-## Challenge (47) - Checkout Page Setup
+## Challenge (55) - Setup React Query
 
-- create CheckoutForm component
+- import and setup react query in App.jsx
+- pass query client down to
+  - Landing Page
+  - SingleProduct Page
+  - Products Page
+- refactor loaders
 
-### Checkout.jsx
-
-- Import Dependencies:
-
-  - Import `useSelector` from `'react-redux'`.
-  - Import `CheckoutForm`, `SectionTitle`, and `CartTotals` from `'../components'`.
-
-- Create the `Checkout` component:
-
-  - Inside the component, use `useSelector` to access the `cartTotal` from the Redux store.
-  - Check if the `cartTotal` is empty.
-  - If the `cartTotal` is empty, return a `SectionTitle` component with the text 'Your cart is empty'.
-  - If the `cartTotal` is not empty:
-    - Return a `SectionTitle` component with the text 'Place your order'.
-    - Render a `<div>` element with the class name 'mt-8 grid gap-8 md:grid-cols-2 items-start'.
-    - Inside the `<div>`, render the `CheckoutForm` component and the `CartTotals` component.
-
-- Export the `Checkout` component as the default export.
-
-## Solution (47) - Checkout Page Setup
-
-Checkout.jsx
-
-```js
-import { useSelector } from 'react-redux'
-import { CheckoutForm, SectionTitle, CartTotals } from '../components'
-
-//  const cartItems = useSelector((state) => state.cartState)
-
-  if (cartItems.cartTotal === 0) {
-const Checkout = () => {
-  const cartItems = useSelector((state) => state.cartState.cartTotal)
-  if (cartTotal.length === 0) {
-    return <SectionTitle text="Your cart is empty" />
-  }
-  return (
-    <>
-      <SectionTitle text="Place your order" />
-      <div className="mt-8 grid gap-8  md:grid-cols-2 items-start">
-        <CheckoutForm />
-        <CartTotals />
-      </div>
-    </>
-  )
-}
-export default Checkout
-```
-
-## Challenge (48) - Restrict Access
-
-App.jsx
-
-- in App.jsx import loader from Checkout page
-- pass store into the checkoutLoader
-- if no user redirect to login
-
-### Checkout.jsx
-
-- Import Dependencies:
-
-  - Import `redirect` from `'react-router-dom'`.
-  - Import `toast` from `'react-toastify'`.
-
-- Create a `loader` function:
-
-  - The `loader` function takes a `store` as a parameter.
-  - Inside the `loader` function:
-    - Get the `user` from the Redux store using `store.getState().userState.user`.
-    - Check if the `user` is falsy (not logged in).
-    - If the `user` is falsy:
-      - Display a toast warning message using `toast.warn()` with the text 'You must be logged in to checkout'.
-      - Return `redirect('/login')` to redirect the user to the login page.
-    - If the `user` is truthy (logged in):
-      - Return `null`.
-
-- Export the `loader` function.
-
-## Solution (48) - Restrict Access
+## Solution (55) - Setup React Query
 
 App.jsx
 
 ```js
-import { loader as checkoutLoader } from './pages/Checkout';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-import { store } from './store';
-
-const router = createBrowserRouter([
-  {
-   ....
-      {
-        path: 'checkout',
-        element: <Checkout />,
-        loader: checkoutLoader(store),
-
-      },
-
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+    },
   },
-
-]);
-
-```
-
-Checkout.jsx
-
-```js
-import { redirect } from 'react-router-dom'
-import { toast } from 'react-toastify'
-
-export const loader = (store) => async () => {
-  const user = store.getState().userState.user
-
-  if (!user) {
-    toast.warn('You must be logged in to checkout')
-    return redirect('/login')
-  }
-  return null
-}
-```
-
-## Challenge (49) - CheckoutForm
-
-- [API DOCS](https://documenter.getpostman.com/view/18152321/2s9Xy5KpTi)
-- docs - create order request
-- test in Thunder Client
-
-### App.jsx
-
-- in App.jsx import action from CheckoutForm.jsx
-- pass store into the checkoutAction
-
-## CheckoutForm.jsx
-
-- Import Dependencies:
-
-  - Import `Form` and `redirect` from `'react-router-dom'`.
-  - Import `FormInput` and `SubmitBtn` from appropriate paths.
-  - Import other required utilities and actions.
-
-- Create an `action` function:
-
-  - The `action` function takes a `store` as a parameter and returns an asynchronous function that takes a `request` parameter.
-  - Inside the async function:
-    - Await `request.formData()` to get form data.
-    - Destructure the `name` and `address` properties from the form data using `Object.fromEntries(formData)`.
-    - Get the `user` from the Redux store using `store.getState().userState.user`.
-    - Get the `cartItems`, `orderTotal`, and `numItemsInCart` from the Redux store using `store.getState().cartState`.
-    - Create an `info` object containing the gathered information.
-    - Try to make a POST request to '/orders' with the `info` data and the user's token in the headers.
-    - If successful:
-      - Dispatch the `clearCart()` action using `store.dispatch(clearCart())` to clear the cart.
-      - Display a success toast message using `toast.success()` with the text 'order placed successfully'.
-      - Return `redirect('/orders')` to redirect the user to the orders page.
-    - If there's an error:
-      - Log the error.
-      - Get the error message from the response data or provide a default message.
-      - Display an error toast message using `toast.error()` with the error message.
-      - Return `null`.
-
-- Create a `CheckoutForm` component:
-
-  - Inside the component:
-    - Use the `Form` component from 'react-router-dom' to create a form.
-    - Display a heading for the shipping information.
-    - Use the `FormInput` component to create input fields for the first name and address.
-    - Use the `SubmitBtn` component to create a submit button with the text 'Place Your Order'.
-
-- Export the `CheckoutForm` component.
-
-## Solution (49) - CheckoutForm
-
-App.jsx
-
-```js
-import { action as checkoutAction } from './components/CheckoutForm'
-import { store } from './store'
+})
 
 const router = createBrowserRouter([
   {
@@ -185,42 +30,257 @@ const router = createBrowserRouter([
     errorElement: <Error />,
     children: [
       {
+        index: true,
+        element: <Landing />,
+        loader: landingLoader(queryClient),
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: 'products',
+        element: <Products />,
+        loader: productsLoader(queryClient),
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: 'products/:id',
+        element: <SingleProduct />,
+        loader: singleProductLoader(queryClient),
+        errorElement: <ErrorElement />,
+      },
+      {
         path: 'checkout',
         element: <Checkout />,
         loader: checkoutLoader(store),
-        action: checkoutAction(store),
+        action: checkoutAction(store, queryClient),
+      },
+      {
+        path: 'orders',
+        element: <Orders />,
+        loader: ordersLoader(store, queryClient),
       },
     ],
   },
 ])
+
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  )
+}
+export default App
 ```
+
+Landing.js
+
+```js
+export const loader = (queryClient) => async () => {
+  const response = await customFetch(url)
+  const products = response.data.data
+  return { products }
+}
+```
+
+## Challenge (56) - Landing
+
+- setup react query and invoke in loader
+
+## Solution (56) - Landing
+
+Landing.jsx
+
+```js
+const featuredProductsQuery = {
+  queryKey: ['featuredProducts'],
+  queryFn: () => customFetch(url),
+}
+
+export const loader = (queryClient) => async () => {
+  const response = await queryClient.ensureQueryData(featuredProductsQuery)
+  const products = response.data.data
+  return { products }
+}
+```
+
+## Challenge (57) - Single Product
+
+- setup react query and invoke in loader
+
+## Solution (57) - Single Product
+
+SingleProduct.jsx
+
+```js
+const singleProductQuery = (id) => {
+  return {
+    queryKey: ['singleProduct', id],
+    queryFn: () => customFetch.get(`/products/${id}`),
+  }
+}
+
+export const loader =
+  (queryClient) =>
+  async ({ params }) => {
+    const response = await queryClient.ensureQueryData(
+      singleProductQuery(params.id)
+    )
+    return { product: response.data.data }
+  }
+```
+
+## Challenge (58) - All Products
+
+- setup react query and invoke in loader
+
+## Solution (58) - All Products
+
+Products.jsx
+
+```js
+const allProductsQuery = (queryParams) => {
+  const { search, category, company, sort, price, shipping, page } = queryParams
+
+  return {
+    queryKey: [
+      'products',
+      search ?? '',
+      category ?? 'all',
+      company ?? 'all',
+      sort ?? 'a-z',
+      price ?? 100000,
+      shipping ?? false,
+      page ?? 1,
+    ],
+    queryFn: () =>
+      customFetch(url, {
+        params: queryParams,
+      }),
+  }
+}
+
+export const loader =
+  (queryClient) =>
+  async ({ request }) => {
+    const params = Object.fromEntries([
+      ...new URL(request.url).searchParams.entries(),
+    ])
+    const response = await queryClient.ensureQueryData(allProductsQuery(params))
+
+    const products = response.data.data
+    const meta = response.data.meta
+
+    return { products, meta, params }
+  }
+```
+
+?? === This operator is known as the nullish coalescing operator in JavaScript. It is a logical operator that returns its right-hand side operand when its left-hand side operand is null or undefined, and otherwise returns its left-hand side operand.
+
+In simpler terms, the ?? operator is used to provide a default value for potentially null or undefined variables.
+
+## Challenge (59) - Orders
+
+setup react query and invoke in loader
+
+## Solution (59) - Orders
+
+```js
+import { redirect, useLoaderData } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { customFetch } from '../utils'
+import {
+  OrdersList,
+  ComplexPaginationContainer,
+  SectionTitle,
+} from '../components'
+
+export const ordersQuery = (params, user) => {
+  return {
+    queryKey: [
+      'orders',
+      user.username,
+      params.page ? parseInt(params.page) : 1,
+    ],
+    queryFn: () =>
+      customFetch.get('/orders', {
+        params,
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      }),
+  }
+}
+
+export const loader =
+  (store, queryClient) =>
+  async ({ request }) => {
+    const user = store.getState().userState.user
+
+    if (!user) {
+      toast.warn('You must be logged in to view orders')
+      return redirect('/login')
+    }
+    const params = Object.fromEntries([
+      ...new URL(request.url).searchParams.entries(),
+    ])
+    try {
+      const response = await queryClient.ensureQueryData(
+        ordersQuery(params, user)
+      )
+
+      return {
+        orders: response.data.data,
+        meta: response.data.meta,
+      }
+    } catch (error) {
+      console.log(error)
+      const errorMessage =
+        error?.response?.data?.error?.message ||
+        'there was an error accessing your orders'
+
+      toast.error(errorMessage)
+      if (error?.response?.status === 401 || 403) return redirect('/login')
+      return null
+    }
+  }
+const Orders = () => {
+  const { meta } = useLoaderData()
+
+  if (meta.pagination.total < 1) {
+    return <SectionTitle text="Please make an order" />
+  }
+  return (
+    <>
+      <SectionTitle text="Your Orders" />
+      <OrdersList />
+      <ComplexPaginationContainer />
+    </>
+  )
+}
+export default Orders
+```
+
+## Challenge (60) - Remove Queries
+
+- remove "orders" query in CheckoutForm and Header
+
+## Solution (60) - Remove Queries
 
 CheckoutForm.jsx
 
 ```js
-import { Form, redirect } from 'react-router-dom'
-import FormInput from './FormInput'
-import SubmitBtn from './SubmitBtn'
-import { customFetch, formatPrice } from '../utils'
-import { toast } from 'react-toastify'
-import { clearCart } from '../features/cart/cartSlice'
+import { Form, redirect } from 'react-router-dom';
+import FormInput from './FormInput';
+import SubmitBtn from './SubmitBtn';
+import { customFetch, formatPrice } from '../utils';
+import { toast } from 'react-toastify';
+import { clearCart } from '../features/cart/cartSlice';
 
 export const action =
-  (store) =>
+  (store, queryClient) =>
   async ({ request }) => {
-    const formData = await request.formData()
-    const { name, address } = Object.fromEntries(formData)
-    const user = store.getState().userState.user
-    const { cartItems, orderTotal, numItemsInCart } = store.getState().cartState
-
-    const info = {
-      name,
-      address,
-      chargeTotal: orderTotal,
-      orderTotal: formatPrice(orderTotal),
-      cartItems,
-      numItemsInCart,
-    }
+    ...
     try {
       const response = await customFetch.post(
         '/orders',
@@ -230,55 +290,34 @@ export const action =
             Authorization: `Bearer ${user.token}`,
           },
         }
-      )
-      store.dispatch(clearCart())
-      toast.success('order placed successfully')
-      return redirect('/orders')
-    } catch (error) {
-      console.log(error)
-      const errorMessage =
-        error?.response?.data?.error?.message ||
-        'there was an error placing your order'
-
-      toast.error(errorMessage)
-      return null
-    }
-  }
-const CheckoutForm = () => {
-  return (
-    <Form method="POST" className="flex flex-col gap-y-4">
-      <h4 className="font-medium text-xl">Shipping Information</h4>
-      <FormInput label="first name" name="name" type="text" />
-      <FormInput label="address" name="address" type="text" />
-      <div className="mt-4">
-        <SubmitBtn text="Place Your Order" />
-      </div>
-    </Form>
-  )
-}
-export default CheckoutForm
+      );
+      // remove query
+      queryClient.removeQueries(['orders']);
+      // rest of the code
+      store.dispatch(clearCart());
+      toast.success('order placed successfully');
+      return redirect('/orders');
+    } ...
+  };
 ```
 
-## Challenge (50) - Auth Error
-
-- handle auth errors
-- check for response.status
-  - if status === 401 redirect to login
-
-## Solution (50) - Auth Error
-
-CheckoutForm.jsx
+Header.jsx
 
 ```js
 
- catch (error) {
-  console.log(error);
-  const errorMessage =
-    error?.response?.data?.error?.message ||
-    'there was an error placing your order';
-  toast.error(errorMessage);
-  if (error?.response?.status === 401 || 403) return redirect('/login');
-
-  return null;
+import { useQueryClient } from '@tanstack/react-query';
+const Header = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.userState.user);
+  const queryClient = useQueryClient();
+  const handleLogout = async () => {
+    navigate('/');
+    dispatch(logoutUser());
+    dispatch(clearCart());
+    queryClient.removeQueries();
+  };
+  ...
 }
+
 ```
