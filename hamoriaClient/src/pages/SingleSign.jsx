@@ -6,10 +6,21 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addItem } from '../features/cart/cartSlice'
 
-export const loader = async ({ params }) => {
-  const response = await convenientFetch(`/products/${params.id}`)
-  return { product: response.data.data }
+const singleProductQuery = (id) => {
+  return {
+    queryKey: ['singleProduct', id],
+    queryFn: () => convenientFetch.get(`/products/${id}`),
+  }
 }
+
+export const loader =
+  (queryClient) =>
+  async ({ params }) => {
+    const response = await queryClient.ensureQueryData(
+      singleProductQuery(params.id)
+    )
+    return { product: response.data.data }
+  }
 
 const SingleSign = () => {
   const { product } = useLoaderData()

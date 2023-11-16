@@ -109,7 +109,7 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <FeatureHome />,
-            loader: featureLoader,
+            loader: featureLoader(queryClient),
           },
           {
             path: 'add-achievement',
@@ -151,12 +151,12 @@ const router = createBrowserRouter([
           {
             path: 'all-signs',
             element: <AllSigns />,
-            loader: allSignsLoader,
+            loader: allSignsLoader(queryClient),
           },
           {
             path: 'signs/:id',
             element: <SingleSign />,
-            loader: singleSignLoader,
+            loader: singleSignLoader(queryClient),
           },
           {
             path: 'cart',
@@ -167,12 +167,12 @@ const router = createBrowserRouter([
             path: 'checkout',
             element: <Checkout />,
             loader: checkoutLoader(store),
-            action: checkoutAction(store),
+            action: checkoutAction(store, queryClient),
           },
           {
             path: 'orders',
             element: <Orders />,
-            loader: ordersLoader(store),
+            loader: ordersLoader(store, queryClient),
           },
         ],
       },
