@@ -359,7 +359,15 @@ Pages: (AchievementContainer, PageBtnContainer)
 
 ### authStore v0.4.1
 
+[]
+---[] move theame preference
+---[] move user auth
+
 ### doCheckout v0.4.2
+
+[]
+---[] loader with store validate privilage
+---[] 401 and 403 auth
 
 ### orders v0.4.3
 

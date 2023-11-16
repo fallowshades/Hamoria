@@ -14,7 +14,7 @@ const Header = () => {
   const user = useSelector((state) => state.userState.user)
   console.log(user)
   const handleLogout = () => {
-    navigate('/')
+    navigate('/dashboard')
     dispatch(clearCart())
     dispatch(logoutUser())
   }
