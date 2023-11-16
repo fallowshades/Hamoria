@@ -12,7 +12,7 @@ const WhatNavLinks = ({ isBigSidebar }) => {
         const { text, path, icon } = whatlinks
         {
         }
-        if ((path == 'checkout' || path == 'orders') && user) {
+        if ((path == 'checkout' || path == 'orders') && !user) {
           console.log(user)
           return null
         }
