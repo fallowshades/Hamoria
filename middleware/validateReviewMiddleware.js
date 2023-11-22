@@ -1,7 +1,9 @@
 import { body, validationResult } from 'express-validator'
 import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
-
 import Review from '../models/reviewModel.js'
+
+import mongoose from 'mongoose'
+import { param } from 'express-validator'
 
 const withValidationErrors = (validateValues) => {
   return [
@@ -21,6 +23,15 @@ const withValidationErrors = (validateValues) => {
     },
   ]
 }
+
+export const validateIdParam = withValidationErrors([
+  param('id').custom(async (value) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value)
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
+    const sign = await Review.findById(value)
+    if (!sign) throw new NotFoundError(`No review with id ${value}`)
+  }),
+])
 
 export const validateReviewInput = withValidationErrors([
   body('product').notEmpty().withMessage('product is required'),

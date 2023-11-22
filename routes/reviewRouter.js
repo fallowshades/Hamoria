@@ -13,6 +13,7 @@ import { validateNonPrimaryKey } from '../middleware/validateSignMiddleware.js'
 import {
   validateReviewInput,
   validateAlreadySubmittedNotPrimary,
+  validateIdParam,
 } from '../middleware/validateReviewMiddleware.js'
 router
   .route('/')
@@ -28,7 +29,7 @@ router
 
 router
   .route('/:id')
-  .get(getSingleReview)
+  .get(validateIdParam, getSingleReview)
   .patch(authenticateUser, updateReview)
   .delete(authenticateUser, deleteReview)
 

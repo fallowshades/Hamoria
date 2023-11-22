@@ -8,10 +8,15 @@ export const createReview = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ review })
 }
 export const getAllReviews = async (req, res) => {
-  res.send('get all reviews')
+  const reviews = await Review.find({})
+
+  res.status(StatusCodes.OK).json({ reviews, count: reviews.length })
 }
 export const getSingleReview = async (req, res) => {
-  res.send('get single reviews')
+  const { id: reviewId } = req.params
+
+  const review = await Review.findOne({ _id: reviewId })
+  res.status(StatusCodes.OK).json({ review })
 }
 export const updateReview = async (req, res) => {
   res.send('update reviews')
