@@ -30,7 +30,7 @@ router
 router
   .route('/:id')
   .get(validateIdParam, getSingleReview)
-  .patch(authenticateUser, updateReview)
+  .patch(authenticateUser, validateIdParam, updateReview)
   .delete(authenticateUser, deleteReview)
 
 export default router

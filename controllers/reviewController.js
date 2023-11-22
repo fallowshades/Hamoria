@@ -20,7 +20,19 @@ export const getSingleReview = async (req, res) => {
   res.status(StatusCodes.OK).json({ review })
 }
 export const updateReview = async (req, res) => {
-  res.send('update reviews')
+  const { id: reviewId } = req.params
+  const { rating, title, comment } = req.body
+
+  const review = await Review.findOne({ _id: reviewId })
+
+  checkPermissions(req.user, review.user)
+
+  review.rating = rating
+  review.title = title
+  review.comment = comment
+  await review.save()
+
+  res.status(StatusCodes.OK).json({ review })
 }
 export const deleteReview = async (req, res) => {
   const { id: reviewId } = req.params
