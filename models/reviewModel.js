@@ -1,6 +1,6 @@
-const mongoose = require(mongoose)
+import mongoose from 'mongoose'
 
-const ReviewSchema = mongoose.Schema(
+const ReviewSchema = new mongoose.Schema(
   {
     rating: {
       type: Number,
@@ -34,3 +34,5 @@ const ReviewSchema = mongoose.Schema(
   { timestamp: true }
 )
 ReviewSchema.index({ product: 1, user: 1 }, { unique: true })
+
+export default mongoose.model('review', ReviewSchema)
