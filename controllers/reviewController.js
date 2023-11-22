@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes'
 import Review from '../models/reviewModel.js'
 import 'express-async-errors'
+import { checkPermissions } from '../utils/checkPermissions.js'
 
 export const createReview = async (req, res) => {
   req.body.user = req.user.userId
@@ -22,5 +23,11 @@ export const updateReview = async (req, res) => {
   res.send('update reviews')
 }
 export const deleteReview = async (req, res) => {
-  res.send('delete reviews')
+  const { id: reviewId } = req.params
+
+  const review = await Review.findOne({ _id: reviewId })
+
+  checkPermissions(req.user, review.user)
+  await Review.deleteOne({ _id: reviewId })
+  res.status(StatusCodes.OK).json({ review })
 }
