@@ -1,7 +1,6 @@
 import { Router } from 'express'
 const router = Router()
 import { authenticateUser } from '../middleware/authMiddleware.js'
-
 import {
   createReview,
   getAllReviews,
@@ -10,7 +9,22 @@ import {
   deleteReview,
 } from '../controllers/reviewController.js'
 
-router.route('/').post(authenticateUser, createReview).get(getAllReviews)
+import { validateNonPrimaryKey } from '../middleware/validateSignMiddleware.js'
+import {
+  validateReviewInput,
+  validateAlreadySubmittedNotPrimary,
+} from '../middleware/validateReviewMiddleware.js'
+router
+  .route('/')
+  .post(
+    authenticateUser,
+    validateReviewInput,
+    validateNonPrimaryKey,
+    validateAlreadySubmittedNotPrimary,
+
+    createReview
+  )
+  .get(getAllReviews)
 
 router
   .route('/:id')

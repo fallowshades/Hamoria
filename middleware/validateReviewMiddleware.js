@@ -1,12 +1,7 @@
 import { body, validationResult } from 'express-validator'
-import { BadRequestError } from '../errors/customErrors.js'
-
-import mongoose from 'mongoose'
-import { param } from 'express-validator'
+import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
 
 import Review from '../models/reviewModel.js'
-
-import { NotFoundError } from '../errors/customErrors.js'
 
 const withValidationErrors = (validateValues) => {
   return [
@@ -25,4 +20,26 @@ const withValidationErrors = (validateValues) => {
       next()
     },
   ]
+}
+
+export const validateReviewInput = withValidationErrors([
+  body('product').notEmpty().withMessage('product is required'),
+  body('rating').notEmpty().withMessage('rating is required'),
+  body('title').notEmpty().withMessage('invalid category value'),
+  body('comment').notEmpty().withMessage('comment is required'),
+])
+
+export const validateAlreadySubmittedNotPrimary = async (req, res, next) => {
+  const { product: productId } = req.body
+
+  const alreadySubmitted = await Review.findOne({
+    product: productId,
+    user: req.user.userId,
+  })
+
+  if (alreadySubmitted) {
+    throw new BadRequestError('Already submitted review for this product')
+  }
+
+  next()
 }
