@@ -259,3 +259,83 @@ review.comment = comment
 
 await review.save()
 ```
+
+## populate method
+
+### update avrage tracking
+
+#### populate
+
+--concider product must be true
+
+reviewController.js
+
+```js
+const getAllReviews = async (req, res) => {
+  const reviews = await Review.find({})
+    .populate({
+      path: 'signs',
+      select: 'name company price',
+    })
+    .populate({ path: 'user', select: 'name' })
+}
+```
+
+#### virtuals
+
+signModel.js
+
+```js
+SignSchema.virtual('reviews', {
+  ref: 'Review',
+  localField: '_id',
+  foreignField: 'sign',
+  justOne: false,
+})
+```
+
+#### target interval
+
+-can analys
+
+```js
+matcch: {
+  rating: 5
+}
+```
+
+## trigger
+
+### manage dynamic extention
+
+#### single sign and review
+
+reviewController.js
+
+```js
+
+const getSingleProductReviews = async(req,res){
+  const {id: productId} = req.params
+
+  const reviews = await Review.find({sign: signId})
+  res.status(StatusCodes.OK).json({reviews, count: reviews.length})
+}
+```
+
+reviewRouter.js
+
+```js
+import { getSingleProductReview } from ''
+
+router.route('/:id/reviews').get(getSingleProductReview)
+```
+
+#### delete all review
+
+signModel.js
+
+```js
+SignSchema.pre('remove', async function (next) {
+  await this.model('Review').deleteMany({ sign: this._id })
+})
+```
