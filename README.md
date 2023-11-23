@@ -1,323 +1,529 @@
-## Challenge (55) - Setup React Query
+#
 
-- import and setup react query in App.jsx
-- pass query client down to
-  - Landing Page
-  - SingleProduct Page
-  - Products Page
-- refactor loaders
+## testing purpose
 
-## Solution (55) - Setup React Query
+### review model
 
-App.jsx
+#### value (equation scalar)
+
+reviewModel.js
 
 ```js
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+const mongoose = require(mongoose)
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5,
-    },
+const ReviewSchema = mongoose.Schema({
+  rating: {
+    type: Number,
+    min: 1,
+    max: 5,
+    required: [true, 'Please provide rating'],
   },
 })
+```
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <HomeLayout />,
-    errorElement: <Error />,
-    children: [
-      {
-        index: true,
-        element: <Landing />,
-        loader: landingLoader(queryClient),
-        errorElement: <ErrorElement />,
-      },
-      {
-        path: 'products',
-        element: <Products />,
-        loader: productsLoader(queryClient),
-        errorElement: <ErrorElement />,
-      },
-      {
-        path: 'products/:id',
-        element: <SingleProduct />,
-        loader: singleProductLoader(queryClient),
-        errorElement: <ErrorElement />,
-      },
-      {
-        path: 'checkout',
-        element: <Checkout />,
-        loader: checkoutLoader(store),
-        action: checkoutAction(store, queryClient),
-      },
-      {
-        path: 'orders',
-        element: <Orders />,
-        loader: ordersLoader(store, queryClient),
-      },
-    ],
+#### form text input
+
+```js
+const ReviewSchema = mongoose.Schema({
+  title: {
+    type: String,
+    trim: true,
+    required: [true, 'Please provide review title'],
   },
+
+  comment: {
+    type: String,
+    required: [true, 'Please provide review text'],
+  },
+})
+```
+
+#### binding to user and products
+
+```js
+
+const ReviewSchema = mongoose.Schema({
+
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        required: true
+    },
+
+    product: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Product',
+        required: true
+    }
+    {timestamp: true}
+})
+
+```
+
+#### unique validator index (who is review like color)
+
+```js
+const ReviewSchema = mongoose.Schema({...})
+
+ReviewSchema.index({ product: 1, user: 1 }, { unique: true })
+```
+
+### routes
+
+#### commonJS --> modules
+
+-- export before const
+
+reviewController.js
+
+```js
+import mongoose from 'mongoose'
+
+const createReview = async (req, res) =>{
+    res.send('create reviews)
+}
+const getAllReviews = async (req, res) =>{
+    res.send('get all reviews)
+}
+const getSingleReview = async (req, res) =>{
+    res.send('get single reviews)
+}
+const updateReview = async (req, res) =>{
+    res.send('update reviews)
+}
+const deleteReview = async (req, res) =>{
+    res.send('delete reviews)
+}
+
+export default mongoose.model('review', ReviewSchema)
+
+/*
+module.exports = {
+    createReview, getAllReviews, getSingleReview, updateReview, deleteReview
+}
+*/
+
+```
+
+reviewRouter.js --> modules
+
+```js
+const express = require('express')
+const router = express.Router()
+
+const {
+  createReview,
+  getAllReviews,
+  getSingleReview,
+  updateReview,
+  deleteReview,
+} = require('../controllers/reviewController')
+const { authenticateUser } = require('../middleware/authMiddleware')
+
+//-->modules
+import { Router } from 'express'
+const router = Router()
+import { authenticateUser } from '../middleware/authMiddleware.js'
+
+import {
+  createReview,
+  getAllReviews,
+  getSingleReview,
+  updateReview,
+  deleteReview,
+} from '../controllers/reviewController.js'
+
+router.route('/').post(authenticateUser, createReview).get(getAllReviews)
+
+router
+  .route('/:id')
+  .get(getSingleReview)
+  .patch(authenticateUser, updateReview)
+  .delete(authenticateUser, deleteReview)
+```
+
+app.js
+
+```js
+import reviewRouter from './routes/reviewRouter.js'
+
+app.use('/api/v1/reviews', reviewRouter)
+```
+
+test postman
+
+## crud
+
+### creat
+
+#### dependencies from user exept utils
+
+commonJS --> modules
+
+```js
+const { StatusCodes } = require('http-status-codes')
+const customError = require('../errors')
+
+import { StatusCodes } from 'http-status-codes'
+import Review from '../models/reviewModel.js'
+import 'express-async-errors'
+```
+
+#### create with bind dependency (search semantic)
+
+```js
+const createReview = async (req, res) => {
+  const { product: productId } = req.body
+
+  req.body.user = req.user.userId
+  const review = await Review.create(req.body)
+  res.status(StatusCodes.CREATED).json({ review })
+}
+```
+
+#### validation
+
+```js
+const createReview = async (req, res) => {
+    ...
+        const isValid = await Product.findOne({_id: productId})
+
+        if(!isValidProduct){
+            throw new CustomError.NotFoundError(`No product with id: ${productId}`)
+        }
+    ...
+}
+```
+
+test
+
+```json
+{
+  "product": "6553667dd025a6b567cdc7cb",
+  "rating": 1,
+  "title": "bad product",
+  "comment": "very. very bad product"
+}
+```
+
+#### create +1 alternative .unique custom validation
+
+```js
+const alreadySubmitted = await Review.findOne({
+  product: productId,
+  user: req.user.userId,
+})
+
+if (alreadySubmitted) {
+  throw new CustomError.BadRequestError(
+    'Already submitted review for this product'
+  )
+}
+```
+
+#### refracture validation in controller to sing and review middleware
+
+-remove the coupling customErrors and sign model from reviewController
+
+validateSignMiddleware.js
+
+```js
+export const validateNonPrimaryKey = withValidationErrors([
+  body('product').custom(async (productId) => {
+    console.log(productId)
+
+    const isValidId = mongoose.Types.ObjectId.isValid(productId)
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
+    const isValidSign = await Sign.findOne({ _id: productId })
+    if (!isValidSign) throw new NotFoundError(`no sign with id : ${value}`)
+  }),
+])
+```
+
+---
+
+validateReviewMiddleware.js
+
+```js
+import { body, validationResult } from 'express-validator'
+import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
+import Review from '../models/reviewModel.js'
+
+const withValidationErrors = (validateValues) => {
+  return [
+    validateValues,
+    (req, res, next) => {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        const errorMessages = errors.array().map((error) => error.msg)
+
+        if (errorMessages[0].startsWith('no review')) {
+          throw new NotFoundError(errorMessages)
+        }
+
+        throw new BadRequestError(errorMessages)
+      }
+      next()
+    },
+  ]
+}
+
+export const validateReviewInput = withValidationErrors([
+  body('product').notEmpty().withMessage('product is required'),
+  body('rating').notEmpty().withMessage('rating is required'),
+  body('title').notEmpty().withMessage('invalid category value'),
+  body('comment').notEmpty().withMessage('comment is required'),
 ])
 
-const App = () => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  )
-}
-export default App
-```
+export const validateAlreadySubmittedNotPrimary = async (req, res, next) => {
+  const { product: productId } = req.body
 
-Landing.js
+  const alreadySubmitted = await Review.findOne({
+    product: productId,
+    user: req.user.userId,
+  })
 
-```js
-export const loader = (queryClient) => async () => {
-  const response = await customFetch(url)
-  const products = response.data.data
-  return { products }
-}
-```
-
-## Challenge (56) - Landing
-
-- setup react query and invoke in loader
-
-## Solution (56) - Landing
-
-Landing.jsx
-
-```js
-const featuredProductsQuery = {
-  queryKey: ['featuredProducts'],
-  queryFn: () => customFetch(url),
-}
-
-export const loader = (queryClient) => async () => {
-  const response = await queryClient.ensureQueryData(featuredProductsQuery)
-  const products = response.data.data
-  return { products }
-}
-```
-
-## Challenge (57) - Single Product
-
-- setup react query and invoke in loader
-
-## Solution (57) - Single Product
-
-SingleProduct.jsx
-
-```js
-const singleProductQuery = (id) => {
-  return {
-    queryKey: ['singleProduct', id],
-    queryFn: () => customFetch.get(`/products/${id}`),
+  if (alreadySubmitted) {
+    throw new BadRequestError('Already submitted review for this product')
   }
-}
 
-export const loader =
-  (queryClient) =>
-  async ({ params }) => {
-    const response = await queryClient.ensureQueryData(
-      singleProductQuery(params.id)
-    )
-    return { product: response.data.data }
-  }
+  next()
+}
 ```
 
-## Challenge (58) - All Products
+---
 
-- setup react query and invoke in loader
-
-## Solution (58) - All Products
-
-Products.jsx
+reviewRouter.js
 
 ```js
-const allProductsQuery = (queryParams) => {
-  const { search, category, company, sort, price, shipping, page } = queryParams
-
-  return {
-    queryKey: [
-      'products',
-      search ?? '',
-      category ?? 'all',
-      company ?? 'all',
-      sort ?? 'a-z',
-      price ?? 100000,
-      shipping ?? false,
-      page ?? 1,
-    ],
-    queryFn: () =>
-      customFetch(url, {
-        params: queryParams,
-      }),
-  }
-}
-
-export const loader =
-  (queryClient) =>
-  async ({ request }) => {
-    const params = Object.fromEntries([
-      ...new URL(request.url).searchParams.entries(),
-    ])
-    const response = await queryClient.ensureQueryData(allProductsQuery(params))
-
-    const products = response.data.data
-    const meta = response.data.meta
-
-    return { products, meta, params }
-  }
-```
-
-?? === This operator is known as the nullish coalescing operator in JavaScript. It is a logical operator that returns its right-hand side operand when its left-hand side operand is null or undefined, and otherwise returns its left-hand side operand.
-
-In simpler terms, the ?? operator is used to provide a default value for potentially null or undefined variables.
-
-## Challenge (59) - Orders
-
-setup react query and invoke in loader
-
-## Solution (59) - Orders
-
-```js
-import { redirect, useLoaderData } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { customFetch } from '../utils'
+import { validateNonPrimaryKey } from '../middleware/validateSignMiddleware.js'
 import {
-  OrdersList,
-  ComplexPaginationContainer,
-  SectionTitle,
-} from '../components'
+  validateReviewInput,
+  validateAlreadySubmittedNotPrimary,
+} from '../middleware/validateReviewMiddleware.js'
+router.route('/').post(
+  authenticateUser,
+  validateReviewInput,
+  validateNonPrimaryKey,
+  validateAlreadySubmittedNotPrimary,
 
-export const ordersQuery = (params, user) => {
-  return {
-    queryKey: [
-      'orders',
-      user.username,
-      params.page ? parseInt(params.page) : 1,
-    ],
-    queryFn: () =>
-      customFetch.get('/orders', {
-        params,
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      }),
-  }
-}
-
-export const loader =
-  (store, queryClient) =>
-  async ({ request }) => {
-    const user = store.getState().userState.user
-
-    if (!user) {
-      toast.warn('You must be logged in to view orders')
-      return redirect('/login')
-    }
-    const params = Object.fromEntries([
-      ...new URL(request.url).searchParams.entries(),
-    ])
-    try {
-      const response = await queryClient.ensureQueryData(
-        ordersQuery(params, user)
-      )
-
-      return {
-        orders: response.data.data,
-        meta: response.data.meta,
-      }
-    } catch (error) {
-      console.log(error)
-      const errorMessage =
-        error?.response?.data?.error?.message ||
-        'there was an error accessing your orders'
-
-      toast.error(errorMessage)
-      if (error?.response?.status === 401 || 403) return redirect('/login')
-      return null
-    }
-  }
-const Orders = () => {
-  const { meta } = useLoaderData()
-
-  if (meta.pagination.total < 1) {
-    return <SectionTitle text="Please make an order" />
-  }
-  return (
-    <>
-      <SectionTitle text="Your Orders" />
-      <OrdersList />
-      <ComplexPaginationContainer />
-    </>
-  )
-}
-export default Orders
+  createReview
+)
 ```
 
-## Challenge (60) - Remove Queries
-
-- remove "orders" query in CheckoutForm and Header
-
-## Solution (60) - Remove Queries
-
-CheckoutForm.jsx
+### read id consideration
 
 ```js
-import { Form, redirect } from 'react-router-dom';
-import FormInput from './FormInput';
-import SubmitBtn from './SubmitBtn';
-import { customFetch, formatPrice } from '../utils';
-import { toast } from 'react-toastify';
-import { clearCart } from '../features/cart/cartSlice';
+const getAllReviews = async (req, res) => {
+  const reviews = await Review.find({})
 
-export const action =
-  (store, queryClient) =>
-  async ({ request }) => {
-    ...
-    try {
-      const response = await customFetch.post(
-        '/orders',
-        { data: info },
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-      // remove query
-      queryClient.removeQueries(['orders']);
-      // rest of the code
-      store.dispatch(clearCart());
-      toast.success('order placed successfully');
-      return redirect('/orders');
-    } ...
-  };
+  res.status(StatusCodes.OK).json({ reviews, count: reviews.length })
+}
+
+const getSingleReview = async (req, res) => {
+  const { id: reviewId } = req.params
+
+  const review = await Review.findOne({ _id: reviewId })
+
+  /*
+  if (!review) {
+    throw new CustomError.NotFoundError(`No review with id ${reviewId}`)
+  }
+  */
+
+  res.status(StatusCodes.OK).json({ review })
+}
 ```
 
-Header.jsx
+reviewRouter.js
 
 ```js
-
-import { useQueryClient } from '@tanstack/react-query';
-const Header = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.userState.user);
-  const queryClient = useQueryClient();
-  const handleLogout = async () => {
-    navigate('/');
-    dispatch(logoutUser());
-    dispatch(clearCart());
-    queryClient.removeQueries();
-  };
+import {
   ...
+  ,
+  validateIdParam,
+} from '../middleware/validateReviewMiddleware.js'
+
+router
+  .route('/:id')
+  ...
+  .get(validateIdParam, getSingleReview)
+
+```
+
+validateReviewMiddleware.js
+
+```js
+import mongoose from 'mongoose'
+import { param } from 'express-validator'
+
+export const validateIdParam = withValidationErrors([
+  param('id').custom(async (value) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value)
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
+    const sign = await Review.findById(value)
+    if (!sign) throw new NotFoundError(`No review with id ${value}`)
+  }),
+])
+```
+
+### delete
+
+#### cpy get single review
+
+copy get Single review
+
+```js
+const { checkPermissions } = //require('../utils')
+```
+
+#### util permission
+
+utils/checkPermissions.js
+
+```js
+//const CustomError = require('../errors')
+
+export const checkPermissions = (requestUser, resourceUserId) => {
+  // console.log(requestUser);
+  // console.log(resourceUserId);
+  // console.log(typeof resourceUserId);
+  if (requestUser.role === 'admin') return
+  if (requestUser.userId === resourceUserId.toString()) return
+  throw new CustomError.UnauthorizedError('Not authorized to access this route')
 }
 
+//module.exports = chechPermissions
+```
+
+#### check before delete
+
+```js
+checkPermissions(req.user, review.user)
+await review.remove()
+res.status(StatusCodes.OK).json({ msg: 'Successs! Review removed' })
+```
+
+### update
+
+#### access
+
+```js
+const updateReview = async (req, res) => {
+  const { id: reviewId } = req.params
+  const { rating, title, comment } = req.body
+
+  const review = await Review.findOne({ _id: reviewId })
+  /*
+  if (!review) {
+    throw new CustomError.NotFoundError(`No review with id ${reviewId}`)
+  }
+*/
+  res.status(StatusCodes.OK).json({ review })
+}
+```
+
+#### update new values
+
+```js
+checkPermissions(req.user, review.user)
+
+review.rating = rating
+review.title = title
+review.comment = comment
+
+await review.save()
+```
+
+reviewRouter
+
+```js
+.patch(authenticateUser, validateIdParam, updateReview)
+```
+
+## populate method
+
+### update avrage tracking
+
+#### populate
+
+--concider product must be true
+
+reviewController.js
+
+```js
+export const getAllReviews = async (req, res) => {
+  const reviews = await Review.find({})
+    .populate({
+      path: 'signs',
+      select: 'name company price',
+    })
+    .populate({ path: 'user', select: 'name' })
+}
+```
+
+#### virtuals
+
+signModel.js
+
+```js
+SignSchema.virtual('reviews', {
+  ref: 'review',
+  localField: '_id',
+  foreignField: 'sign',
+  justOne: false,
+})
+```
+
+signController
+
+```js
+const sign = await Sign.findById(id).populate('reviews')
+```
+
+#### target interval
+
+-can analys
+
+```js
+matcch: {
+  rating: 5
+}
+```
+
+## trigger buissiness rules
+
+### manage dynamic extention
+
+#### single sign and review
+
+reviewController.js
+
+```js
+export const getSingleProductReviews = async (req, res) => {
+  const { id: signId } = req.params
+
+  const reviews = await Review.find({ sign: signId })
+  res.status(StatusCodes.OK).json({ reviews, count: reviews.length })
+}
+```
+
+reviewRouter.js
+
+```js
+import {
+  ...,
+  getSingleProductReview } from ''
+
+router.route('/:id/reviews').get(getSingleProductReview)
+```
+
+#### delete all review
+
+signModel.js
+
+```js
+SignSchema.pre('remove', async function (next) {
+  await this.model('review').deleteMany({ sign: this._id })
+})
 ```

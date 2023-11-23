@@ -16,7 +16,7 @@ const SignSchema = new mongoose.Schema(
     description: {
       type: String,
       required: [true, 'Please provide product description'],
-      maxlengh: [1000, 'Description can not be more than 1000 characters'],
+      maxlength: [1000, 'Description can not be more than 1000 characters'],
     },
     image: {
       type: String,
@@ -46,7 +46,18 @@ const SignSchema = new mongoose.Schema(
       default: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 )
+
+SignSchema.virtual('reviews', {
+  ref: 'review',
+  localField: '_id',
+  foreignField: 'sign',
+  justOne: false,
+})
+
+SignSchema.pre('remove', async function (next) {
+  await this.model('review').deleteMany({ sign: this._id })
+})
 
 export default mongoose.model('sign', SignSchema)

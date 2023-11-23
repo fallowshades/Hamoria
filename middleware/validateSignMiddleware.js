@@ -28,6 +28,17 @@ const withValidationErrors = (validateValues) => {
   ]
 }
 
+export const validateNonPrimaryKey = withValidationErrors([
+  body('sign').custom(async (signId) => {
+    console.log(signId)
+
+    const isValidId = mongoose.Types.ObjectId.isValid(signId)
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
+    const isValidSign = await Sign.findOne({ _id: signId })
+    if (!isValidSign) throw new NotFoundError(`no sign with id : ${signId}`)
+  }),
+])
+
 export const validateIdParam = withValidationErrors([
   param('id').custom(async (value) => {
     const isValidId = mongoose.Types.ObjectId.isValid(value)
