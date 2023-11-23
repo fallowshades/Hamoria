@@ -1,10 +1,12 @@
-# review
+#
 
-##
+## testing purpose
 
 ### review model
 
 #### value (equation scalar)
+
+reviewModel.js
 
 ```js
 const mongoose = require(mongoose)
@@ -61,41 +63,49 @@ const ReviewSchema = mongoose.Schema({
 #### unique validator index (who is review like color)
 
 ```js
-const ReviewSchema = mongoose.Schema({})
+const ReviewSchema = mongoose.Schema({...})
+
 ReviewSchema.index({ product: 1, user: 1 }, { unique: true })
 ```
 
 ### routes
 
-#### create
+#### commonJS --> modules
 
-reviewRouter.js
+-- export before const
+
+reviewController.js
 
 ```js
+import mongoose from 'mongoose'
 
 const createReview = async (req, res) =>{
     res.send('create reviews)
 }
-const createReview = async (req, res) =>{
+const getAllReviews = async (req, res) =>{
     res.send('get all reviews)
 }
-const createReview = async (req, res) =>{
+const getSingleReview = async (req, res) =>{
     res.send('get single reviews)
 }
-const createReview = async (req, res) =>{
+const updateReview = async (req, res) =>{
     res.send('update reviews)
 }
-const createReview = async (req, res) =>{
+const deleteReview = async (req, res) =>{
     res.send('delete reviews)
 }
 
+export default mongoose.model('review', ReviewSchema)
+
+/*
 module.exports = {
     createReview, getAllReviews, getSingleReview, updateReview, deleteReview
 }
+*/
 
 ```
 
-reviewRouter.js
+reviewRouter.js --> modules
 
 ```js
 const express = require('express')
@@ -108,37 +118,67 @@ const {
   updateReview,
   deleteReview,
 } = require('../controllers/reviewController')
+const { authenticateUser } = require('../middleware/authMiddleware')
+
+//-->modules
+import { Router } from 'express'
+const router = Router()
+import { authenticateUser } from '../middleware/authMiddleware.js'
+
+import {
+  createReview,
+  getAllReviews,
+  getSingleReview,
+  updateReview,
+  deleteReview,
+} from '../controllers/reviewController.js'
 
 router.route('/').post(authenticateUser, createReview).get(getAllReviews)
 
-router.route('/:id').get(getSingleReview).patch(authenticateUser, updateReviews)
+router
+  .route('/:id')
+  .get(getSingleReview)
+  .patch(authenticateUser, updateReview)
+  .delete(authenticateUser, deleteReview)
+```
+
+app.js
+
+```js
+import reviewRouter from './routes/reviewRouter.js'
+
+app.use('/api/v1/reviews', reviewRouter)
 ```
 
 test postman
 
-## util and db
+## crud
 
 ### creat
 
 #### dependencies from user exept utils
 
+commonJS --> modules
+
 ```js
 const { StatusCodes } = require('http-status-codes')
 const customError = require('../errors')
+
+import { StatusCodes } from 'http-status-codes'
+import Review from '../models/reviewModel.js'
+import 'express-async-errors'
 ```
 
 #### create with bind dependency (search semantic)
 
 ```js
+const createReview = async (req, res) => {
+  const { product: productId } = req.body
 
-const createReview = async (req, res) =>{
-    const {product: productId} = req.body
-
-    req.body.user = req.user.userId
-    const review = aawait Review.create(req.body)
-    res.status(StatusCodes.CREATED).json({review})
+  req.body.user = req.user.userId
+  const review = await Review.create(req.body)
+  res.status(StatusCodes.CREATED).json({ review })
 }
-
 ```
 
 #### validation
@@ -155,7 +195,18 @@ const createReview = async (req, res) => {
 }
 ```
 
-#### create alternative .unique custom validation
+test
+
+```json
+{
+  "product": "6553667dd025a6b567cdc7cb",
+  "rating": 1,
+  "title": "bad product",
+  "comment": "very. very bad product"
+}
+```
+
+#### create +1 alternative .unique custom validation
 
 ```js
 const alreadySubmitted = await Review.findOne({
@@ -168,6 +219,96 @@ if (alreadySubmitted) {
     'Already submitted review for this product'
   )
 }
+```
+
+#### refracture validation in controller to sing and review middleware
+
+-remove the coupling customErrors and sign model from reviewController
+
+validateSignMiddleware.js
+
+```js
+export const validateNonPrimaryKey = withValidationErrors([
+  body('product').custom(async (productId) => {
+    console.log(productId)
+
+    const isValidId = mongoose.Types.ObjectId.isValid(productId)
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
+    const isValidSign = await Sign.findOne({ _id: productId })
+    if (!isValidSign) throw new NotFoundError(`no sign with id : ${value}`)
+  }),
+])
+```
+
+---
+
+validateReviewMiddleware.js
+
+```js
+import { body, validationResult } from 'express-validator'
+import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
+import Review from '../models/reviewModel.js'
+
+const withValidationErrors = (validateValues) => {
+  return [
+    validateValues,
+    (req, res, next) => {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        const errorMessages = errors.array().map((error) => error.msg)
+
+        if (errorMessages[0].startsWith('no review')) {
+          throw new NotFoundError(errorMessages)
+        }
+
+        throw new BadRequestError(errorMessages)
+      }
+      next()
+    },
+  ]
+}
+
+export const validateReviewInput = withValidationErrors([
+  body('product').notEmpty().withMessage('product is required'),
+  body('rating').notEmpty().withMessage('rating is required'),
+  body('title').notEmpty().withMessage('invalid category value'),
+  body('comment').notEmpty().withMessage('comment is required'),
+])
+
+export const validateAlreadySubmittedNotPrimary = async (req, res, next) => {
+  const { product: productId } = req.body
+
+  const alreadySubmitted = await Review.findOne({
+    product: productId,
+    user: req.user.userId,
+  })
+
+  if (alreadySubmitted) {
+    throw new BadRequestError('Already submitted review for this product')
+  }
+
+  next()
+}
+```
+
+---
+
+reviewRouter.js
+
+```js
+import { validateNonPrimaryKey } from '../middleware/validateSignMiddleware.js'
+import {
+  validateReviewInput,
+  validateAlreadySubmittedNotPrimary,
+} from '../middleware/validateReviewMiddleware.js'
+router.route('/').post(
+  authenticateUser,
+  validateReviewInput,
+  validateNonPrimaryKey,
+  validateAlreadySubmittedNotPrimary,
+
+  createReview
+)
 ```
 
 ### read id consideration
@@ -184,12 +325,46 @@ const getSingleReview = async (req, res) => {
 
   const review = await Review.findOne({ _id: reviewId })
 
+  /*
   if (!review) {
     throw new CustomError.NotFoundError(`No review with id ${reviewId}`)
   }
+  */
 
   res.status(StatusCodes.OK).json({ review })
 }
+```
+
+reviewRouter.js
+
+```js
+import {
+  ...
+  ,
+  validateIdParam,
+} from '../middleware/validateReviewMiddleware.js'
+
+router
+  .route('/:id')
+  ...
+  .get(validateIdParam, getSingleReview)
+
+```
+
+validateReviewMiddleware.js
+
+```js
+import mongoose from 'mongoose'
+import { param } from 'express-validator'
+
+export const validateIdParam = withValidationErrors([
+  param('id').custom(async (value) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value)
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
+    const sign = await Review.findById(value)
+    if (!sign) throw new NotFoundError(`No review with id ${value}`)
+  }),
+])
 ```
 
 ### delete
@@ -199,7 +374,7 @@ const getSingleReview = async (req, res) => {
 copy get Single review
 
 ```js
-const { checkPermissions } = require('../utils')
+const { checkPermissions } = //require('../utils')
 ```
 
 #### util permission
@@ -207,9 +382,9 @@ const { checkPermissions } = require('../utils')
 utils/checkPermissions.js
 
 ```js
-const CustomError = require('../errors')
+//const CustomError = require('../errors')
 
-const chechPermissions = (requestUser, resourceUserId) => {
+export const checkPermissions = (requestUser, resourceUserId) => {
   // console.log(requestUser);
   // console.log(resourceUserId);
   // console.log(typeof resourceUserId);
@@ -218,7 +393,7 @@ const chechPermissions = (requestUser, resourceUserId) => {
   throw new CustomError.UnauthorizedError('Not authorized to access this route')
 }
 
-module.exports = chechPermissions
+//module.exports = chechPermissions
 ```
 
 #### check before delete
@@ -239,11 +414,11 @@ const updateReview = async (req, res) => {
   const { rating, title, comment } = req.body
 
   const review = await Review.findOne({ _id: reviewId })
-
+  /*
   if (!review) {
     throw new CustomError.NotFoundError(`No review with id ${reviewId}`)
   }
-
+*/
   res.status(StatusCodes.OK).json({ review })
 }
 ```
@@ -260,6 +435,12 @@ review.comment = comment
 await review.save()
 ```
 
+reviewRouter
+
+```js
+.patch(authenticateUser, validateIdParam, updateReview)
+```
+
 ## populate method
 
 ### update avrage tracking
@@ -271,7 +452,7 @@ await review.save()
 reviewController.js
 
 ```js
-const getAllReviews = async (req, res) => {
+export const getAllReviews = async (req, res) => {
   const reviews = await Review.find({})
     .populate({
       path: 'signs',
@@ -287,11 +468,17 @@ signModel.js
 
 ```js
 SignSchema.virtual('reviews', {
-  ref: 'Review',
+  ref: 'review',
   localField: '_id',
   foreignField: 'sign',
   justOne: false,
 })
+```
+
+signController
+
+```js
+const sign = await Sign.findById(id).populate('reviews')
 ```
 
 #### target interval
@@ -304,7 +491,7 @@ matcch: {
 }
 ```
 
-## trigger
+## trigger buissiness rules
 
 ### manage dynamic extention
 
@@ -313,19 +500,20 @@ matcch: {
 reviewController.js
 
 ```js
+export const getSingleProductReviews = async (req, res) => {
+  const { id: signId } = req.params
 
-const getSingleProductReviews = async(req,res){
-  const {id: productId} = req.params
-
-  const reviews = await Review.find({sign: signId})
-  res.status(StatusCodes.OK).json({reviews, count: reviews.length})
+  const reviews = await Review.find({ sign: signId })
+  res.status(StatusCodes.OK).json({ reviews, count: reviews.length })
 }
 ```
 
 reviewRouter.js
 
 ```js
-import { getSingleProductReview } from ''
+import {
+  ...,
+  getSingleProductReview } from ''
 
 router.route('/:id/reviews').get(getSingleProductReview)
 ```
@@ -336,6 +524,6 @@ signModel.js
 
 ```js
 SignSchema.pre('remove', async function (next) {
-  await this.model('Review').deleteMany({ sign: this._id })
+  await this.model('review').deleteMany({ sign: this._id })
 })
 ```
