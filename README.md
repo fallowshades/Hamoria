@@ -1,529 +1,248 @@
-#
+# Order v0.4.6
 
-## testing purpose
+##
 
-### review model
+### Order schema
 
-#### value (equation scalar)
+#### linear equation / ratio
 
-reviewModel.js
+Orders.js
 
 ```js
-const mongoose = require(mongoose)
 
-const ReviewSchema = mongoose.Schema({
-  rating: {
+const OrderSchema = mongoose.Schema({
+  tax : {
     type: Number,
-    min: 1,
-    max: 5,
-    required: [true, 'Please provide rating'],
-  },
+    required: true,
+  }
+
+  shippingFee: {
+    type: Number,
+    required: true,
+  }
+  subtotal: {
+    type: Number,
+    required: true
+  }
+
+  total: {
+    type:Number,
+    required: true
+  }
 })
+
 ```
 
-#### form text input
+#### identified package delivery
 
 ```js
-const ReviewSchema = mongoose.Schema({
-  title: {
+const OrderSchema = mongoose.Schema({
+  ...
+
+
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User'
+    required: true,
+  },
+
+
+
+  clientSecret: {
     type: String,
-    trim: true,
-    required: [true, 'Please provide review title'],
-  },
+    required: true,
+  }
 
-  comment: {
+  paymentIntentId: {
     type: String,
-    required: [true, 'Please provide review text'],
-  },
+  }
+
+  })
+```
+
+#### sign considerate type (color etc.)
+
+orders.js
+
+```js
+
+const SingleCartItemSchema = mongoose.Schema({
+  name: {type: String, required: true}
+  image: {type: String, required: true}
+  price: {type: Number, required: true}
+  amount: {type:Number, required: true}
+
+  product: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Product',
+    required: true,
+  }
 })
-```
 
-#### binding to user and products
+  const OrderSchema = mongoose.Schema({
+  ...
 
-```js
+    status: {
+    type: String,
+    enum: ['pending', 'failed', 'paid', 'delivered', 'canceled']
+    default: 'pending'
+  }
+  cartItems:[singleCartItemSchema],
 
-const ReviewSchema = mongoose.Schema({
-
-    user: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required: true
-    },
-
-    product: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Product',
-        required: true
-    }
-    {timestamp: true}
+  ...
 })
 
 ```
 
-#### unique validator index (who is review like color)
+### Order structure
+
+#### CRUD for who
 
 ```js
-const ReviewSchema = mongoose.Schema({...})
+const createOrder = async (req, res) => {
+  res.send('create order')
+}
 
-ReviewSchema.index({ product: 1, user: 1 }, { unique: true })
+const getAllOrder = async (req, res) => {
+  res.send('get all orders')
+}
+
+const getSingleOrder = async (req, res) => {
+  res.send('get single order')
+}
+
+const getCurrentUserOrders = async (req, res) => {
+  res.send('createCurentUserOrders')
+}
+
+const updateOrder = async (req, res) => {
+  res.send('update order')
+}
 ```
 
-### routes
+#### privilaged order routes
 
-#### commonJS --> modules
-
--- export before const
-
-reviewController.js
-
-```js
-import mongoose from 'mongoose'
-
-const createReview = async (req, res) =>{
-    res.send('create reviews)
-}
-const getAllReviews = async (req, res) =>{
-    res.send('get all reviews)
-}
-const getSingleReview = async (req, res) =>{
-    res.send('get single reviews)
-}
-const updateReview = async (req, res) =>{
-    res.send('update reviews)
-}
-const deleteReview = async (req, res) =>{
-    res.send('delete reviews)
-}
-
-export default mongoose.model('review', ReviewSchema)
-
-/*
-module.exports = {
-    createReview, getAllReviews, getSingleReview, updateReview, deleteReview
-}
-*/
-
-```
-
-reviewRouter.js --> modules
+orderRouter.js
 
 ```js
 const express = require('express')
 const router = express.Router()
 
 const {
-  createReview,
-  getAllReviews,
-  getSingleReview,
-  updateReview,
-  deleteReview,
-} = require('../controllers/reviewController')
-const { authenticateUser } = require('../middleware/authMiddleware')
-
-//-->modules
-import { Router } from 'express'
-const router = Router()
-import { authenticateUser } from '../middleware/authMiddleware.js'
-
-import {
-  createReview,
-  getAllReviews,
-  getSingleReview,
-  updateReview,
-  deleteReview,
-} from '../controllers/reviewController.js'
-
-router.route('/').post(authenticateUser, createReview).get(getAllReviews)
-
-router
-  .route('/:id')
-  .get(getSingleReview)
-  .patch(authenticateUser, updateReview)
-  .delete(authenticateUser, deleteReview)
-```
-
-app.js
-
-```js
-import reviewRouter from './routes/reviewRouter.js'
-
-app.use('/api/v1/reviews', reviewRouter)
-```
-
-test postman
-
-## crud
-
-### creat
-
-#### dependencies from user exept utils
-
-commonJS --> modules
-
-```js
-const { StatusCodes } = require('http-status-codes')
-const customError = require('../errors')
-
-import { StatusCodes } from 'http-status-codes'
-import Review from '../models/reviewModel.js'
-import 'express-async-errors'
-```
-
-#### create with bind dependency (search semantic)
-
-```js
-const createReview = async (req, res) => {
-  const { product: productId } = req.body
-
-  req.body.user = req.user.userId
-  const review = await Review.create(req.body)
-  res.status(StatusCodes.CREATED).json({ review })
-}
-```
-
-#### validation
-
-```js
-const createReview = async (req, res) => {
-    ...
-        const isValid = await Product.findOne({_id: productId})
-
-        if(!isValidProduct){
-            throw new CustomError.NotFoundError(`No product with id: ${productId}`)
-        }
-    ...
-}
-```
-
-test
-
-```json
-{
-  "product": "6553667dd025a6b567cdc7cb",
-  "rating": 1,
-  "title": "bad product",
-  "comment": "very. very bad product"
-}
-```
-
-#### create +1 alternative .unique custom validation
-
-```js
-const alreadySubmitted = await Review.findOne({
-  product: productId,
-  user: req.user.userId,
-})
-
-if (alreadySubmitted) {
-  throw new CustomError.BadRequestError(
-    'Already submitted review for this product'
-  )
-}
-```
-
-#### refracture validation in controller to sing and review middleware
-
--remove the coupling customErrors and sign model from reviewController
-
-validateSignMiddleware.js
-
-```js
-export const validateNonPrimaryKey = withValidationErrors([
-  body('product').custom(async (productId) => {
-    console.log(productId)
-
-    const isValidId = mongoose.Types.ObjectId.isValid(productId)
-    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
-    const isValidSign = await Sign.findOne({ _id: productId })
-    if (!isValidSign) throw new NotFoundError(`no sign with id : ${value}`)
-  }),
-])
-```
-
----
-
-validateReviewMiddleware.js
-
-```js
-import { body, validationResult } from 'express-validator'
-import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
-import Review from '../models/reviewModel.js'
-
-const withValidationErrors = (validateValues) => {
-  return [
-    validateValues,
-    (req, res, next) => {
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        const errorMessages = errors.array().map((error) => error.msg)
-
-        if (errorMessages[0].startsWith('no review')) {
-          throw new NotFoundError(errorMessages)
-        }
-
-        throw new BadRequestError(errorMessages)
-      }
-      next()
-    },
-  ]
-}
-
-export const validateReviewInput = withValidationErrors([
-  body('product').notEmpty().withMessage('product is required'),
-  body('rating').notEmpty().withMessage('rating is required'),
-  body('title').notEmpty().withMessage('invalid category value'),
-  body('comment').notEmpty().withMessage('comment is required'),
-])
-
-export const validateAlreadySubmittedNotPrimary = async (req, res, next) => {
-  const { product: productId } = req.body
-
-  const alreadySubmitted = await Review.findOne({
-    product: productId,
-    user: req.user.userId,
-  })
-
-  if (alreadySubmitted) {
-    throw new BadRequestError('Already submitted review for this product')
-  }
-
-  next()
-}
-```
-
----
-
-reviewRouter.js
-
-```js
-import { validateNonPrimaryKey } from '../middleware/validateSignMiddleware.js'
-import {
-  validateReviewInput,
-  validateAlreadySubmittedNotPrimary,
-} from '../middleware/validateReviewMiddleware.js'
-router.route('/').post(
   authenticateUser,
-  validateReviewInput,
-  validateNonPrimaryKey,
-  validateAlreadySubmittedNotPrimary,
+  authorizedPermissions,
+} = require('../controllers/orderController')
 
-  createReview
-)
-```
-
-### read id consideration
-
-```js
-const getAllReviews = async (req, res) => {
-  const reviews = await Review.find({})
-
-  res.status(StatusCodes.OK).json({ reviews, count: reviews.length })
-}
-
-const getSingleReview = async (req, res) => {
-  const { id: reviewId } = req.params
-
-  const review = await Review.findOne({ _id: reviewId })
-
-  /*
-  if (!review) {
-    throw new CustomError.NotFoundError(`No review with id ${reviewId}`)
-  }
-  */
-
-  res.status(StatusCodes.OK).json({ review })
-}
-```
-
-reviewRouter.js
-
-```js
-import {
-  ...
-  ,
-  validateIdParam,
-} from '../middleware/validateReviewMiddleware.js'
+const {
+  getAllOrders,
+  getSingleOrder,
+  getCurrentUserOrders,
+  createOrder,
+  updateOrder,
+} = require('../middleware/orderController')
 
 router
-  .route('/:id')
-  ...
-  .get(validateIdParam, getSingleReview)
-
+  .route('/')
+  .post(authenticateUser, createOrder)
+  .get(authenticatedUser, authorizedPermissions)
 ```
 
-validateReviewMiddleware.js
+App.js
 
 ```js
-import mongoose from 'mongoose'
-import { param } from 'express-validator'
-
-export const validateIdParam = withValidationErrors([
-  param('id').custom(async (value) => {
-    const isValidId = mongoose.Types.ObjectId.isValid(value)
-    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
-    const sign = await Review.findById(value)
-    if (!sign) throw new NotFoundError(`No review with id ${value}`)
-  }),
-])
+const orderRouter = require('./routes/orderRoutes')
+app.use('/api/v1/orders', orderRouter)
 ```
 
-### delete
+### update review
 
-#### cpy get single review
+#### implication
 
-copy get Single review
+test in postman
 
-```js
-const { checkPermissions } = //require('../utils')
-```
+reviewRouter.
 
-#### util permission
-
-utils/checkPermissions.js
+#### create order handle user input (linear equation & bad)
 
 ```js
-//const CustomError = require('../errors')
+const createOrder = async (req, res) => {
+  const { items: cartItems, tax, shippingFee } = req.body
 
-export const checkPermissions = (requestUser, resourceUserId) => {
-  // console.log(requestUser);
-  // console.log(resourceUserId);
-  // console.log(typeof resourceUserId);
-  if (requestUser.role === 'admin') return
-  if (requestUser.userId === resourceUserId.toString()) return
-  throw new CustomError.UnauthorizedError('Not authorized to access this route')
-}
-
-//module.exports = chechPermissions
-```
-
-#### check before delete
-
-```js
-checkPermissions(req.user, review.user)
-await review.remove()
-res.status(StatusCodes.OK).json({ msg: 'Successs! Review removed' })
-```
-
-### update
-
-#### access
-
-```js
-const updateReview = async (req, res) => {
-  const { id: reviewId } = req.params
-  const { rating, title, comment } = req.body
-
-  const review = await Review.findOne({ _id: reviewId })
-  /*
-  if (!review) {
-    throw new CustomError.NotFoundError(`No review with id ${reviewId}`)
+  if (!cartItems || cartItems.length < 1) {
+    throw new CustomError.BadRequestError('No cart items provided')
   }
-*/
-  res.status(StatusCodes.OK).json({ review })
+
+  if (!tax || !shhippingFee) {
+    throw new CustomError.BadRequestError('Please provide tax and shipping fee')
+  }
 }
 ```
 
-#### update new values
+#### accumulate subtotals
+
+ordersController.js
 
 ```js
-checkPermissions(req.user, review.user)
+const createOrder = async (req, res) => {
 
-review.rating = rating
-review.title = title
-review.comment = comment
+...
 
-await review.save()
+let orderItems = []
+let subtotal = 0
+
+for(const item of cartItems){
+const dbProduct = await Product.findOne({ _id: item.product });
+    if (!dbProduct) {
+      throw new CustomError.NotFoundError(
+        `No product with id : ${item.product}`
+      );
+    }
+    const { name, price, image, _id } = dbProduct;
+    const singleOrderItem = {
+      amount: item.amount,
+      name,
+      price,
+      image,
+      product: _id,
+    };
+    // add item to order
+    orderItems = [...orderItems, singleOrderItem];
+    // calculate subtotal
+}
+    subtotal += item.amount * price;}
 ```
 
-reviewRouter
-
 ```js
-.patch(authenticateUser, validateIdParam, updateReview)
-```
-
-## populate method
-
-### update avrage tracking
-
-#### populate
-
---concider product must be true
-
-reviewController.js
-
-```js
-export const getAllReviews = async (req, res) => {
-  const reviews = await Review.find({})
-    .populate({
-      path: 'signs',
-      select: 'name company price',
-    })
-    .populate({ path: 'user', select: 'name' })
+const fakeStripeAPI = async ({ amount, currency }) => {
+  const client_secret = 'someRandomValue'
+  return { client_secret, amount }
 }
 ```
 
-#### virtuals
-
-signModel.js
-
 ```js
-SignSchema.virtual('reviews', {
-  ref: 'review',
-  localField: '_id',
-  foreignField: 'sign',
-  justOne: false,
-})
-```
+const createOrder = async (req, res) => {
+  ...
 
-signController
+// calculate total
+  const total = tax + shippingFee + subtotal;
+  // get client secret
+  const paymentIntent = await fakeStripeAPI({
+    amount: total,
+    currency: 'usd',
+  });
 
-```js
-const sign = await Sign.findById(id).populate('reviews')
-```
+  const order = await Order.create({
+    orderItems,
+    total,
+    subtotal,
+    tax,
+    shippingFee,
+    clientSecret: paymentIntent.client_secret,
+    user: req.user.userId,
+  });
 
-#### target interval
-
--can analys
-
-```js
-matcch: {
-  rating: 5
+  res
+    .status(StatusCodes.CREATED)
+    .json({ order, clientSecret: order.clientSecret });
 }
-```
-
-## trigger buissiness rules
-
-### manage dynamic extention
-
-#### single sign and review
-
-reviewController.js
-
-```js
-export const getSingleProductReviews = async (req, res) => {
-  const { id: signId } = req.params
-
-  const reviews = await Review.find({ sign: signId })
-  res.status(StatusCodes.OK).json({ reviews, count: reviews.length })
-}
-```
-
-reviewRouter.js
-
-```js
-import {
-  ...,
-  getSingleProductReview } from ''
-
-router.route('/:id/reviews').get(getSingleProductReview)
-```
-
-#### delete all review
-
-signModel.js
-
-```js
-SignSchema.pre('remove', async function (next) {
-  await this.model('review').deleteMany({ sign: this._id })
-})
 ```

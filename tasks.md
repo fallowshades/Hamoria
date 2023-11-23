@@ -379,6 +379,4 @@ Pages: (AchievementContainer, PageBtnContainer)
 []populate
 []trigger
 
-### aggregated pipeline v0.4.6
-
-### imitate order db v0.4.7
+### imitate order db v0.4.6
