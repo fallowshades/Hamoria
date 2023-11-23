@@ -18,11 +18,11 @@ export const createOrder = async (req, res) => {
   let subtotal = 0
 
   for (const item of cartItems) {
-    const dbProduct = await Sign.findOne({ _id: item.sign })
-    if (!dbProduct) {
-      throw new NotFoundError(`No product with id : ${item.sign}`)
+    const dbSign = await Sign.findOne({ _id: item.sign })
+    if (!dbSign) {
+      throw new NotFoundError(`No sign with id : ${item.sign}`)
     }
-    const { title, price, image, _id } = dbProduct
+    const { title, price, image, _id } = dbSign
 
     const singleOrderItem = {
       amount: item.amount,
@@ -61,17 +61,36 @@ export const createOrder = async (req, res) => {
 }
 
 export const getAllOrders = async (req, res) => {
-  res.send('get all orders')
+  const orders = await Order.find({})
+  res.status(StatusCodes.OK).json({ orders, count: orders.length })
 }
-
 export const getSingleOrder = async (req, res) => {
-  res.send('get single order')
+  const { id: orderId } = req.params
+  const order = await Order.findOne({ _id: orderId })
+  if (!order) {
+    throw new NotFoundError(`No order with id : ${orderId}`)
+  }
+  console.log(req.user, order.user)
+  checkPermissions(req.user, order.user)
+  res.status(StatusCodes.OK).json({ order })
 }
-
 export const getCurrentUserOrders = async (req, res) => {
-  res.send('createCurrentUserOrders')
+  const orders = await Order.find({ user: req.user.userId })
+  res.status(StatusCodes.OK).json({ orders, count: orders.length })
 }
-
 export const updateOrder = async (req, res) => {
-  res.send('update order')
+  const { id: orderId } = req.params
+  const { paymentIntentId } = req.body
+
+  const order = await Order.findOne({ _id: orderId })
+  if (!order) {
+    throw new NotFoundError(`No order with id : ${orderId}`)
+  }
+  checkPermissions(req.user, order.user)
+
+  order.paymentIntentId = paymentIntentId
+  order.status = 'paid'
+  await order.save()
+
+  res.status(StatusCodes.OK).json({ order })
 }

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const singleCartItemSchema = mongoose.Schema({
-  name: { type: String, required: true },
+  title: { type: String, required: true },
   image: { type: String, required: true },
   price: { type: Number, required: true },
   amount: { type: Number, required: true },
@@ -52,7 +52,7 @@ const OrderSchema = mongoose.Schema({
     enum: ['pending', 'failed', 'paid', 'delivered', 'canceled'],
     default: 'pending',
   },
-  cartItems: [singleCartItemSchema],
+  orderItems: [singleCartItemSchema],
 })
 
 export default mongoose.model('order', OrderSchema)

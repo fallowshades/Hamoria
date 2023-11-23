@@ -22,5 +22,8 @@ router
 
 router.route('/showAllMyOrders').get(authenticateUser, getCurrentUserOrders)
 
-router.route('/:id').get(getSingleOrder).patch(updateOrder)
+router
+  .route('/:id')
+  .get(authenticateUser, getSingleOrder)
+  .patch(authenticateUser, updateOrder)
 export default router
