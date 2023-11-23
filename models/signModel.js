@@ -56,4 +56,8 @@ SignSchema.virtual('reviews', {
   justOne: false,
 })
 
+SignSchema.pre('remove', async function (next) {
+  await this.model('review').deleteMany({ sign: this._id })
+})
+
 export default mongoose.model('sign', SignSchema)
