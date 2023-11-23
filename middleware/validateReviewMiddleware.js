@@ -34,17 +34,17 @@ export const validateIdParam = withValidationErrors([
 ])
 
 export const validateReviewInput = withValidationErrors([
-  body('product').notEmpty().withMessage('product is required'),
+  body('sign').notEmpty().withMessage('sign is required'),
   body('rating').notEmpty().withMessage('rating is required'),
   body('title').notEmpty().withMessage('invalid category value'),
   body('comment').notEmpty().withMessage('comment is required'),
 ])
 
 export const validateAlreadySubmittedNotPrimary = async (req, res, next) => {
-  const { product: productId } = req.body
+  const { sign: signId } = req.body
 
   const alreadySubmitted = await Review.findOne({
-    product: productId,
+    sign: signId,
     user: req.user.userId,
   })
 

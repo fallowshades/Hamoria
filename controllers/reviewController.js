@@ -10,6 +10,11 @@ export const createReview = async (req, res) => {
 }
 export const getAllReviews = async (req, res) => {
   const reviews = await Review.find({})
+    .populate({
+      path: 'sign',
+      select: 'title company price',
+    })
+    .populate({ path: 'user', select: 'name' })
 
   res.status(StatusCodes.OK).json({ reviews, count: reviews.length })
 }
