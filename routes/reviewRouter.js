@@ -7,6 +7,7 @@ import {
   getSingleReview,
   updateReview,
   deleteReview,
+  getSingleProductReviews,
 } from '../controllers/reviewController.js'
 
 import { validateNonPrimaryKey } from '../middleware/validateSignMiddleware.js'
@@ -32,5 +33,7 @@ router
   .get(validateIdParam, getSingleReview)
   .patch(authenticateUser, validateIdParam, updateReview)
   .delete(authenticateUser, deleteReview)
+
+router.route('/:id/reviews').get(getSingleProductReviews)
 
 export default router

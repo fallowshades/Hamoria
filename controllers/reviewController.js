@@ -24,6 +24,14 @@ export const getSingleReview = async (req, res) => {
   const review = await Review.findOne({ _id: reviewId })
   res.status(StatusCodes.OK).json({ review })
 }
+
+export const getSingleProductReviews = async (req, res) => {
+  const { id: signId } = req.params
+
+  const reviews = await Review.find({ sign: signId })
+  res.status(StatusCodes.OK).json({ reviews, count: reviews.length })
+}
+
 export const updateReview = async (req, res) => {
   const { id: reviewId } = req.params
   const { rating, title, comment } = req.body
