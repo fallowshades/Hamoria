@@ -1,5 +1,8 @@
 import { Router } from 'express'
-import { validateOrdersInput } from '../middleware/validationOrdersMiddleware.js'
+import {
+  validateOrdersInput,
+  validateIdParam,
+} from '../middleware/validationOrdersMiddleware.js'
 import {
   authenticateUser,
   authorizePermissions,
@@ -17,13 +20,13 @@ const router = Router()
 
 router
   .route('/')
-  .post(authenticateUser, createOrder)
+  .post(authenticateUser, validateOrdersInput, createOrder)
   .get(authenticateUser, authorizePermissions('user'), getAllOrders)
 
 router.route('/showAllMyOrders').get(authenticateUser, getCurrentUserOrders)
 
 router
   .route('/:id')
-  .get(authenticateUser, getSingleOrder)
-  .patch(authenticateUser, updateOrder)
+  .get(authenticateUser, validateIdParam, getSingleOrder)
+  .patch(authenticateUser, validateIdParam, updateOrder)
 export default router

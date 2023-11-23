@@ -67,10 +67,7 @@ export const getAllOrders = async (req, res) => {
 export const getSingleOrder = async (req, res) => {
   const { id: orderId } = req.params
   const order = await Order.findOne({ _id: orderId })
-  if (!order) {
-    throw new NotFoundError(`No order with id : ${orderId}`)
-  }
-  console.log(req.user, order.user)
+
   checkPermissions(req.user, order.user)
   res.status(StatusCodes.OK).json({ order })
 }
@@ -83,9 +80,7 @@ export const updateOrder = async (req, res) => {
   const { paymentIntentId } = req.body
 
   const order = await Order.findOne({ _id: orderId })
-  if (!order) {
-    throw new NotFoundError(`No order with id : ${orderId}`)
-  }
+
   checkPermissions(req.user, order.user)
 
   order.paymentIntentId = paymentIntentId

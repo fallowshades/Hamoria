@@ -294,3 +294,53 @@ const createOrder = async (req, res) => {
     .json({ order, clientSecret: order.clientSecret });
 }
 ```
+
+#### refracture database calls from controller to validation middleware
+
+ordersRouter.js
+
+```js
+import {
+  validateOrdersInput,
+  validateIdParam,
+} from '../middleware/validationOrdersMiddleware.js'
+
+router.route('/').post(authenticateUser, validateOrdersInput, createOrder)
+router
+  .route('/:id')
+  .get(authenticateUser, validateIdParam, getSingleOrder)
+  .patch(authenticateUser, validateIdParam, updateOrder)
+```
+
+validationOrdersMiddleware.js
+
+```js
+import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
+import mongoose from 'mongoose'
+import { param } from 'express-validator'
+import Order from '../models/ordersModel.js'
+
+{
+  ...
+
+if (!errors.isEmpty()) {
+  const errorMessages = errors.array().map((error) => error.msg)
+  if (errorMessages[0].startsWith('no order')) {
+    throw new NotFoundError(errorMessages)
+  }
+  throw new BadRequestError(errorMessages)
+}
+next()
+
+...
+}
+
+export const validateIdParam = withValidationErrors([
+  param('id').custom(async (value, { req }) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value)
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
+    const order = await Order.findById(value)
+    if (!order) throw new NotFoundError(`no order with id : ${value}`)
+  }),
+])
+```

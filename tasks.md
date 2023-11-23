@@ -380,3 +380,27 @@ Pages: (AchievementContainer, PageBtnContainer)
 []trigger
 
 ### imitate order db v0.4.6
+
+## Add all routes for documentation
+
+### add prefix db v0.5.0
+
+### add hand orientation db v0.5.1
+
+### add course query database db v0.5.2
+
+[]no routes
+---[] crud controller
+---[] domain controller
+---[] tuple controller
+---[] place controller
+---[] item controller
+[]so routes
+
+### add word db v0.5.3
+
+### add reference db v0.5.4
+
+### add course db v0.5.5
+
+### documentation tools v0.5.6
