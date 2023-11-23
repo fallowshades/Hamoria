@@ -4,6 +4,8 @@ import 'express-async-errors'
 import { checkPermissions } from '../utils/checkPermissions.js'
 
 export const createOrder = async (req, res) => {
+  const { items: cartItems, tax, shippingFee } = req.body
+
   res.send('create order')
 }
 

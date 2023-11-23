@@ -1,5 +1,5 @@
 import { Router } from 'express'
-
+import { validateOrdersInput } from '../middleware/validationOrdersMiddleware.js'
 import {
   authenticateUser,
   authorizePermissions,
