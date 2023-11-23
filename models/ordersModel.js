@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const SingleCartItemSchema = mongoose.Schema({
+const singleCartItemSchema = mongoose.Schema({
   name: { type: String, required: true },
   image: { type: String, required: true },
   price: { type: Number, required: true },
@@ -54,3 +54,5 @@ const OrderSchema = mongoose.Schema({
   },
   cartItems: [singleCartItemSchema],
 })
+
+export default mongoose.model('order', OrderSchema)
