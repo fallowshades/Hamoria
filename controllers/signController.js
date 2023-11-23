@@ -28,7 +28,7 @@ export const createSign = async (req, res) => {
 
 export const getSign = async (req, res) => {
   const { id } = req.params
-  const sign = await Sign.findById(id)
+  const sign = await Sign.findById(id).populate('reviews')
   if (!sign) {
     return res.status(StatusCodes.CREATED).json({ signs })
   }

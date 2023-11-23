@@ -46,7 +46,14 @@ const SignSchema = new mongoose.Schema(
       default: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 )
+
+SignSchema.virtual('reviews', {
+  ref: 'review',
+  localField: '_id',
+  foreignField: 'sign',
+  justOne: false,
+})
 
 export default mongoose.model('sign', SignSchema)
