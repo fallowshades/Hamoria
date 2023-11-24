@@ -9,4 +9,4 @@ const PrefixSchema = new mongoose.Schema({
 })
 
 // Export the Mongoose schema definition
-export default mongoose.model('Prefix_PositionHand', positionHandSchema)
+export default mongoose.model('prefix', PrefixSchema)

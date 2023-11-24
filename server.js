@@ -21,6 +21,8 @@ import signRouter from './routes/signRouter.js'
 
 import reviewRouter from './routes/reviewRouter.js'
 import orderRouter from './routes/ordersRouter.js'
+
+import prefixRouter from './routes/prefixRouter.js'
 dotenv.config()
 
 cloudinary.config({
@@ -45,6 +47,7 @@ app.use('/api/v1/users', authenticateUser, userRouter)
 app.use('/api/v1/signs', signRouter)
 app.use('/api/v1/reviews', reviewRouter)
 app.use('/api/v1/orders', orderRouter)
+app.use('/api/v1/prefixes', prefixRouter)
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, './hamoriaClient/dst', 'index.html'))
