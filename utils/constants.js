@@ -71,3 +71,13 @@ export const HAND_VARIANTS = {
   B: 'b',
   FLYG: 'flyg',
 }
+
+export const ORIENTATION = {
+  INWARD: 'inward',
+  DOWNWARD: 'downward',
+  FORWARD: 'forward',
+  REAGAINST: 'reAgainst',
+  UPPWARD: 'uppward',
+  NULL: null,
+  EMPTY: '',
+}
