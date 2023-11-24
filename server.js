@@ -25,6 +25,7 @@ import orderRouter from './routes/ordersRouter.js'
 import prefixRouter from './routes/prefixRouter.js'
 import orientationRouter from './routes/orientationRouter.js'
 import wordRouter from './routes/wordRouter.js'
+import referenceRouter from './routes/referenceRouter.js'
 dotenv.config()
 
 cloudinary.config({
@@ -52,6 +53,7 @@ app.use('/api/v1/orders', orderRouter)
 app.use('/api/v1/prefixes', prefixRouter)
 app.use('/api/v1/orientations', orientationRouter)
 app.use('/api/v1/words', wordRouter)
+app.use('/api/v1/references', referenceRouter)
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, './hamoriaClient/dst', 'index.html'))
