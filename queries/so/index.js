@@ -1,4 +1,5 @@
 export {
+  createShock,
   getAllShock,
   getSingleShock,
   updateShock,
@@ -6,6 +7,7 @@ export {
 } from './shockController.js'
 
 export {
+  createDenial,
   getAllDenial,
   getSingleDenial,
   updateDenial,
@@ -13,6 +15,7 @@ export {
 } from './denialController.js'
 
 export {
+  createAnger,
   getAllAnger,
   getSingleAnger,
   updateAnger,
@@ -20,6 +23,7 @@ export {
 } from './angerController.js'
 
 export {
+  createBargain,
   getAllBargain,
   getSingleBargain,
   updateBargain,
@@ -27,6 +31,7 @@ export {
 } from './bargainController.js'
 
 export {
+  createDepression,
   getAllDepression,
   getSingleDepression,
   updateDepression,
@@ -34,6 +39,7 @@ export {
 } from './depressionController.js'
 
 export {
+  createTesting,
   getAllTesting,
   getSingleTesting,
   updateTesting,
@@ -41,6 +47,7 @@ export {
 } from './testingController.js'
 
 export {
+  createAcceptance,
   getAllAcceptance,
   getSingleAcceptance,
   updateAcceptance,
