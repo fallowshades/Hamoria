@@ -1,52 +1,64 @@
 import { Router } from 'express'
 
 import {
+  createCRUD,
   getAllCRUD,
   getSingleCRUD,
   updateCRUD,
   deleteCRUD,
+  createDomain,
   getAllDomain,
   getSingleDomain,
   updateDomain,
   deleteDomain,
+  createTuple,
   getAllTuple,
   getSingleTuple,
   updateTuple,
   deleteTuple,
+  createPlace,
   getAllPlace,
   getSinglePlace,
   updatePlace,
   deletePlace,
+  createItem,
   getAllItem,
   getSingleItem,
   updateItem,
   deleteItem,
 } from '../queries/no/index.js'
 import {
+  createShock,
   getAllShock,
   getSingleShock,
   updateShock,
   deleteShock,
+  createDenial,
   getAllDenial,
   getSingleDenial,
   updateDenial,
   deleteDenial,
+  createAnger,
   getAllAnger,
   getSingleAnger,
   updateAnger,
   deleteAnger,
+  createBargain,
   getAllBargain,
   getSingleBargain,
   updateBargain,
   deleteBargain,
+  createDepression,
   getAllDepression,
   getSingleDepression,
   updateDepression,
   deleteDepression,
+  createTesting,
   getAllTesting,
   getSingleTesting,
   updateTesting,
   deleteTesting,
+  createAcceptance,
   getAllAcceptance,
   getSingleAcceptance,
   updateAcceptance,
@@ -55,19 +67,19 @@ import {
 
 const router = Router()
 
-router.route('/no/crud').get(getAllCRUD)
-router.route('/no/domain/').get(getAllDomain)
-router.route('/no/tuple').get(getAllTuple)
-router.route('/no/place').get(getAllPlace)
-router.route('/no/item').get(getAllItem)
+router.route('/no/crud').get(getAllCRUD).post(createCRUD)
+router.route('/no/domain/').get(getAllDomain).post(createDomain)
+router.route('/no/tuple').get(getAllTuple).post(createTuple)
+router.route('/no/place').get(getAllPlace).post(createPlace)
+router.route('/no/item').get(getAllItem).post(createItem)
 
-router.route('/so/shock/').get(getAllShock)
-router.route('/so/denial').get(getAllDenial)
-router.route('/so/anger').get(getAllAnger)
-router.route('/so/bargain').get(getAllBargain)
-router.route('/so/depression').get(getAllDepression)
-router.route('/so/testing').get(getAllTesting)
-router.route('/so/acceptance').get(getAllAcceptance)
+router.route('/so/shock/').get(getAllShock).post(createShock)
+router.route('/so/denial').get(getAllDenial).post(createDenial)
+router.route('/so/anger').get(getAllAnger).post(createAnger)
+router.route('/so/bargain').get(getAllBargain).post(createBargain)
+router.route('/so/depression').get(getAllDepression).post(createDepression)
+router.route('/so/testing').get(getAllTesting).post(createTesting)
+router.route('/so/acceptance').get(getAllAcceptance).post(createAcceptance)
 
 router
   .route('/no/crud/:id')

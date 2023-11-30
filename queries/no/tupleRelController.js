@@ -1,6 +1,10 @@
 import { StatusCodes } from 'http-status-codes'
 import 'express-async-errors'
 
+export const createTuple = async (req, res) => {
+  res.send('create Tuple')
+}
+
 export const getAllTuple = async (req, res) => {
   res.send('get all Tuple')
 }
