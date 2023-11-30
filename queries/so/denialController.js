@@ -1,6 +1,10 @@
 import { StatusCodes } from 'http-status-codes'
 import 'express-async-errors'
 
+export const createDenial = async (req, res) => {
+  res.send('create Denial')
+}
+
 export const getAllDenial = async (req, res) => {
   res.send('get all Denial')
 }

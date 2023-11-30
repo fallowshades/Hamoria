@@ -1,6 +1,10 @@
 import { StatusCodes } from 'http-status-codes'
 import 'express-async-errors'
 
+export const createDepression = async (req, res) => {
+  res.send('create Depression')
+}
+
 export const getAllDepression = async (req, res) => {
   res.send('get all Depression')
 }

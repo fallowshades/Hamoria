@@ -1,4 +1,5 @@
 export {
+  createCRUD,
   getAllCRUD,
   getSingleCRUD,
   updateCRUD,
@@ -6,6 +7,7 @@ export {
 } from './crudController.js'
 
 export {
+  createDomain,
   getAllDomain,
   getSingleDomain,
   updateDomain,
@@ -13,6 +15,7 @@ export {
 } from './domainRelController.js'
 
 export {
+  createTuple,
   getAllTuple,
   getSingleTuple,
   updateTuple,
@@ -20,6 +23,7 @@ export {
 } from './tupleRelController.js'
 
 export {
+  createItem,
   getAllItem,
   getSingleItem,
   updateItem,
@@ -27,6 +31,7 @@ export {
 } from './itemController.js'
 
 export {
+  createPlace,
   getAllPlace,
   getSinglePlace,
   updatePlace,
