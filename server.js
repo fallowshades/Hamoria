@@ -38,7 +38,7 @@ cloudinary.config({
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const app = express()
-app.use(express.static(path.resolve(__dirname, './public')))
+app.use(express.static(path.resolve(__dirname, './public/dist')))
 app.use(express.json())
 
 if (process.env.NODE_ENV === 'development') {
@@ -59,7 +59,7 @@ app.use('/api/v1/references', referenceRouter)
 app.use('/api/v1/courses', courseRouter)
 
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './public', 'index.html'))
+  res.sendFile(path.resolve(__dirname, './public/dist', 'index.html'))
 })
 
 app.use('*', (req, res) => {
