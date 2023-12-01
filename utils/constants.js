@@ -74,8 +74,10 @@ export const HAND_VARIANTS = {
 
 export const ORIENTATION = {
   INWARD: 'inward',
+  INWARDS: 'inwards',
   DOWNWARD: 'downward',
   FORWARD: 'forward',
+  AGAIGNS: 'against',
   REAGAINST: 'reAgainst',
   UPPWARD: 'uppward',
   NULL: null,

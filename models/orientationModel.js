@@ -2,6 +2,9 @@ import mongoose from 'mongoose'
 import { ORIENTATION } from '../utils/constants.js'
 
 const OrientationSchema = new mongoose.Schema({
+  orderid: {
+    type: String,
+  },
   fingerdirection: {
     type: String,
     enum: Object.values(ORIENTATION),

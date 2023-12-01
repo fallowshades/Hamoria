@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
 const WordSchema = new mongoose.Schema({
+  orderID: String,
   word: {
     type: String,
     required: true,
