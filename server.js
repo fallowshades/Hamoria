@@ -28,6 +28,9 @@ import wordRouter from './routes/wordRouter.js'
 import referenceRouter from './routes/referenceRouter.js'
 import courseRouter from './routes/courseRouter.js'
 
+import swaggerUI from 'swagger-ui-express'
+import YAML from 'yamljs'
+
 dotenv.config()
 
 cloudinary.config({
@@ -44,6 +47,14 @@ app.use(express.json())
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
+
+const swaggerDocumentation = YAML.load('./swagger.yaml')
+
+app.get('/docs', (req, res) => {
+  res.send('<h1>Hamoria api</h1><a href="api-docs">Documentation</a>')
+})
+
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocumentation))
 
 app.use(cookieParser())
 app.use('/api/v1/achievements', authenticateUser, achievementRouter)

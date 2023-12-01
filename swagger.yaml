@@ -1,0 +1,1802 @@
+openapi: 3.0.0
+info:
+  title: Hamoria
+  contact:
+    url: https://hamoria.onrender.com/
+  version: '1.0'
+servers:
+  - url: http://example.com
+    variables: {}
+paths:
+  /api/v1/auth/register:
+    post:
+      tags:
+        - User
+      summary: register v0.1.3
+      operationId: registerv0.1.3
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/registerv0.1.3request'
+                - example:
+                    name: Bubbles McLaughster
+                    email: test@test.com
+                    password: secret123
+                    lastName: Ticklebottom
+                    location: Giggle City
+            example:
+              name: Bubbles McLaughster
+              email: test@test.com
+              password: secret123
+              lastName: Ticklebottom
+              location: Giggle City
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/auth/login:
+    post:
+      tags:
+        - User
+      summary: login v0.1.3
+      operationId: loginv0.1.3
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/loginv0.1.3request'
+                - example:
+                    email: test@test.com
+                    password: secret123
+            example:
+              email: test@test.com
+              password: secret123
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/users/lupdate-user:
+    patch:
+      tags:
+        - User
+      summary: update-user v0.1.4
+      operationId: update-userv0.1.4
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/update-userv0.1.4request'
+                - example:
+                    name: name2
+                    email: name2@gmail.com
+                    password: secret123
+                    location: there
+            example:
+              name: name2
+              email: name2@gmail.com
+              password: secret123
+              location: there
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/users/current-user:
+    get:
+      tags:
+        - User
+      summary: get current user v0.1.4
+      operationId: getcurrentuserv0.1.4
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/users/admin/app-stats:
+    get:
+      tags:
+        - User
+      summary: get applidation stats v0.1.4
+      operationId: getapplidationstatsv0.1.4
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /:
+    post:
+      tags:
+        - testDepricated
+      summary: Accept json v0.1.0
+      operationId: Acceptjsonv0.1.0
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/achievements:
+    get:
+      tags:
+        - Achivements
+      summary: get All achievements
+      operationId: getAllachievements
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    post:
+      tags:
+        - Achivements
+      summary: create achievement
+      operationId: createachievement
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/createachievementrequest'
+                - example:
+                    description: do this
+                    status: inactive
+                    points: 1
+                    type: progressive
+                    dateOfCompletion: null
+                    createdBy: 652411368872b95096dc2c9b
+            example:
+              description: do this
+              status: inactive
+              points: 1
+              type: progressive
+              dateOfCompletion: null
+              createdBy: 652411368872b95096dc2c9b
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/achievements/6524004cc8d349301227ddf4:
+    get:
+      tags:
+        - Achivements
+      summary: FindOne achivement
+      operationId: FindOneachivement
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/achievements/stats:
+    get:
+      tags:
+        - Achivements
+      summary: showStats achivement
+      operationId: showStatsachivement
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/achievements/6521404c4426e3a03bbf74cf:
+    patch:
+      tags:
+        - Achivements
+      summary: update
+      operationId: update
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/updaterequest'
+                - example:
+                    description: do that
+                    status: inactive
+                    type: exploration
+            example:
+              description: do that
+              status: inactive
+              type: exploration
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/achievements/65216993ff2509453eefd3c4:
+    delete:
+      tags:
+        - Achivements
+      summary: delete
+      operationId: delete
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/test:
+    post:
+      tags:
+        - effectiveValidationData i2L3
+      summary: New Request
+      operationId: NewRequest
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/NewRequestRequest'
+                - example:
+                    name: userName
+            example:
+              name: userName
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/signs:
+    post:
+      tags:
+        - Sign
+      summary: create sign
+      operationId: createsign
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/createsignrequest'
+                - example:
+                    title: tst
+                    price: 1
+                    description: des
+                    category: work
+                    company: ikea
+                    colors:
+                      - '#ff000'
+                      - '#00ff00'
+                      - '#0000ff'
+            example:
+              title: tst
+              price: 1
+              description: des
+              category: work
+              company: ikea
+              colors:
+                - '#ff000'
+                - '#00ff00'
+                - '#0000ff'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - Sign
+      summary: get all signs
+      operationId: getallsigns
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/signs/6553667dd025a6b567cdc7cb:
+    get:
+      tags:
+        - Sign
+      summary: get one sign
+      operationId: getonesign
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/signs/6553966de6dfe1872ba10bcc:
+    patch:
+      tags:
+        - Sign
+      summary: update sign
+      operationId: updatesign
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/updatesignrequest'
+                - example:
+                    title: tst
+                    price: 1
+                    description: des!!
+                    category: work
+                    company: marcos
+                    colors:
+                      - '#ff000'
+                      - '#00ff00'
+                      - '#0000ff'
+            example:
+              title: tst
+              price: 1
+              description: des!!
+              category: work
+              company: marcos
+              colors:
+                - '#ff000'
+                - '#00ff00'
+                - '#0000ff'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - Sign
+      summary: delete sign
+      operationId: deletesign
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/reviews:
+    post:
+      tags:
+        - Review
+      summary: Create Review
+      operationId: CreateReview
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/CreateReviewRequest'
+                - example:
+                    sign: 6553667dd025a6b567cdc7cb
+                    rating: 1
+                    title: bad product
+                    comment: very. very bad product
+            example:
+              sign: 6553667dd025a6b567cdc7cb
+              rating: 1
+              title: bad product
+              comment: very. very bad product
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - Review
+      summary: Get all Reviews
+      operationId: GetallReviews
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/reviews/655f74a5acc0945762da7b81:
+    get:
+      tags:
+        - Review
+      summary: Get single review
+      operationId: Getsinglereview
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - Review
+      summary: Update review
+      operationId: Updatereview
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/UpdatereviewRequest'
+                - example:
+                    rating: 2
+                    title: alright
+                    comment: decent
+            example:
+              rating: 2
+              title: alright
+              comment: decent
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - Review
+      summary: Delete review
+      operationId: Deletereview
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/reviews/655f74a5acc0945762da7b81/reviews:
+    get:
+      tags:
+        - Review
+      summary: getSingleProductReviews
+      operationId: getSingleProductReviews
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/orders:
+    post:
+      tags:
+        - Orders
+      summary: creatOrder
+      operationId: creatOrder
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/creatOrderRequest'
+                - example:
+                    tax: 499
+                    shippingFee: 799
+                    items:
+                      - title: accent chair
+                        price: 2599
+                        image: /uploads/example.jpeg
+                        amount: 14
+                        sign: 6553667dd025a6b567cdc7cb
+                      - title: accent chair
+                        price: 2577
+                        image: /uploads/example.jpeg
+                        amount: 18
+                        sign: 655378f3db45bad0d819b804
+            example:
+              tax: 499
+              shippingFee: 799
+              items:
+                - title: accent chair
+                  price: 2599
+                  image: /uploads/example.jpeg
+                  amount: 14
+                  sign: 6553667dd025a6b567cdc7cb
+                - title: accent chair
+                  price: 2577
+                  image: /uploads/example.jpeg
+                  amount: 18
+                  sign: 655378f3db45bad0d819b804
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - Orders
+      summary: getAllOrders
+      operationId: getAllOrders
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/orders/655f7a7:
+    get:
+      tags:
+        - Orders
+      summary: getSingleOrder
+      operationId: getSingleOrder
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/orders/655f7a77630c51b83d8be004:
+    patch:
+      tags:
+        - Orders
+      summary: updateOrder
+      operationId: updateOrder
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/updateOrderRequest'
+                - example:
+                    paymentIntentId: someRandomId
+            example:
+              paymentIntentId: someRandomId
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/orders/showAllMyOrders:
+    get:
+      tags:
+        - Orders
+      summary: getCurrentUserOrders
+      operationId: getCurrentUserOrders
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/prefixes:
+    post:
+      tags:
+        - prefix
+      summary: createPrefix
+      operationId: createPrefix
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - prefix
+      summary: getAllPrefixes
+      operationId: getAllPrefixes
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/prefixes/1:
+    get:
+      tags:
+        - prefix
+      summary: get single Prefix
+      operationId: getsinglePrefix
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - prefix
+      summary: updatePrefix
+      operationId: updatePrefix
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - prefix
+      summary: delete prefix
+      operationId: deleteprefix
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/orientations:
+    post:
+      tags:
+        - orientation
+      summary: createOrientation
+      operationId: createOrientation
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - orientation
+      summary: get all orientations
+      operationId: getallorientations
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/orientations/1:
+    get:
+      tags:
+        - orientation
+      summary: get single orientation
+      operationId: getsingleorientation
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - orientation
+      summary: delete orientation
+      operationId: deleteorientation
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/words:
+    post:
+      tags:
+        - words
+      summary: createWord
+      operationId: createWord
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - words
+      summary: get all words
+      operationId: getallwords
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/words/1:
+    get:
+      tags:
+        - words
+      summary: getSingleWord
+      operationId: getSingleWord
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - words
+      summary: updateWord
+      operationId: updateWord
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/words/§:
+    delete:
+      tags:
+        - words
+      summary: deleteWord
+      operationId: deleteWord
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/references:
+    post:
+      tags:
+        - reference
+      summary: create reference
+      operationId: createreference
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - reference
+      summary: get all references
+      operationId: getallreferences
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - reference
+      summary: delete reference
+      operationId: deletereference
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/references/1:
+    get:
+      tags:
+        - reference
+      summary: get single reference
+      operationId: getsinglereference
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - reference
+      summary: update reference
+      operationId: updatereference
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/no/crud:
+    post:
+      tags:
+        - course
+      summary: create
+      operationId: create
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - course
+      summary: get all crud
+      operationId: getallcrud
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/no/domain:
+    post:
+      tags:
+        - course
+      summary: create domain
+      operationId: createdomain
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - course
+      summary: get all domain
+      operationId: getalldomain
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/no/tuple:
+    post:
+      tags:
+        - course
+      summary: create tuple
+      operationId: createtuple
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - course
+      summary: get all tuple
+      operationId: getalltuple
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/no/place:
+    post:
+      tags:
+        - course
+      summary: create place
+      operationId: createplace
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - course
+      summary: get all place
+      operationId: getallplace
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/no/item:
+    post:
+      tags:
+        - course
+      summary: create item
+      operationId: createitem
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - course
+      summary: get all item
+      operationId: getallitem
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/shock:
+    post:
+      tags:
+        - course
+      summary: create shock
+      operationId: createshock
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - course
+      summary: get all shock
+      operationId: getallshock
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/denial:
+    post:
+      tags:
+        - course
+      summary: create denial
+      operationId: createdenial
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - course
+      summary: get all denial
+      operationId: getalldenial
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/anger:
+    post:
+      tags:
+        - course
+      summary: create anger
+      operationId: createanger
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - course
+      summary: get all anger
+      operationId: getallanger
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/bargain:
+    post:
+      tags:
+        - course
+      summary: create bargain
+      operationId: createbargain
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - course
+      summary: get all bargain
+      operationId: getallbargain
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/depression:
+    post:
+      tags:
+        - course
+      summary: create depression
+      operationId: createdepression
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - course
+      summary: get all depression
+      operationId: getalldepression
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/testing:
+    post:
+      tags:
+        - course
+      summary: create testing
+      operationId: createtesting
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - course
+      summary: get all testing
+      operationId: getalltesting
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/acceptance:
+    post:
+      tags:
+        - course
+      summary: create acceptance
+      operationId: createacceptance
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/no/crud/1:
+    get:
+      tags:
+        - course
+      summary: get single crud
+      operationId: getsinglecrud
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - course
+      summary: update crud
+      operationId: updatecrud
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - course
+      summary: delete crud
+      operationId: deletecrud
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/no/domain/1:
+    get:
+      tags:
+        - course
+      summary: get single domain
+      operationId: getsingledomain
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - course
+      summary: update domain
+      operationId: updatedomain
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - course
+      summary: delete domain
+      operationId: deletedomain
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/no/tuple/1:
+    get:
+      tags:
+        - course
+      summary: get single tuple
+      operationId: getsingletuple
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - course
+      summary: update tuple
+      operationId: updatetuple
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - course
+      summary: delete tuple
+      operationId: deletetuple
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/no/place/1:
+    get:
+      tags:
+        - course
+      summary: get single place
+      operationId: getsingleplace
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - course
+      summary: update place
+      operationId: updateplace
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - course
+      summary: delete place
+      operationId: deleteplace
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/no/item/1:
+    get:
+      tags:
+        - course
+      summary: get single item
+      operationId: getsingleitem
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - course
+      summary: update item
+      operationId: updateitem
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/shock/1:
+    get:
+      tags:
+        - course
+      summary: get single scock
+      operationId: getsinglescock
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - course
+      summary: update shock
+      operationId: updateshock
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - course
+      summary: delete shock
+      operationId: deleteshock
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/anger/1:
+    get:
+      tags:
+        - course
+      summary: get single anger
+      operationId: getsingleanger
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - course
+      summary: update anger
+      operationId: updateanger
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - course
+      summary: delete anger
+      operationId: deleteanger
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/bargain/1:
+    get:
+      tags:
+        - course
+      summary: get single bargain
+      operationId: getsinglebargain
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - course
+      summary: delete bargain
+      operationId: deletebargain
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/testing/1:
+    get:
+      tags:
+        - course
+      summary: get single testing
+      operationId: getsingletesting
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - course
+      summary: update testing
+      operationId: updatetesting
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - course
+      summary: delete testing
+      operationId: deletetesting
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/acceptance/1:
+    get:
+      tags:
+        - course
+      summary: get single acceptance
+      operationId: getsingleacceptance
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - course
+      summary: update acceptance
+      operationId: updateacceptance
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - course
+      summary: delete acceptance
+      operationId: deleteacceptance
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/denial/1:
+    patch:
+      tags:
+        - course
+      summary: update denial
+      operationId: updatedenial
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - course
+      summary: delete denial
+      operationId: deletedenial
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/depression/1:
+    patch:
+      tags:
+        - course
+      summary: update depression
+      operationId: updatedepression
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - course
+      summary: delete depression
+      operationId: deletedepression
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /api/v1/courses/so/item/1:
+    delete:
+      tags:
+        - course
+      summary: delete item
+      operationId: deleteitem
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+components:
+  schemas:
+    registerv0.1.3request:
+      title: registerv0.1.3request
+      required:
+        - name
+        - email
+        - password
+        - lastName
+        - location
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        lastName:
+          type: string
+        location:
+          type: string
+      example:
+        name: Bubbles McLaughster
+        email: test@test.com
+        password: secret123
+        lastName: Ticklebottom
+        location: Giggle City
+    loginv0.1.3request:
+      title: loginv0.1.3request
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: test@test.com
+        password: secret123
+    update-userv0.1.4request:
+      title: update-userv0.1.4request
+      required:
+        - name
+        - email
+        - password
+        - location
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        location:
+          type: string
+      example:
+        name: name2
+        email: name2@gmail.com
+        password: secret123
+        location: there
+    createachievementrequest:
+      title: createachievementrequest
+      required:
+        - description
+        - status
+        - points
+        - type
+        - dateOfCompletion
+        - createdBy
+      type: object
+      properties:
+        description:
+          type: string
+        status:
+          type: string
+        points:
+          type: integer
+          format: int32
+        type:
+          type: string
+        dateOfCompletion:
+          type: string
+          nullable: true
+        createdBy:
+          type: string
+      example:
+        description: do this
+        status: inactive
+        points: 1
+        type: progressive
+        dateOfCompletion: null
+        createdBy: 652411368872b95096dc2c9b
+    createachievementathenticatedrequest:
+      title: createachievementathenticatedrequest
+      required:
+        - description
+        - status
+        - points
+        - type
+        - dateOfCompletion
+      type: object
+      properties:
+        description:
+          type: string
+        status:
+          type: string
+        points:
+          type: integer
+          format: int32
+        type:
+          type: string
+        dateOfCompletion:
+          type: string
+          nullable: true
+      example:
+        description: do this
+        status: inactive
+        points: 0
+        type: progressive
+        dateOfCompletion: null
+    updaterequest:
+      title: updaterequest
+      required:
+        - description
+        - status
+        - type
+      type: object
+      properties:
+        description:
+          type: string
+        status:
+          type: string
+        type:
+          type: string
+      example:
+        description: do that
+        status: inactive
+        type: exploration
+    NewRequestRequest:
+      title: NewRequestRequest
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+      example:
+        name: userName
+    createsignrequest:
+      title: createsignrequest
+      required:
+        - title
+        - price
+        - description
+        - category
+        - company
+        - colors
+      type: object
+      properties:
+        title:
+          type: string
+        price:
+          type: integer
+          format: int32
+        description:
+          type: string
+        category:
+          type: string
+        company:
+          type: string
+        colors:
+          type: array
+          items:
+            type: string
+          description: ''
+      example:
+        title: tst
+        price: 1
+        description: des
+        category: work
+        company: ikea
+        colors:
+          - '#ff000'
+          - '#00ff00'
+          - '#0000ff'
+    updatesignrequest:
+      title: updatesignrequest
+      required:
+        - title
+        - price
+        - description
+        - category
+        - company
+        - colors
+      type: object
+      properties:
+        title:
+          type: string
+        price:
+          type: integer
+          format: int32
+        description:
+          type: string
+        category:
+          type: string
+        company:
+          type: string
+        colors:
+          type: array
+          items:
+            type: string
+          description: ''
+      example:
+        title: tst
+        price: 1
+        description: des!!
+        category: work
+        company: marcos
+        colors:
+          - '#ff000'
+          - '#00ff00'
+          - '#0000ff'
+    CreateReviewRequest:
+      title: CreateReviewRequest
+      required:
+        - sign
+        - rating
+        - title
+        - comment
+      type: object
+      properties:
+        sign:
+          type: string
+        rating:
+          type: integer
+          format: int32
+        title:
+          type: string
+        comment:
+          type: string
+      example:
+        sign: 6553667dd025a6b567cdc7cb
+        rating: 1
+        title: bad product
+        comment: very. very bad product
+    UpdatereviewRequest:
+      title: UpdatereviewRequest
+      required:
+        - rating
+        - title
+        - comment
+      type: object
+      properties:
+        rating:
+          type: integer
+          format: int32
+        title:
+          type: string
+        comment:
+          type: string
+      example:
+        rating: 2
+        title: alright
+        comment: decent
+    creatOrderRequest:
+      title: creatOrderRequest
+      required:
+        - tax
+        - shippingFee
+        - items
+      type: object
+      properties:
+        tax:
+          type: integer
+          format: int32
+        shippingFee:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+          description: ''
+      example:
+        tax: 499
+        shippingFee: 799
+        items:
+          - title: accent chair
+            price: 2599
+            image: /uploads/example.jpeg
+            amount: 14
+            sign: 6553667dd025a6b567cdc7cb
+          - title: accent chair
+            price: 2577
+            image: /uploads/example.jpeg
+            amount: 18
+            sign: 655378f3db45bad0d819b804
+    Item:
+      title: Item
+      required:
+        - title
+        - price
+        - image
+        - amount
+        - sign
+      type: object
+      properties:
+        title:
+          type: string
+        price:
+          type: integer
+          format: int32
+        image:
+          type: string
+        amount:
+          type: integer
+          format: int32
+        sign:
+          type: string
+      example:
+        title: accent chair
+        price: 2599
+        image: /uploads/example.jpeg
+        amount: 14
+        sign: 6553667dd025a6b567cdc7cb
+    updateOrderRequest:
+      title: updateOrderRequest
+      required:
+        - paymentIntentId
+      type: object
+      properties:
+        paymentIntentId:
+          type: string
+      example:
+        paymentIntentId: someRandomId
+tags:
+  - name: User
+  - name: testDepricated
+  - name: Achivements
+  - name: effectiveValidationData i2L3
+  - name: Sign
+  - name: Review
+  - name: Orders
+  - name: prefix
+  - name: orientation
+  - name: words
+  - name: reference
+  - name: course
