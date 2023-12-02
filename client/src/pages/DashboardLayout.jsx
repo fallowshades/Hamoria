@@ -17,12 +17,13 @@ import customFetch from '../utils/customFetch'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-import { Loading } from '../components'
+import { Loading, Footer } from '../components'
 import { useQuery } from '@tanstack/react-query'
 import { Header, WhatSidebar, WhatSidebarBig } from '../components'
 
 import { useDispatch } from 'react-redux'
 import { toggleTheme } from '../features/user/userSlice'
+
 const userQuery = {
   queryKey: ['user'],
   queryFn: async () => {
@@ -151,6 +152,7 @@ const DashboardLayout = ({
             <div className="dashboard-page">
               {isPageLoading ? <Loading /> : <Outlet context={{ user }} />}
             </div>
+            <Footer />
           </div>
           {activeLeftSidebar ? null : (
             <div>

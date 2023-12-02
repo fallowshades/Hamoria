@@ -423,4 +423,6 @@ Pages: (utils\foraignArray, constants, \* diff population, utils\mockWhat, utils
 ---[] word with prefix
 ---[] sign/handstatus with orientation
 
-### basic crud for each parent and child and reference v0.5.6
+### front and back troubleshot v0.5.6
+
+[]footer

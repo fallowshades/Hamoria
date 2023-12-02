@@ -1,191 +1,127 @@
-# populate moc v0.5.6
+# v0.5.6
 
-## populate before crud ^^
+## footer element
 
-### populate orientation and prefix
+### links
 
-#### orientation
-
-create utils\mockOrientationData.json (later move to mocData folder)
-
-populateOrientation.js
+#### create footer links
 
 ```js
-import { readFile } from 'fs/promises'
-import mongoose from 'mongoose'
-import dotenv from 'dotenv'
-import Orientation from './models/orientationModel.js'
-dotenv.config()
-try {
-  await mongoose.connect(process.env.MONGO_URL)
-  const jsonOrientation = JSON.parse(
-    await readFile(new URL('./utils/mockOrientationData.json', import.meta.url))
+//we
+import { MdOutlineEventNote } from 'react-icons/md'
+import { FcAbout } from 'react-icons/fc'
+import { RiNewspaperLine } from 'react-icons/ri'
+import { IoIosHelpCircleOutline } from 'react-icons/io'
+import { GoCodeOfConduct } from 'react-icons/go'
+import { LiaCookieBiteSolid } from 'react-icons/lia'
+
+export const footerLinks = [
+  { id: 1, path: 'about-us', text: 'about', icon: <FcAbout /> },
+  { id: 2, path: 'events', text: 'events', icon: <MdOutlineEventNote /> },
+  { id: 3, path: 'news', text: 'news', icon: <RiNewspaperLine /> },
+  { id: 4, path: 'help', text: 'help', icon: <IoIosHelpCircleOutline /> },
+  {
+    id: 5,
+    path: 'terms-and-conditions',
+    text: 'terms and conditions',
+    icon: <GoCodeOfConduct />,
+  },
+  {
+    id: 6,
+    path: 'cookie-setting',
+    text: 'cookie setting',
+    icon: <LiaCookieBiteSolid />,
+  },
+]
+```
+
+#### weLink
+
+```js
+import { footerLinks } from '../utils/links'
+import { NavLink } from 'react-router-dom'
+const WeLinks = () => {
+  return (
+    <div className="nav-links">
+      {footerLinks.map((link) => {
+        const { text, path, icon } = link
+        return (
+          <NavLink to={path} key={text} className="nav-link" end>
+            <span className="icon">{icon}</span>
+            {text}
+          </NavLink>
+        )
+      })}
+    </div>
   )
-  const manyOrientation = jsonOrientation.map((orientation) => {
-    return { ...orientation }
-  })
-  //await Orientation.deleteMany()
-  //await Orientation.create(manyOrientation)
-  console.log('Success!!!')
-  process.exit(0)
-} catch (error) {
-  console.log(error)
-  process.exit(1)
 }
+export default WeLinks
 ```
 
-#### convenient match id for populate
+### footer
 
-OrientationModel, prefixModel, wordModel create id
+####
+
+Footer.jsx
 
 ```js
-{ orderid: {
-    type: String,
-  },}
-```
-
-#### constants considerations
-
-constats string should be lowarcase because convertion tools
-
-crea mockWhat folder
-
-.gitignore
-
-```txt
-/utils/mockWhat/*
-```
-
-### populate word and sign
-
-#### prepare sign aswell as word foraign nested data props
-
-create utils\foraignArrays.js
-
-signModel.js
-
-```js
-import {
-  singleHandOrientation,
-  singleHandPrefix,
-} from '../utils/foraignArrays.js'
-```
-
-utils\foraignArrays.js
-
-```js
-import mongoose from 'mongoose'
-import { ORIENTATION, HAND_VARIANTS } from '../utils/constants.js'
-
-export const singleHandOrientation = mongoose.Schema({
-  orderid: { type: String },
-  fingerdirection: {
-    type: String,
-    enum: Object.values(ORIENTATION),
-    default: ORIENTATION.NULL,
-  },
-  fingerdirection2: {
-    type: String,
-    enum: Object.values(ORIENTATION),
-    default: ORIENTATION.NULL,
-  },
-  palmdirection: {
-    type: String,
-    enum: Object.values(ORIENTATION),
-    default: ORIENTATION.NULL,
-  },
-  palmdirection2: {
-    type: String,
-    enum: Object.values(ORIENTATION),
-    default: ORIENTATION.NULL,
-  },
-
-  orientation: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'orientation',
-    required: true,
-  },
-})
-
-export const singleHandPrefix = mongoose.Schema({
-  orderid: {
-    type: String,
-  },
-  position: { type: String, required: true },
-  hand: { type: String, enum: [HAND_VARIANTS], required: true },
-  prefix: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'prefix',
-    required: true,
-  },
-})
-
-export const singleHandForm = mongoose.Schema({})
-```
-
-#### populate word
-
-populateword.js
-
-```js
-import { readFile } from 'fs/promises'
-import mongoose from 'mongoose'
-import dotenv from 'dotenv'
-import Prefix from './models/prefixModel.js'
-
-import Word from './models/wordModel.js'
-
-dotenv.config()
-console.log('start')
-try {
-  await mongoose.connect(process.env.MONGO_URL)
-
-  const prefixes = await Prefix.find({})
-  // console.log(prefixes)
-
-  const jsonWord = JSON.parse(
-    await readFile(
-      new URL('./utils/mockWhat/mockWord150Data.json', import.meta.url)
-    )
+import WeLinks from './WeLinks'
+import Wrapper from '../assets/wrappers/Footer'
+import Logo from './Logo'
+import { useState } from 'react'
+const Footer = () => {
+  const [showFooter, setShowFooter] = useState(true)
+  return (
+    <Wrapper>
+      <div
+        className={
+          showFooter ? 'footer-container' : 'footer-container show-footer'
+        }
+      >
+        <div className="content">
+          <header>
+            <Logo />
+          </header>
+          <WeLinks />
+        </div>
+      </div>
+    </Wrapper>
   )
-
-  const updatedWords = jsonWord.map((word) => {
-    if (
-      word.prefix_id &&
-      prefixes.some((prefix) => prefix.Connectionid === word.prefix_id)
-    ) {
-      const connection = prefixes.find(
-        (prefix) => prefix.Connectionid == word.prefix_id
-      )
-      console.log({ connection })
-      return {
-        ...word,
-        prefixid: {
-          connection_id: connection.Connectionid,
-          position: connection.position,
-          hand: connection.hand,
-        },
-      }
-    }
-    return { ...word }
-  })
-
-  await Word.deleteMany()
-  await Word.create(jsonPrefix)
-  console.log('Success!!!')
-  process.exit(0)
-} catch (error) {
-  console.log(error)
-  process.exit(1)
 }
+export default Footer
 ```
 
-### uh the nested parts
-
-signModel.js
+index.js
 
 ```js
-   orderid: [singleHandOrientation],
+export { default as Footer } from './Footer'
 ```
 
-... list goes on
+DashboardLayout
+
+```js
+import { Loading, Footer } from '../components'
+
+<div className="dashboard-page">
+              {isPageLoading ? <Loading /> : <Outlet context={{ user }} />}
+            </div>
+            <Footer />
+```
+
+#### Footer css
+
+Footer.js
+
+```js
+import styled from 'styled-components'
+const Wrapper = styled.footer`
+  background: var(--background-secondary-color);
+  .content {
+    display: flex;
+    flex-direction: row;
+  }
+`
+export default Wrapper
+```
+
+##
