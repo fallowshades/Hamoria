@@ -1,5 +1,10 @@
 import mongoose from 'mongoose'
 import { SIGN_COMPANY, SIGN_CATEGORY } from '../utils/constants.js'
+import {
+  singleHandOrientation,
+  singleHandPrefix,
+} from '../utils/foraignArrays.js'
+
 const SignSchema = new mongoose.Schema(
   {
     title: {

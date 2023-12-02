@@ -4,7 +4,7 @@ import { HAND_VARIANTS } from '../utils/constants.js'
 
 // Define a Mongoose schema
 const PrefixSchema = new mongoose.Schema({
-  orderid: {
+  Connectionid: {
     type: String,
   },
   position: { type: String, required: true },
