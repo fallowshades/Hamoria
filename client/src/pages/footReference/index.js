@@ -1,0 +1,5 @@
+export { default as CookieSetting } from './CookieSetting'
+export { default as Events } from './Events'
+export { default as Help } from './Help'
+export { default as News } from './News'
+export { default as TermsAndConditions } from './TermsAndConditions'

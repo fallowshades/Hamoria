@@ -32,6 +32,14 @@ import {
   Cart,
 } from './pages'
 
+import {
+  CookieSetting,
+  Events,
+  Help,
+  News,
+  TermsAndConditions,
+} from './pages/footReference'
+
 import { action as registerAction } from './pages/Register'
 import { action as loginAction } from './pages/Login'
 import { loader as dashboardLoader } from './pages/DashboardLayout'
@@ -173,6 +181,26 @@ const router = createBrowserRouter([
             path: 'orders',
             element: <Orders />,
             loader: ordersLoader(store, queryClient),
+          },
+          {
+            path: 'cookie-setting',
+            element: CookieSetting,
+          },
+          {
+            path: 'events',
+            element: Events,
+          },
+          {
+            path: 'help',
+            element: Help,
+          },
+          {
+            path: 'news',
+            element: News,
+          },
+          {
+            path: 'terms-and-conditions',
+            element: TermsAndConditions,
           },
         ],
       },

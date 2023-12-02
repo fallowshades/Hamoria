@@ -37,7 +37,7 @@ export const whatlinks = [
 ]
 
 export const footerLinks = [
-  { id: 1, path: 'about-us', text: 'about', icon: <FcAbout /> },
+  { id: 1, path: 'about', text: 'about', icon: <FcAbout /> },
   { id: 2, path: 'events', text: 'events', icon: <MdOutlineEventNote /> },
   { id: 3, path: 'news', text: 'news', icon: <RiNewspaperLine /> },
   { id: 4, path: 'help', text: 'help', icon: <IoIosHelpCircleOutline /> },
