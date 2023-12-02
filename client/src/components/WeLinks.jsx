@@ -1,9 +1,10 @@
 import { footerLinks } from '../utils/links'
 import { NavLink } from 'react-router-dom'
-const WeLinks = () => {
+const WeLinks = ({ startIndex, endIndex }) => {
+  const linksInRange = footerLinks.slice(startIndex, endIndex + 1)
   return (
     <div className="nav-links">
-      {footerLinks.map((link) => {
+      {linksInRange.map((link) => {
         const { text, path, icon } = link
 
         return (

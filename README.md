@@ -124,4 +124,31 @@ const Wrapper = styled.footer`
 export default Wrapper
 ```
 
-##
+### footer layout
+
+Footer.jsx
+
+```js
+const Footer = () => {
+  return (
+    <div className="content">
+      <div className="link-column">
+        <WeLinks startIndex={0} endIndex={2} />
+      </div>
+      <div className="link-column">
+        <WeLinks startIndex={3} endIndex={6} />
+      </div>
+    </div>
+  )
+}
+```
+
+Welinks.jsx
+
+```js
+const WeLinks = ({ startIndex, endIndex }) => {
+  const linksInRange = footerLinks.slice(startIndex, endIndex + 1)
+
+   {linksInRange.map((link) => {...})}
+}
+```

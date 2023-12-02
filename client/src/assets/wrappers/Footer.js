@@ -6,6 +6,9 @@ const Wrapper = styled.footer`
   .content {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    gap: 2em;
   }
 `
 

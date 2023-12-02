@@ -16,7 +16,14 @@ const Footer = () => {
           <header>
             <Logo />
           </header>
-          <WeLinks />
+          <div className="content">
+            <div className="link-column">
+              <WeLinks startIndex={0} endIndex={2} />
+            </div>
+            <div className="link-column">
+              <WeLinks startIndex={3} endIndex={6} />
+            </div>
+          </div>
         </div>
       </div>
     </Wrapper>
