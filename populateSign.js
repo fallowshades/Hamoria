@@ -11,8 +11,6 @@ console.log('start')
 try {
   await mongoose.connect(process.env.MONGO_URL)
 
-  const prefixes = await Prefix.find({})
-  console.log(prefixes)
   const orientations = await Orientation.find({})
   console.log(orientations)
   const jsonSign = JSON.parse(
@@ -22,11 +20,20 @@ try {
   )
 
   const Signs = jsonSign.map((sign) => {
-    const prefixSigns = prefixes.filter(
-      (prefix) => prefix.orderid == sign.orderid
+    const correspondingOrder2 = orientations.find(
+      (order) => order.orderid === sign.orderid
     )
 
-    return { ...sign, prefixSigns }
+    return {
+      ...sign,
+      order: {
+        fingerdirection: correspondingOrder2.fingerdirection,
+        fingerdirection2: correspondingOrder2.fingerdirection2,
+        palmdirection: correspondingOrder2.palmdirection,
+        palmdirection2: correspondingOrder2.palmdirection2,
+        singlehandform: correspondingOrder2.singlehandform,
+      },
+    }
   })
   console.log(Signs)
 
