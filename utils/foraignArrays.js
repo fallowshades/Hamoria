@@ -44,4 +44,19 @@ export const singleHandPrefix = mongoose.Schema({
   },
 })
 
-export const singleHandForm = mongoose.Schema({})
+export const singleHandForm = mongoose.Schema({
+  orderId: String,
+  active_hand: String,
+  aktive_hand2: String,
+  passive_hand2: String,
+  singlehandform: String,
+})
+
+export const references = mongoose.Schema({
+  orderid: String,
+  position: String,
+  bodyContact: String,
+  touch: String,
+  faceexpression: String,
+  Link: String,
+})
