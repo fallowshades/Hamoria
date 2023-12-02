@@ -4,6 +4,9 @@ import { HAND_VARIANTS } from '../utils/constants.js'
 
 // Define a Mongoose schema
 const PrefixSchema = new mongoose.Schema({
+  Connectionid: {
+    type: String,
+  },
   position: { type: String, required: true },
   hand: { type: String, enum: [HAND_VARIANTS], required: true },
 })

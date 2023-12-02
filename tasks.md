@@ -387,7 +387,11 @@ Pages: (AchievementContainer, PageBtnContainer)
 
 ### add hand orientation db v0.5.1
 
-### add course query database db v0.5.2
+### add word db v0.5.2
+
+### add reference db v0.5.3
+
+### add course db v0.5.4
 
 []no routes
 ---[] crud controller
@@ -397,10 +401,26 @@ Pages: (AchievementContainer, PageBtnContainer)
 ---[] item controller
 []so routes
 
-### add word db v0.5.3
+### documentation tools v0.5.5
 
-### add reference db v0.5.4
+pages: (swagger.ymal, app)
 
-### add course db v0.5.5
+[]generate api docs with swagger
+---[]export json from postmon
+---[] create ymal with apimatic
+---[] import dependences to server documentation
 
-### documentation tools v0.5.6
+### populate moc v0.5.6
+
+Pages: (utils\foraignArray, constants, \* diff population, utils\mockWhat, utils\constats )
+
+[]dependencies for 2 different layers
+---[]populate prefix
+---[] populate orientation
+---[]populate reference
+
+[]populate with dependence
+---[] word with prefix
+---[] sign/handstatus with orientation
+
+### basic crud for each parent and child and reference v0.5.6

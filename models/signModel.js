@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 import { SIGN_COMPANY, SIGN_CATEGORY } from '../utils/constants.js'
+import { singleHandOrientation } from '../utils/foraignArrays.js'
+
 const SignSchema = new mongoose.Schema(
   {
     title: {
@@ -45,6 +47,7 @@ const SignSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    orderid: [singleHandOrientation],
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 )

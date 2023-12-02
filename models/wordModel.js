@@ -1,6 +1,9 @@
 import mongoose from 'mongoose'
 
+import { singleHandPrefix } from '../utils/foraignArrays.js'
+
 const WordSchema = new mongoose.Schema({
+  orderID: String,
   word: {
     type: String,
     required: true,
@@ -13,6 +16,7 @@ const WordSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  prefixid: [singleHandPrefix],
 })
 
 export default mongoose.model('word', WordSchema)
