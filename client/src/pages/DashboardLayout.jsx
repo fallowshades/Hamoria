@@ -142,10 +142,10 @@ const DashboardLayout = ({
         {user.name == 'Chuckleberry' ? <Header /> : null}
         <main className="dashboard">
           {activeLeftSidebar ? (
-            <div>
+            <>
               <SmallSidebar />
               <BigSidebar />
-            </div>
+            </>
           ) : null}
           <div>
             <Navbar />
@@ -155,10 +155,10 @@ const DashboardLayout = ({
             <Footer />
           </div>
           {activeLeftSidebar ? null : (
-            <div>
+            <>
               <WhatSidebar />
               <WhatSidebarBig />
-            </div>
+            </>
           )}
         </main>
       </Wrapper>

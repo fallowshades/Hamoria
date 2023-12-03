@@ -1,12 +1,12 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 const Wrapper = styled.aside`
   display: none;
   @media (min-width: 992px) {
     display: block;
     box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.1);
+    background: var(--background-secondary-color);
     .sidebar-container {
-      background: var(--background-secondary-color);
       min-height: 100vh;
       height: 100%;
       width: 250px;
@@ -58,5 +58,5 @@ const Wrapper = styled.aside`
       background: var(--background-color);
     }
   }
-`;
-export default Wrapper;
+`
+export default Wrapper

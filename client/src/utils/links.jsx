@@ -15,11 +15,16 @@ import {
 } from 'react-icons/fa6'
 import { PiHandbagBold } from 'react-icons/pi'
 //we
-import { FcAbout } from 'react-icons/fc'
+
 import { RiNewspaperLine } from 'react-icons/ri'
 import { IoIosHelpCircleOutline } from 'react-icons/io'
 import { GoCodeOfConduct } from 'react-icons/go'
 import { LiaCookieBiteSolid } from 'react-icons/lia'
+
+import { SiSemanticweb } from 'react-icons/si'
+import { VscReferences } from 'react-icons/vsc'
+import { PiHandEye } from 'react-icons/pi'
+import { FaHandPointer } from 'react-icons/fa'
 
 export const links = [
   { text: 'add Achievement', path: '.', icon: <FaWpforms /> },
@@ -43,7 +48,7 @@ export const whatlinks = [
 ]
 
 export const footerLinks = [
-  { id: 1, path: 'about', text: 'about', icon: <FcAbout /> },
+  { id: 1, path: 'about', text: 'about', icon: <FaRegQuestionCircle /> },
   { id: 2, path: 'events', text: 'events', icon: <MdOutlineEventNote /> },
   { id: 3, path: 'news', text: 'news', icon: <RiNewspaperLine /> },
   { id: 4, path: 'help', text: 'help', icon: <IoIosHelpCircleOutline /> },
@@ -58,5 +63,23 @@ export const footerLinks = [
     path: 'cookie-setting',
     text: 'cookie setting',
     icon: <LiaCookieBiteSolid />,
+  },
+]
+
+export const partLinks = [
+  { id: 1, path: 'reference', text: 'reference', icon: <VscReferences /> },
+  { id: 2, path: 'word', text: 'word', icon: <SiSemanticweb /> },
+  { id: 3, path: 'orientation', text: 'orientation', icon: <FaHandPointer /> },
+  {
+    id: 4,
+    path: 'hand-status',
+    text: 'hand status',
+    icon: <PiHandEye />,
+  },
+  {
+    id: 5,
+    path: 'prefix',
+    text: 'terms and conditions',
+    icon: <GoCodeOfConduct />,
   },
 ]

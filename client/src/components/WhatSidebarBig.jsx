@@ -2,6 +2,7 @@ import WhatNavLinks from './WhatNavLinks'
 import { Logo } from '../components'
 import Wrapper from '../assets/wrappers/BigWhatSidebar'
 import { useDashboardContext } from '../pages/DashboardLayout'
+import HandPartContainer from './HandPartContainer'
 
 const WhatSidebarBig = () => {
   const { showSidebar } = useDashboardContext()
@@ -17,6 +18,7 @@ const WhatSidebarBig = () => {
             <Logo />
           </header>
           <WhatNavLinks isBigSidebar />
+          <HandPartContainer />
         </div>
       </div>
     </Wrapper>
