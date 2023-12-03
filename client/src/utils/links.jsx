@@ -3,11 +3,17 @@ import React from 'react'
 //who
 import { IoBarChartSharp } from 'react-icons/io5'
 import { MdQueryStats, MdOutlineEventNote } from 'react-icons/md'
-import { FaWpforms } from 'react-icons/fa'
+import { FaWpforms, FaRegQuestionCircle } from 'react-icons/fa'
 import { ImProfile } from 'react-icons/im'
 import { MdAdminPanelSettings } from 'react-icons/md'
 //what
-
+import { TbHome } from 'react-icons/tb'
+import {
+  FaHands,
+  FaHandsHoldingCircle,
+  FaHandshakeSimple,
+} from 'react-icons/fa6'
+import { PiHandbagBold } from 'react-icons/pi'
 //we
 import { FcAbout } from 'react-icons/fc'
 import { RiNewspaperLine } from 'react-icons/ri'
@@ -28,12 +34,12 @@ export const links = [
 ]
 
 export const whatlinks = [
-  { id: 1, path: '.', text: 'home', icon: <IoBarChartSharp /> },
-  { id: 2, path: 'about', text: 'about', icon: <IoBarChartSharp /> },
-  { id: 3, path: 'all-signs', text: 'signs', icon: <IoBarChartSharp /> },
-  { id: 4, path: 'cart', text: 'cart', icon: <IoBarChartSharp /> },
-  { id: 5, path: 'checkout', text: 'checkout', icon: <IoBarChartSharp /> },
-  { id: 6, path: 'orders', text: 'orders', icon: <IoBarChartSharp /> },
+  { id: 1, path: '.', text: 'home', icon: <TbHome /> },
+  { id: 2, path: 'about', text: 'about', icon: <FaRegQuestionCircle /> },
+  { id: 3, path: 'all-signs', text: 'signs', icon: <FaHands /> },
+  { id: 4, path: 'cart', text: 'cart', icon: <PiHandbagBold /> },
+  { id: 5, path: 'checkout', text: 'checkout', icon: <FaHandsHoldingCircle /> },
+  { id: 6, path: 'orders', text: 'orders', icon: <FaHandshakeSimple /> },
 ]
 
 export const footerLinks = [
