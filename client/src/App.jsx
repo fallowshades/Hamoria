@@ -40,6 +40,14 @@ import {
   TermsAndConditions,
 } from './pages/footReference'
 
+import {
+  HandStatus,
+  Orientation,
+  Reference,
+  Word,
+  Prefix,
+} from './pages/handparts'
+
 import { action as registerAction } from './pages/Register'
 import { action as loginAction } from './pages/Login'
 import { loader as dashboardLoader } from './pages/DashboardLayout'
@@ -201,6 +209,27 @@ const router = createBrowserRouter([
           {
             path: 'terms-and-conditions',
             element: TermsAndConditions,
+          },
+
+          {
+            path: 'reference',
+            element: Reference,
+          },
+          {
+            path: 'word',
+            element: Word,
+          },
+          {
+            path: 'orientation',
+            element: Orientation,
+          },
+          {
+            path: 'hand-status',
+            element: HandStatus,
+          },
+          {
+            path: 'prefix',
+            element: Prefix,
           },
         ],
       },

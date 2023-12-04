@@ -18,8 +18,8 @@ const WhatSidebarBig = () => {
             <Logo />
           </header>
           <WhatNavLinks isBigSidebar />
-          <HandPartContainer />
           <CoursesContainer />
+          <HandPartContainer />
         </div>
       </div>
     </Wrapper>

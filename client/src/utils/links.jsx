@@ -83,7 +83,7 @@ export const partLinks = [
   {
     id: 5,
     path: 'prefix',
-    text: 'terms and conditions',
+    text: 'prefix',
     icon: <GoCodeOfConduct />,
   },
 ]

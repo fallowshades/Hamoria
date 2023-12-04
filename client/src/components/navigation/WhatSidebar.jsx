@@ -28,8 +28,8 @@ const WhatSidebar = () => {
             </div>
 
             <div className="col2">
-              <HandPartContainer />
               <CoursesContainer />
+              <HandPartContainer />
             </div>
           </div>
         </div>
