@@ -1,10 +1,11 @@
 import { NavLink } from 'react-router-dom'
-import { partLinks } from '../utils/links'
+import { partLinks, curriculumLinks } from '../utils/links'
 
-const NavLinksNested = () => {
+const NavLinksNested = ({ coursesLinks }) => {
+  const linkesToMap = coursesLinks ? curriculumLinks : partLinks
   return (
     <>
-      {partLinks.map((link) => {
+      {linkesToMap.map((link) => {
         const { id, text, path, icon } = link
 
         return (

@@ -3,7 +3,7 @@ import { Logo } from '../components'
 import Wrapper from '../assets/wrappers/BigWhatSidebar'
 import { useDashboardContext } from '../pages/DashboardLayout'
 import HandPartContainer from './HandPartContainer'
-
+import CoursesContainer from './CoursesContainer'
 const WhatSidebarBig = () => {
   const { showSidebar } = useDashboardContext()
   return (
@@ -19,6 +19,7 @@ const WhatSidebarBig = () => {
           </header>
           <WhatNavLinks isBigSidebar />
           <HandPartContainer />
+          <CoursesContainer />
         </div>
       </div>
     </Wrapper>

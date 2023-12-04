@@ -21,11 +21,15 @@ import { IoIosHelpCircleOutline } from 'react-icons/io'
 import { GoCodeOfConduct } from 'react-icons/go'
 import { LiaCookieBiteSolid } from 'react-icons/lia'
 
+//parts
 import { SiSemanticweb } from 'react-icons/si'
 import { VscReferences } from 'react-icons/vsc'
 import { PiHandEye } from 'react-icons/pi'
 import { FaHandPointer } from 'react-icons/fa'
 
+//courses
+import { GiMaterialsScience } from 'react-icons/gi'
+import { GiHumanPyramid } from 'react-icons/gi'
 export const links = [
   { text: 'add Achievement', path: '.', icon: <FaWpforms /> },
   {
@@ -82,4 +86,31 @@ export const partLinks = [
     text: 'terms and conditions',
     icon: <GoCodeOfConduct />,
   },
+]
+
+export const curriculumLinks = [
+  { id: 1, path: 'no', text: 'no', icon: <GiMaterialsScience /> },
+  { id: 2, path: 'so', text: 'so', icon: <GiHumanPyramid /> },
+]
+
+export const noLinks = [
+  { id: 1, path: 'crud', text: 'crud', icon: <GiMaterialsScience /> },
+  { id: 2, path: 'domain', text: 'domain', icon: <GiHumanPyramid /> },
+  { id: 2, path: 'tuple', text: 'tuple', icon: <GiHumanPyramid /> },
+  { id: 2, path: 'place', text: 'place', icon: <GiHumanPyramid /> },
+  { id: 2, path: 'item', text: 'item', icon: <GiHumanPyramid /> },
+]
+
+export const soLinks = [
+  { id: 1, path: 'shock', text: 'shock', icon: <GiMaterialsScience /> },
+  { id: 2, path: 'denial', text: 'denial', icon: <GiHumanPyramid /> },
+
+  { id: 2, path: 'anger', text: 'anger', icon: <GiHumanPyramid /> },
+
+  { id: 2, path: 'bargain', text: 'bargain', icon: <GiHumanPyramid /> },
+
+  { id: 2, path: 'depression', text: 'depression', icon: <GiHumanPyramid /> },
+
+  { id: 2, path: 'testing', text: 'testing', icon: <GiHumanPyramid /> },
+  { id: 2, path: 'acceptance', text: 'acceptance', icon: <GiHumanPyramid /> },
 ]

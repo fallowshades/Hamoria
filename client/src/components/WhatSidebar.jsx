@@ -4,7 +4,7 @@ import Logo from './Logo'
 import Wrapper from '../assets/wrappers/smallWhatSidebar'
 import { useDashboardContext } from '../pages/DashboardLayout'
 import HandPartContainer from './HandPartContainer'
-
+import CoursesContainer from './CoursesContainer'
 const WhatSidebar = () => {
   const { showSidebar, toggleSidebar } = useDashboardContext()
   return (
@@ -29,6 +29,7 @@ const WhatSidebar = () => {
 
             <div className="col2">
               <HandPartContainer />
+              <CoursesContainer />
             </div>
           </div>
         </div>
