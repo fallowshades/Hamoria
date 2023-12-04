@@ -1,7 +1,7 @@
 import WhatNavLinks from './WhatNavLinks'
-import { Logo } from '../components'
-import Wrapper from '../assets/wrappers/BigWhatSidebar'
-import { useDashboardContext } from '../pages/DashboardLayout'
+import { Logo } from '..'
+import Wrapper from '../../assets/wrappers/BigWhatSidebar'
+import { useDashboardContext } from '../../pages/DashboardLayout'
 import HandPartContainer from './HandPartContainer'
 import CoursesContainer from './CoursesContainer'
 const WhatSidebarBig = () => {

@@ -346,3 +346,91 @@ const Wrapper = styled.div`
 
 export default Wrapper
 ```
+
+### course container with cirrculum links
+
+#### links to courses
+
+```js
+import { GiMaterialsScience } from 'react-icons/gi'
+import { GiHumanPyramid } from 'react-icons/gi'
+
+export const curriculumLinks = [
+  { id: 1, path: 'no', text: 'no', icon: <GiMaterialsScience /> },
+  { id: 2, path: 'so', text: 'so', icon: <GiHumanPyramid /> },
+]
+export const noLinks = [
+  { id: 1, path: 'crud', text: 'crud', icon: <GiMaterialsScience /> },
+  { id: 2, path: 'domain', text: 'domain', icon: <GiHumanPyramid /> },
+  { id: 2, path: 'tuple', text: 'tuple', icon: <GiHumanPyramid /> },
+  { id: 2, path: 'place', text: 'place', icon: <GiHumanPyramid /> },
+  { id: 2, path: 'item', text: 'item', icon: <GiHumanPyramid /> },
+]
+export const soLinks = [
+  { id: 1, path: 'shock', text: 'shock', icon: <GiMaterialsScience /> },
+  { id: 2, path: 'denial', text: 'denial', icon: <GiHumanPyramid /> },
+  { id: 2, path: 'anger', text: 'anger', icon: <GiHumanPyramid /> },
+  { id: 2, path: 'bargain', text: 'bargain', icon: <GiHumanPyramid /> },
+  { id: 2, path: 'depression', text: 'depression', icon: <GiHumanPyramid /> },
+  { id: 2, path: 'testing', text: 'testing', icon: <GiHumanPyramid /> },
+  { id: 2, path: 'acceptance', text: 'acceptance', icon: <GiHumanPyramid /> },
+]
+```
+
+#### course container
+
+```js
+const CoursesContainer = () => {
+  const [showCourses, setShowCourses] = useState(false)
+  return (
+    <Wrapper className="nav-link">
+      <button
+        type="button"
+        className="toggle-btn"
+        onClick={() => setShowCourses(!showCourses)}
+      >
+        {showCourses ? <FaPeopleRoof /> : <FaPeopleRoof />}
+        Courses
+      </button>
+      <div className={showCourses ? 'dropdown show-dropdown' : 'dropdown'}>
+        <NavLinksNested coursesLinks />
+      </div>
+      <FaCaretDown />
+    </Wrapper>
+  )
+}
+export default CoursesContainer
+```
+
+NavLinksNested.jsx
+
+```js
+import { partLinks, curriculumLinks } from '../utils/links'
+
+const NavLinksNested = ({ coursesLinks }) => {
+  const linkesToMap = coursesLinks ? curriculumLinks : partLinks
+  {
+    linkesToMap.map((link) => {...})
+  }
+}
+```
+
+#### connect to sidebar
+
+WhatSidebar.jsx and WhatSidebarBig.jsx
+
+```js
+
+import CoursesContainer from './CoursesContainer'
+
+const whatSidebar(){
+  return(<div className="col2">
+              <HandPartContainer />
+              <CoursesContainer />
+            </div>)
+}
+```
+
+### Refracture
+
+navigational folder in /components

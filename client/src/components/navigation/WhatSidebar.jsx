@@ -1,8 +1,8 @@
 import { FaTimes } from 'react-icons/fa'
 import WhatNavLinks from './WhatNavLinks'
-import Logo from './Logo'
-import Wrapper from '../assets/wrappers/smallWhatSidebar'
-import { useDashboardContext } from '../pages/DashboardLayout'
+import Logo from '../Logo'
+import Wrapper from '../../assets/wrappers/smallWhatSidebar'
+import { useDashboardContext } from '../../pages/DashboardLayout'
 import HandPartContainer from './HandPartContainer'
 import CoursesContainer from './CoursesContainer'
 const WhatSidebar = () => {

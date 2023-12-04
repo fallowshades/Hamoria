@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { FaCaretDown } from 'react-icons/fa'
 import { FaHandScissors } from 'react-icons/fa'
-import Wrapper from '../assets/wrappers/SidebarContainer'
+import Wrapper from '../../assets/wrappers/SidebarContainer'
 
 import NavLinksNested from './NavLinksNested'
 const HandPartContainer = () => {

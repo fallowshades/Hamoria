@@ -1,5 +1,5 @@
-import { useDashboardContext } from '../pages/DashboardLayout'
-import { whatlinks } from '../utils/links'
+import { useDashboardContext } from '../../pages/DashboardLayout'
+import { whatlinks } from '../../utils/links'
 import { NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 

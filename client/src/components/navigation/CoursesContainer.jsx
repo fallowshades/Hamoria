@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { FaCaretDown } from 'react-icons/fa'
-import Wrapper from '../assets/wrappers/SidebarContainer'
+import Wrapper from '../../assets/wrappers/SidebarContainer'
 import { FaPeopleRoof } from 'react-icons/fa6'
 import NavLinksNested from './NavLinksNested'
 

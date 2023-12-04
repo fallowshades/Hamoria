@@ -2,8 +2,8 @@ import { BsCart3 } from 'react-icons/bs'
 import { NavLink } from 'react-router-dom'
 
 import { Link, useNavigate } from 'react-router-dom'
-import { logoutUser } from '../features/user/userSlice'
-import { clearCart } from '../features/cart/cartSlice'
+import { logoutUser } from '../../features/user/userSlice'
+import { clearCart } from '../../features/cart/cartSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { useQueryClient } from '@tanstack/react-query'
 

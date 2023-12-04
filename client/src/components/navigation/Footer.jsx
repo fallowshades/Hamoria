@@ -1,6 +1,6 @@
 import WeLinks from './WeLinks'
-import Wrapper from '../assets/wrappers/Footer'
-import Logo from './Logo'
+import Wrapper from '../../assets/wrappers/Footer'
+import Logo from '../Logo'
 import { useState } from 'react'
 
 const Footer = () => {

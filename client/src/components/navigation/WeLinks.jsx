@@ -1,4 +1,4 @@
-import { footerLinks } from '../utils/links'
+import { footerLinks } from '../../utils/links'
 import { NavLink } from 'react-router-dom'
 const WeLinks = ({ startIndex, endIndex }) => {
   const linksInRange = footerLinks.slice(startIndex, endIndex + 1)

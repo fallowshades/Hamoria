@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { partLinks, curriculumLinks } from '../utils/links'
+import { partLinks, curriculumLinks } from '../../utils/links'
 
 const NavLinksNested = ({ coursesLinks }) => {
   const linkesToMap = coursesLinks ? curriculumLinks : partLinks
