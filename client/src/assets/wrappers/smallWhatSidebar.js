@@ -32,6 +32,16 @@ const Wrapper = styled.aside`
     align-items: center;
     flex-direction: column;
   }
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .col1,
+  .col2 {
+    width: 100%;
+    border: 1px solid red;
+  }
   .close-btn {
     position: absolute;
     top: 10px;
