@@ -1,4 +1,8 @@
 const Reference = () => {
-  return <div>Reference</div>
+  return (
+    <div>
+      <p>Reference</p>
+    </div>
+  )
 }
 export default Reference

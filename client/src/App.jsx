@@ -48,6 +48,18 @@ import {
   Prefix,
 } from './pages/handparts'
 
+import {
+  Shock,
+  Denial,
+  Anger,
+  Bargain,
+  Depression,
+  Testing,
+  Acceptance,
+} from './pages/courses/so'
+
+import { Crud, Domain, Tuple, Place, Item } from './pages/courses/no'
+
 import { action as registerAction } from './pages/Register'
 import { action as loginAction } from './pages/Login'
 import { loader as dashboardLoader } from './pages/DashboardLayout'
@@ -192,44 +204,92 @@ const router = createBrowserRouter([
           },
           {
             path: 'cookie-setting',
-            element: CookieSetting,
+            element: <CookieSetting />,
           },
           {
             path: 'events',
-            element: Events,
+            element: <Events />,
           },
           {
             path: 'help',
-            element: Help,
+            element: <Help />,
           },
           {
             path: 'news',
-            element: News,
+            element: <News />,
           },
           {
             path: 'terms-and-conditions',
-            element: TermsAndConditions,
+            element: <TermsAndConditions />,
           },
-
           {
             path: 'reference',
-            element: Reference,
+            element: <Reference />,
           },
           {
             path: 'word',
-            element: Word,
+            element: <Word />,
           },
           {
             path: 'orientation',
-            element: Orientation,
+            element: <Orientation />,
           },
           {
             path: 'hand-status',
-            element: HandStatus,
+            element: <HandStatus />,
           },
           {
             path: 'prefix',
-            element: Prefix,
+            element: <Prefix />,
+          },
+          {
+            path: 'crud',
+            element: <Crud />,
+          },
+          {
+            path: 'domain',
+            element: <Domain />,
+          },
+          {
+            path: 'tuple',
+            element: <Tuple />,
+          },
+          {
+            path: 'place',
+            element: <Place />,
+          },
+          {
+            path: 'item',
+            element: <Item />,
+          },
+          {
+            path: 'shock',
+            element: <Shock />,
+          },
+          {
+            path: 'denial',
+            element: <Denial />,
+          },
+          {
+            path: 'anger',
+            element: <Anger />,
+          },
+          {
+            path: 'bargain',
+            element: <Bargain />,
+          },
+          {
+            path: 'depression',
+            element: <Depression />,
+          },
+          {
+            path: 'testing',
+            element: <Testing />,
+          },
+
+          {
+            path: 'acceptance',
+            element: <Acceptance />,
           },
         ],
       },
