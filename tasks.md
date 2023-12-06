@@ -426,3 +426,5 @@ Pages: (utils\foraignArray, constants, \* diff population, utils\mockWhat, utils
 ### front and back troubleshot v0.5.6
 
 []footer
+[] sidebar
+[] setup pages

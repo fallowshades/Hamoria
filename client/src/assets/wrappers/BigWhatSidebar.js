@@ -16,7 +16,16 @@ const Wrapper = styled.aside`
     .content {
       position: sticky;
       top: 0;
+      display: flex;
+      flex-direction: column;
+      
     }
+
+    .content > div{
+      flex:   1;
+      
+    }
+
     .show-sidebar {
       margin-right 0;
     }

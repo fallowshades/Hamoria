@@ -434,3 +434,11 @@ const whatSidebar(){
 ### Refracture
 
 navigational folder in /components
+
+## setup pages for courses and parts
+
+create
+
+- ./pages/courses/no
+- ./pages/courses/no
+- ./pages/footReference
