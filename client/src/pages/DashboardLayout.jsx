@@ -124,11 +124,31 @@ const DashboardLayout = ({
     logoutUser()
   }, [isAuthError])
 
-  const [showCourses, setShowCourses] = useState(false)
+  const [showCurriculum, setShowCurriculum] = useState(false)
+  const [showCourses, setShowCourses] = useState({ no: false, so: false })
 
-  const toggleCourses = () => {
-    setShowCourses(!showCourses)
-    console.log(showCourses)
+  const toggleCourses = (course) => {
+    setShowCourses((prevState) => ({
+      ...prevState,
+      [course]: !showCourses[course],
+    }))
+    console.log(showCourses[course])
+  }
+  const resetCourses = () => {
+    setShowCourses((prevState) => {
+      // Create a new object with the same keys as showCourses
+      const resetState = Object.keys(prevState).reduce((acc, key) => {
+        acc[key] = false
+        return acc
+      }, {})
+      return resetState
+    })
+  }
+
+  const toggleCurriculum = () => {
+    setShowCurriculum(!showCurriculum)
+
+    if (showCurriculum) resetCourses()
   }
 
   return (
@@ -142,6 +162,8 @@ const DashboardLayout = ({
         logoutUser,
         toggleCourses,
         showCourses,
+        toggleCurriculum,
+        showCurriculum,
       }}
     >
       <Wrapper

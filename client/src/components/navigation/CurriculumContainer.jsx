@@ -1,5 +1,10 @@
 import NavLinksNested from './NavLinksNested'
+import CourseContainerButton from './CourseContainerButton'
 const CurriculumContainer = () => {
-  return <NavLinksNested coursesLinks />
+  return (
+    <>
+      <CourseContainerButton />
+    </>
+  )
 }
 export default CurriculumContainer

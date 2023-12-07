@@ -8,7 +8,7 @@ import CurriculumContainerButton from './CurriculumContainerButton'
 import CurriculumContainer from './CurriculumContainer'
 const WhatSidebar = () => {
   const { showSidebar, toggleSidebar } = useDashboardContext()
-  const { showCourses } = useDashboardContext()
+  const { showCourses, showCurriculum } = useDashboardContext()
   return (
     <Wrapper>
       <div
@@ -33,7 +33,9 @@ const WhatSidebar = () => {
               <CurriculumContainerButton />
 
               <div
-                className={showCourses ? 'dropdown show-dropdown' : 'dropdown'}
+                className={
+                  showCurriculum ? 'dropdown show-dropdown' : 'dropdown'
+                }
               >
                 <CurriculumContainer />
               </div>

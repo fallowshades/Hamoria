@@ -3,7 +3,7 @@ import { Logo } from '..'
 import Wrapper from '../../assets/wrappers/BigWhatSidebar'
 import { useDashboardContext } from '../../pages/DashboardLayout'
 import HandPartContainer from './HandPartContainer'
-import CurriculumContainer from './CurriculumContainerButton'
+import CurriculumContainer from './CurriculumContainer'
 const WhatSidebarBig = () => {
   const { showSidebar } = useDashboardContext()
   return (

@@ -442,3 +442,296 @@ create
 - ./pages/courses/no
 - ./pages/courses/no
 - ./pages/footReference
+
+### toogle container with curriculum
+
+#### basic container to be nested
+
+#### setup curriculum to setup courses
+
+package.json
+
+```js
+"nanoid": "^5.0.4",
+```
+
+- update all id
+
+links.jsx
+
+```js
+import { nanoid } from 'nanoid'
+```
+
+#### refracture to toggle in dashboard
+
+DashboardLayout
+
+````js
+  const [showCourses, setShowCourses] = useState(false)
+  const toggleCourses = () => {
+    setShowCourses(!showCourses)
+    console.log(showCourses)
+
+     <DashboardContext.Provider
+      value={{
+        toggleDarkTheme,
+        toggleSidebar,
+        logoutUser,
+        toggleCourses,
+        showCourses,
+      }}
+    >
+  }```
+````
+
+whatSidebar.jsx
+
+```js
+import CurriculumContainerButton from './CurriculumContainerButton'
+const { showCourses } = useDashboardContext()
+
+
+return<>...
+            <div className="col2">
+              <CurriculumContainer />
+              <CurriculumContainerButton />
+              <div
+                className={showCourses ? 'dropdown show-dropdown' : 'dropdown'}
+              >
+                <CurriculumContainer />
+              </div>
+              <>
+```
+
+CurriculumContainerButton.jsx
+
+```js
+import { useState } from 'react'
+import { FaCaretDown } from 'react-icons/fa'
+import Wrapper from '../../assets/wrappers/SidebarContainer'
+import { FaPeopleRoof } from 'react-icons/fa6'
+import NavLinksNested from './NavLinksNested'
+import CourseContainer from './CourseContainer'
+import { useEffect } from 'react'
+import { useDashboardContext } from '../../pages/DashboardLayout'
+const CurriculumContainer = () => {
+  const [dropdownHeight, setDropdownHeight] = useState('auto') // Set initial height to auto
+  const { showCourses, toggleCourses } = useDashboardContext()
+  return (
+    <Wrapper className="nav-link">
+      <button
+        type="button"
+        className="toggle-btn"
+        onClick={() => toggleCourses()}
+      >
+        {showCourses ? <FaPeopleRoof /> : <FaPeopleRoof />}
+        Courses
+      </button>
+      <FaCaretDown />
+    </Wrapper>
+  )
+}
+export default CurriculumContainer
+```
+
+#### prepare for future
+
+- create course container
+
+```js
+import { curriculumLinks } from '../../utils/links'
+import { useState } from 'react'
+import Wrapper from '../../assets/wrappers/SidebarContainer'
+import { FaCaretDown } from 'react-icons/fa'
+const CourseContainer = () => {
+  const [showCourses, setShowCourses] = useState(false)
+
+  return (
+    <div className="nav-links">
+      {curriculumLinks.map((link) => {
+        const { id, text, path, icon } = link
+
+        return (
+          <Wrapper key={id} className="nav-link">
+            <button
+              type="button"
+              className="toggle-btn"
+              onClick={() => setShowCourses(!showCourses)}
+            >
+              {showCourses ? <i>{link.icon}</i> : <i>{link.icon}</i>}
+              Courses
+            </button>
+
+            <div
+              className={showCourses ? 'dropdown show-dropdown' : 'dropdown'}
+            >
+              <p>{link.text}</p>
+            </div>
+            <FaCaretDown />
+          </Wrapper>
+        )
+      })}
+    </div>
+  )
+}
+export default CourseContainer
+```
+
+### nested collapse
+
+#### toggleble icons and future fragment application
+
+links.js
+
+```js
+import { LuBoxes, LuPersonStanding } from 'react-icons/lu'
+export const curriculumLinks = [
+  {
+    id: nanoid(),
+    fragmentId: nanoid(),
+    path: 'no',
+    text: 'no',
+    icon: <GiMaterialsScience />,
+    activeIcon: <LuBoxes />,
+  },
+  {
+    id: nanoid(),
+    fragmentId: nanoid(),
+    path: 'so',
+    text: 'so',
+    icon: <GiHumanPyramid />,
+    activeIcon: <LuPersonStanding />,
+  },
+]
+```
+
+#### cascade delete when close parent
+
+DashboardLayout.jsx
+
+````js
+ const [showCurriculum, setShowCurriculum] = useState(false)
+  const [showCourses, setShowCourses] = useState({ no: false, so: false })
+  const toggleCourses = (course) => {
+    setShowCourses((prevState) => ({
+      ...prevState,
+      [course]: !showCourses[course],
+    }))
+    console.log(showCourses[course])
+  }
+  const resetCourses = () => {
+    setShowCourses((prevState) => {
+      // Create a new object with the same keys as showCourses
+      const resetState = Object.keys(prevState).reduce((acc, key) => {
+        acc[key] = false
+        return acc
+      }, {})
+      return resetState
+    })
+  }
+  const toggleCurriculum = () => {
+    setShowCurriculum(!showCurriculum)
+       if (showCurriculum) resetCourses()
+  }
+    ```
+````
+
+#### --!update misstake of using showCourse instead of show circulum
+
+whatSidebar.jsx
+
+```js
+const { showCourses, showCurriculum } = useDashboardContext()
+
+ <div
+
+                className={
+                  showCurriculum ? 'dropdown show-dropdown' : 'dropdown'
+                }
+              >
+                <CurriculumContainer />
+              </div>
+```
+
+#### give curriculumbutton toggle icons depend on show
+
+CurriculumContainerButton
+
+--update onClick onClick={() => toggleCurriculum()}
+
+```js
+import { FaPeopleRoof, FaPeopleLine } from 'react-icons/fa6'
+
+const CurriculumContainerButton = () => {
+  const { showCurriculum, toggleCurriculum } = useDashboardContext()
+}
+```
+
+#### fragments such utelize space in parent div
+
+curriculumContainer.jsx
+
+```js
+import CourseContainerButton from './CourseContainerButton'
+const CurriculumContainer = () => {
+  return <NavLinksNested coursesLinks />
+  return (
+    <>
+      <CourseContainerButton />
+    </>
+  )
+}
+```
+
+```js
+import { useState } from 'react'
+import { FaCaretDown } from 'react-icons/fa'
+import Wrapper from '../../assets/wrappers/SidebarContainer'
+import CourseContainer from './CourseContainer'
+import { useDashboardContext } from '../../pages/DashboardLayout'
+import { curriculumLinks } from '../../utils/links'
+import React from 'react'
+
+const CourseContainerButton = () => {
+  const { showCourses, toggleCourses } = useDashboardContext()
+
+  return curriculumLinks.map((button) => {
+    const { id, text, icon, activeIcon, fragmentId } = button
+    return (
+      <React.Fragment key={fragmentId}>
+        <Wrapper key={id} className="nav-link">
+          <button
+            value={text}
+            type="button"
+            className="toggle-btn"
+            onClick={(e) => toggleCourses(e.target.value)}
+          >
+            {showCourses.text ? <span>{icon}</span> : <span>{activeIcon}</span>}
+            {text}
+          </button>
+          <FaCaretDown />
+        </Wrapper>
+
+        <div
+          key={fragmentId}
+          className={showCourses[text] ? 'dropdown show-dropdown' : 'dropdown'}
+        >
+          <CourseContainer course={text} />
+        </div>
+      </React.Fragment>
+    )
+  })
+}
+
+export default CourseContainerButton
+```
+
+CourseContainer
+
+```js
+import NavLinksNested from './NavLinksNested'
+const CourseContainer = ({ course }) => {
+  return <NavLinksNested course={course} />
+}
+```

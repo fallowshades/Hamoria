@@ -1,8 +1,12 @@
 import { NavLink } from 'react-router-dom'
-import { partLinks, curriculumLinks } from '../../utils/links'
+import { partLinks, curriculumLinks, noLinks, soLinks } from '../../utils/links'
 
-const NavLinksNested = ({ coursesLinks }) => {
-  const linkesToMap = coursesLinks ? curriculumLinks : partLinks
+const NavLinksNested = ({ curriculum, course }) => {
+  let linkesToMap = curriculum ? curriculumLinks : partLinks
+
+  if (course && course == 'so') linkesToMap = soLinks
+  if (course && course == 'no') linkesToMap = noLinks
+
   return (
     <>
       {linkesToMap.map((link) => {
@@ -20,7 +24,6 @@ const NavLinksNested = ({ coursesLinks }) => {
               <span className="icon">{icon}</span>
               {text}
             </NavLink>
-            {id}
           </div>
         )
       })}

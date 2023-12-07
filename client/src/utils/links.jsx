@@ -33,6 +33,7 @@ import { GiHumanPyramid } from 'react-icons/gi'
 
 import { nanoid } from 'nanoid'
 
+import { LuBoxes, LuPersonStanding } from 'react-icons/lu'
 export const links = [
   { text: 'add Achievement', path: '.', icon: <FaWpforms /> },
   {
@@ -117,8 +118,22 @@ export const partLinks = [
 ]
 
 export const curriculumLinks = [
-  { id: nanoid(), path: 'no', text: 'no', icon: <GiMaterialsScience /> },
-  { id: nanoid(), path: 'so', text: 'so', icon: <GiHumanPyramid /> },
+  {
+    id: nanoid(),
+    fragmentId: nanoid(),
+    path: 'no',
+    text: 'no',
+    icon: <GiMaterialsScience />,
+    activeIcon: <LuBoxes />,
+  },
+  {
+    id: nanoid(),
+    fragmentId: nanoid(),
+    path: 'so',
+    text: 'so',
+    icon: <GiHumanPyramid />,
+    activeIcon: <LuPersonStanding />,
+  },
 ]
 
 export const noLinks = [
