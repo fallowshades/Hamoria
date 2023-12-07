@@ -31,6 +31,8 @@ const Wrapper = styled.aside`
     display: flex;
     align-items: center;
     flex-direction: column;
+
+    padding-bottom: 13vh;
   }
 
   .close-btn {

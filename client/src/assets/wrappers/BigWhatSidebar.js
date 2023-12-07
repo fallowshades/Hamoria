@@ -12,6 +12,8 @@ const Wrapper = styled.aside`
       width: 250px;
       margin-right: -250px;
       transition: margin-left 0.3s ease-in-out;
+
+      padding-bottom: 13vh;
     }
     .content {
       position: sticky;
