@@ -20,7 +20,11 @@ const CourseContainerButton = () => {
             className="toggle-btn"
             onClick={(e) => toggleCourses(e.target.value)}
           >
-            {showCourses.text ? <span>{icon}</span> : <span>{activeIcon}</span>}
+            {showCourses[text] ? (
+              <span>{icon}</span>
+            ) : (
+              <span>{activeIcon}</span>
+            )}
             {text}
           </button>
           <FaCaretDown />

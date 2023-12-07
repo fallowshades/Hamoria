@@ -28,12 +28,19 @@ import { PiHandEye } from 'react-icons/pi'
 import { FaHandPointer } from 'react-icons/fa'
 
 //courses
-import { GiMaterialsScience } from 'react-icons/gi'
-import { GiHumanPyramid } from 'react-icons/gi'
+import { GiMaterialsScience, GiFamilyTree } from 'react-icons/gi'
+import { GiHumanPyramid, GiMisdirection, GiEvilMinion } from 'react-icons/gi'
 
 import { nanoid } from 'nanoid'
 
-import { LuBoxes, LuPersonStanding } from 'react-icons/lu'
+import { LuBoxes, LuBox, LuPersonStanding, LuReplaceAll } from 'react-icons/lu'
+import { FaSitemap } from 'react-icons/fa'
+import { ImShocked } from 'react-icons/im'
+import { TfiHandStop } from 'react-icons/tfi'
+import { TbMoneybag } from 'react-icons/tb'
+import { SiCodeproject, SiTestinglibrary } from 'react-icons/si'
+import { MdSwitchAccessShortcut } from 'react-icons/md'
+
 export const links = [
   { text: 'add Achievement', path: '.', icon: <FaWpforms /> },
   {
@@ -137,33 +144,38 @@ export const curriculumLinks = [
 ]
 
 export const noLinks = [
-  { id: nanoid(), path: 'crud', text: 'crud', icon: <GiMaterialsScience /> },
-  { id: nanoid(), path: 'domain', text: 'domain', icon: <GiHumanPyramid /> },
-  { id: nanoid(), path: 'tuple', text: 'tuple', icon: <GiHumanPyramid /> },
-  { id: nanoid(), path: 'place', text: 'place', icon: <GiHumanPyramid /> },
-  { id: nanoid(), path: 'item', text: 'item', icon: <GiHumanPyramid /> },
+  { id: nanoid(), path: 'crud', text: 'crud', icon: <LuBox /> },
+  { id: nanoid(), path: 'domain', text: 'domain', icon: <FaSitemap /> },
+  { id: nanoid(), path: 'tuple', text: 'tuple', icon: <GiMisdirection /> },
+  { id: nanoid(), path: 'place', text: 'place', icon: <LuReplaceAll /> },
+  { id: nanoid(), path: 'item', text: 'item', icon: <GiFamilyTree /> },
 ]
 
 export const soLinks = [
-  { id: nanoid(), path: 'shock', text: 'shock', icon: <GiMaterialsScience /> },
-  { id: nanoid(), path: 'denial', text: 'denial', icon: <GiHumanPyramid /> },
+  { id: nanoid(), path: 'shock', text: 'shock', icon: <ImShocked /> },
+  { id: nanoid(), path: 'denial', text: 'denial', icon: <TfiHandStop /> },
 
-  { id: nanoid(), path: 'anger', text: 'anger', icon: <GiHumanPyramid /> },
+  { id: nanoid(), path: 'anger', text: 'anger', icon: <GiEvilMinion /> },
 
-  { id: nanoid(), path: 'bargain', text: 'bargain', icon: <GiHumanPyramid /> },
+  { id: nanoid(), path: 'bargain', text: 'bargain', icon: <TbMoneybag /> },
 
   {
     id: nanoid(),
     path: 'depression',
     text: 'depression',
-    icon: <GiHumanPyramid />,
+    icon: <SiCodeproject />,
   },
 
-  { id: nanoid(), path: 'testing', text: 'testing', icon: <GiHumanPyramid /> },
+  {
+    id: nanoid(),
+    path: 'testing',
+    text: 'testing',
+    icon: <SiTestinglibrary />,
+  },
   {
     id: nanoid(),
     path: 'acceptance',
     text: 'acceptance',
-    icon: <GiHumanPyramid />,
+    icon: <MdSwitchAccessShortcut />,
   },
 ]

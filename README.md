@@ -735,3 +735,74 @@ const CourseContainer = ({ course }) => {
   return <NavLinksNested course={course} />
 }
 ```
+
+### fix
+
+#### nested links icon
+
+links.jsx
+
+```js
+import { GiMaterialsScience, GiFamilyTree } from 'react-icons/gi'
+import { GiHumanPyramid, GiMisdirection, GiEvilMinion } from 'react-icons/gi'
+
+import { LuBoxes, LuBox, LuPersonStanding, LuReplaceAll } from 'react-icons/lu'
+import { FaSitemap } from 'react-icons/fa'
+import { ImShocked } from 'react-icons/im'
+import { TfiHandStop } from 'react-icons/tfi'
+import { TbMoneybag } from 'react-icons/tb'
+import { SiCodeproject, SiTestinglibrary } from 'react-icons/si'
+import { MdSwitchAccessShortcut } from 'react-icons/md'
+```
+
+#### nested map conditional access
+
+--save my self from unnecessary refracture
+
+whatBigSidebar.jsx
+
+```js
+import CurriculumContainerButton from './CurriculumContainerButton'
+
+const { showSidebar, showCurriculum } = useDashboardContext()
+
+ () =>{...
+  <div className="col2">
+            <CurriculumContainerButton />
+          <CurriculumContainer />
+            <div
+              className={showCurriculum ? 'dropdown show-dropdown' : 'dropdown'}
+            >
+              <CurriculumContainer />
+            </div>
+          <HandPartContainer />
+            <HandPartContainer />
+          </div>
+ }
+```
+
+wrappers\whatBigSidbarCss.js
+
+```js
+const Wrapper = styled.aside`
+  .dropdown {
+    width: 100%;
+    text-align: center;
+    visibility: hidden;
+  }
+  .show-dropdown {
+    visibility: visible;
+  }
+  .dropdown-btn {
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+    border-color: transparent;
+    color: var(--white);
+    letter-spacing: var(--letter-spacing);
+    text-transform: capitalize;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+`
+```
