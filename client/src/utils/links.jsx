@@ -30,6 +30,9 @@ import { FaHandPointer } from 'react-icons/fa'
 //courses
 import { GiMaterialsScience } from 'react-icons/gi'
 import { GiHumanPyramid } from 'react-icons/gi'
+
+import { nanoid } from 'nanoid'
+
 export const links = [
   { text: 'add Achievement', path: '.', icon: <FaWpforms /> },
   {
@@ -43,27 +46,42 @@ export const links = [
 ]
 
 export const whatlinks = [
-  { id: 1, path: '.', text: 'home', icon: <TbHome /> },
-  { id: 2, path: 'about', text: 'about', icon: <FaRegQuestionCircle /> },
-  { id: 3, path: 'all-signs', text: 'signs', icon: <FaHands /> },
-  { id: 4, path: 'cart', text: 'cart', icon: <PiHandbagBold /> },
-  { id: 5, path: 'checkout', text: 'checkout', icon: <FaHandsHoldingCircle /> },
-  { id: 6, path: 'orders', text: 'orders', icon: <FaHandshakeSimple /> },
+  { id: nanoid(), path: '.', text: 'home', icon: <TbHome /> },
+  { id: nanoid(), path: 'about', text: 'about', icon: <FaRegQuestionCircle /> },
+  { id: nanoid(), path: 'all-signs', text: 'signs', icon: <FaHands /> },
+  { id: nanoid(), path: 'cart', text: 'cart', icon: <PiHandbagBold /> },
+  {
+    id: nanoid(),
+    path: 'checkout',
+    text: 'checkout',
+    icon: <FaHandsHoldingCircle />,
+  },
+  { id: nanoid(), path: 'orders', text: 'orders', icon: <FaHandshakeSimple /> },
 ]
 
 export const footerLinks = [
-  { id: 1, path: 'about', text: 'about', icon: <FaRegQuestionCircle /> },
-  { id: 2, path: 'events', text: 'events', icon: <MdOutlineEventNote /> },
-  { id: 3, path: 'news', text: 'news', icon: <RiNewspaperLine /> },
-  { id: 4, path: 'help', text: 'help', icon: <IoIosHelpCircleOutline /> },
+  { id: nanoid(), path: 'about', text: 'about', icon: <FaRegQuestionCircle /> },
   {
-    id: 5,
+    id: nanoid(),
+    path: 'events',
+    text: 'events',
+    icon: <MdOutlineEventNote />,
+  },
+  { id: nanoid(), path: 'news', text: 'news', icon: <RiNewspaperLine /> },
+  {
+    id: nanoid(),
+    path: 'help',
+    text: 'help',
+    icon: <IoIosHelpCircleOutline />,
+  },
+  {
+    id: nanoid(),
     path: 'terms-and-conditions',
     text: 'terms and conditions',
     icon: <GoCodeOfConduct />,
   },
   {
-    id: 6,
+    id: nanoid(),
     path: 'cookie-setting',
     text: 'cookie setting',
     icon: <LiaCookieBiteSolid />,
@@ -71,17 +89,27 @@ export const footerLinks = [
 ]
 
 export const partLinks = [
-  { id: 1, path: 'reference', text: 'reference', icon: <VscReferences /> },
-  { id: 2, path: 'word', text: 'word', icon: <SiSemanticweb /> },
-  { id: 3, path: 'orientation', text: 'orientation', icon: <FaHandPointer /> },
   {
-    id: 4,
+    id: nanoid(),
+    path: 'reference',
+    text: 'reference',
+    icon: <VscReferences />,
+  },
+  { id: nanoid(), path: 'word', text: 'word', icon: <SiSemanticweb /> },
+  {
+    id: nanoid(),
+    path: 'orientation',
+    text: 'orientation',
+    icon: <FaHandPointer />,
+  },
+  {
+    id: nanoid(),
     path: 'hand-status',
     text: 'hand status',
     icon: <PiHandEye />,
   },
   {
-    id: 5,
+    id: nanoid(),
     path: 'prefix',
     text: 'prefix',
     icon: <GoCodeOfConduct />,
@@ -89,28 +117,38 @@ export const partLinks = [
 ]
 
 export const curriculumLinks = [
-  { id: 1, path: 'no', text: 'no', icon: <GiMaterialsScience /> },
-  { id: 2, path: 'so', text: 'so', icon: <GiHumanPyramid /> },
+  { id: nanoid(), path: 'no', text: 'no', icon: <GiMaterialsScience /> },
+  { id: nanoid(), path: 'so', text: 'so', icon: <GiHumanPyramid /> },
 ]
 
 export const noLinks = [
-  { id: 1, path: 'crud', text: 'crud', icon: <GiMaterialsScience /> },
-  { id: 2, path: 'domain', text: 'domain', icon: <GiHumanPyramid /> },
-  { id: 2, path: 'tuple', text: 'tuple', icon: <GiHumanPyramid /> },
-  { id: 2, path: 'place', text: 'place', icon: <GiHumanPyramid /> },
-  { id: 2, path: 'item', text: 'item', icon: <GiHumanPyramid /> },
+  { id: nanoid(), path: 'crud', text: 'crud', icon: <GiMaterialsScience /> },
+  { id: nanoid(), path: 'domain', text: 'domain', icon: <GiHumanPyramid /> },
+  { id: nanoid(), path: 'tuple', text: 'tuple', icon: <GiHumanPyramid /> },
+  { id: nanoid(), path: 'place', text: 'place', icon: <GiHumanPyramid /> },
+  { id: nanoid(), path: 'item', text: 'item', icon: <GiHumanPyramid /> },
 ]
 
 export const soLinks = [
-  { id: 1, path: 'shock', text: 'shock', icon: <GiMaterialsScience /> },
-  { id: 2, path: 'denial', text: 'denial', icon: <GiHumanPyramid /> },
+  { id: nanoid(), path: 'shock', text: 'shock', icon: <GiMaterialsScience /> },
+  { id: nanoid(), path: 'denial', text: 'denial', icon: <GiHumanPyramid /> },
 
-  { id: 2, path: 'anger', text: 'anger', icon: <GiHumanPyramid /> },
+  { id: nanoid(), path: 'anger', text: 'anger', icon: <GiHumanPyramid /> },
 
-  { id: 2, path: 'bargain', text: 'bargain', icon: <GiHumanPyramid /> },
+  { id: nanoid(), path: 'bargain', text: 'bargain', icon: <GiHumanPyramid /> },
 
-  { id: 2, path: 'depression', text: 'depression', icon: <GiHumanPyramid /> },
+  {
+    id: nanoid(),
+    path: 'depression',
+    text: 'depression',
+    icon: <GiHumanPyramid />,
+  },
 
-  { id: 2, path: 'testing', text: 'testing', icon: <GiHumanPyramid /> },
-  { id: 2, path: 'acceptance', text: 'acceptance', icon: <GiHumanPyramid /> },
+  { id: nanoid(), path: 'testing', text: 'testing', icon: <GiHumanPyramid /> },
+  {
+    id: nanoid(),
+    path: 'acceptance',
+    text: 'acceptance',
+    icon: <GiHumanPyramid />,
+  },
 ]

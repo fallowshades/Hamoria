@@ -124,6 +124,13 @@ const DashboardLayout = ({
     logoutUser()
   }, [isAuthError])
 
+  const [showCourses, setShowCourses] = useState(false)
+
+  const toggleCourses = () => {
+    setShowCourses(!showCourses)
+    console.log(showCourses)
+  }
+
   return (
     <DashboardContext.Provider
       value={{
@@ -133,6 +140,8 @@ const DashboardLayout = ({
         toggleDarkTheme,
         toggleSidebar,
         logoutUser,
+        toggleCourses,
+        showCourses,
       }}
     >
       <Wrapper

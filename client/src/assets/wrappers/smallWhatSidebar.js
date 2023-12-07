@@ -77,5 +77,28 @@ const Wrapper = styled.aside`
   .active {
     color: var(--primary-500);
   }
+
+  .dropdown {
+    width: 100%;
+
+    text-align: center;
+    visibility: hidden;
+  }
+
+  .show-dropdown {
+    visibility: visible;
+  }
+  .dropdown-btn {
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+
+    border-color: transparent;
+    color: var(--white);
+    letter-spacing: var(--letter-spacing);
+    text-transform: capitalize;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
 `
 export default Wrapper
