@@ -31,9 +31,11 @@ const WhatSidebarBig = () => {
               <CurriculumContainer />
             </div>
 
-            <HandPartContainer />
+            <HandPartButton />
+
             <div className={showParts ? 'dropdown show-dropdown' : 'dropdown'}>
-              <HandPartButton />
+              {' '}
+              <HandPartContainer />
             </div>
           </div>
         </div>

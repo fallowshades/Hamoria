@@ -10,6 +10,11 @@ import CurriculumContainer from './CurriculumContainer'
 const WhatSidebar = () => {
   const { showSidebar, toggleSidebar } = useDashboardContext()
   const { showCourses, showCurriculum, showParts } = useDashboardContext()
+
+  const handleRightButtonClick = () => {
+    toggleSidebar('rightButton')
+  }
+
   return (
     <Wrapper>
       <div
@@ -18,7 +23,11 @@ const WhatSidebar = () => {
         }
       >
         <div className="content">
-          <button type="button" className="close-btn" onClick={toggleSidebar}>
+          <button
+            type="button"
+            className="close-btn"
+            onClick={handleRightButtonClick}
+          >
             <FaTimes />
           </button>
           <header>
@@ -40,11 +49,12 @@ const WhatSidebar = () => {
               >
                 <CurriculumContainer />
               </div>
-              <HandPartContainer />
+
+              <HandPartButton />
               <div
                 className={showParts ? 'dropdown show-dropdown' : 'dropdown'}
               >
-                <HandPartButton />
+                <HandPartContainer />
               </div>
             </div>
           </div>

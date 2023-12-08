@@ -8,6 +8,11 @@ import { useDashboardContext } from '../../pages/DashboardLayout'
 
 const SmallSidebar = () => {
   const { showSidebar, toggleSidebar } = useDashboardContext()
+
+  const handleLeftButtonClick = () => {
+    toggleSidebar('leftButton')
+  }
+
   return (
     <Wrapper>
       <div
@@ -16,30 +21,18 @@ const SmallSidebar = () => {
         }
       >
         <div className="content">
-          <button type="button" className="close-btn" onClick={toggleSidebar}>
+          <button
+            type="button"
+            className="close-btn"
+            onClick={handleLeftButtonClick}
+          >
             <FaTimes />
           </button>
           <header>
             <Logo />
           </header>
           <div className="nav-links">
-            {links.map((link) => {
-              const { text, path, icon } = link
-
-              return (
-                <NavLinks
-                  to={path}
-                  key={text}
-                  className="nav-link"
-                  onClick={toggleSidebar}
-                  // will discuss in a second
-                  end
-                >
-                  <span className="icon">{icon}</span>
-                  {text}
-                </NavLinks>
-              )
-            })}
+            <NavLinks />
           </div>
         </div>
       </div>
