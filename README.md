@@ -811,4 +811,40 @@ const Wrapper = styled.aside`
 
 intotal 72 file changes inc name changes to All[name]
 
+### more fixes
+
+#### footer hover
+
+WeLinks.jsx
+
+```js
+    <NavLink
+            to={path}
+            key={text}
+            className="nav-link flex flex-row gap-2 py-2"
+            end
+          >
+```
+
+Footer.jsx
+
+```js
+const Wrapper = style.style` .nav-link {
+    display: flex;
+    align-items: center;
+    color: var(--text-secondary-color);
+    padding: 1rem 0;
+    padding-left: 2.5rem;
+    text-transform: capitalize;
+    transition: color 0.3s ease-in-out;
+  }
+  .nav-link:hover {
+    color: var(--primary-500);
+    transition: var(--transition);
+  }
+  `
+```
+
+#### small sidebar close button
+
 ## edit and delete parameters

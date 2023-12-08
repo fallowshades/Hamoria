@@ -4,11 +4,12 @@ import Logo from '../Logo'
 import Wrapper from '../../assets/wrappers/smallWhatSidebar'
 import { useDashboardContext } from '../../pages/DashboardLayout'
 import HandPartContainer from './HandPartContainer'
+import HandPartButton from './HandPartButton'
 import CurriculumContainerButton from './CurriculumContainerButton'
 import CurriculumContainer from './CurriculumContainer'
 const WhatSidebar = () => {
   const { showSidebar, toggleSidebar } = useDashboardContext()
-  const { showCourses, showCurriculum } = useDashboardContext()
+  const { showCourses, showCurriculum, showParts } = useDashboardContext()
   return (
     <Wrapper>
       <div
@@ -39,8 +40,12 @@ const WhatSidebar = () => {
               >
                 <CurriculumContainer />
               </div>
-
               <HandPartContainer />
+              <div
+                className={showParts ? 'dropdown show-dropdown' : 'dropdown'}
+              >
+                <HandPartButton />
+              </div>
             </div>
           </div>
         </div>

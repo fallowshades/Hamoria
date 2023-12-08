@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { FaCaretDown } from 'react-icons/fa'
 import { FaHandScissors } from 'react-icons/fa'
 import Wrapper from '../../assets/wrappers/SidebarContainer'
-
-import NavLinksNested from './NavLinksNested'
+import { useDashboardContext } from '../../pages/DashboardLayout'
 const HandPartContainer = () => {
-  const [showParts, setShowPart] = useState(false)
+  const { showParts, setShowPart } = useDashboardContext()
+
   const [handform, setHandform] = useState('v' === 'j')
 
   return (
@@ -19,9 +19,6 @@ const HandPartContainer = () => {
         handparts
       </button>
 
-      <div className={showParts ? 'dropdown show-dropdown' : 'dropdown'}>
-        <NavLinksNested />
-      </div>
       <FaCaretDown />
     </Wrapper>
   )

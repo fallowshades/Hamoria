@@ -84,11 +84,12 @@ const Wrapper = styled.aside`
     width: 100%;
 
     text-align: center;
-    visibility: hidden;
+    display: none;
   }
 
   .show-dropdown {
     visibility: visible;
+    display: block;
   }
   .dropdown-btn {
     border-radius: var(--border-radius);

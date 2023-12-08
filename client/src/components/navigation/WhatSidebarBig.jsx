@@ -3,10 +3,13 @@ import { Logo } from '..'
 import Wrapper from '../../assets/wrappers/BigWhatSidebar'
 import { useDashboardContext } from '../../pages/DashboardLayout'
 import HandPartContainer from './HandPartContainer'
+import HandPartButton from './HandPartButton'
+
 import CurriculumContainer from './CurriculumContainer'
 import CurriculumContainerButton from './CurriculumContainerButton'
+
 const WhatSidebarBig = () => {
-  const { showSidebar, showCurriculum } = useDashboardContext()
+  const { showSidebar, showCurriculum, showParts } = useDashboardContext()
   return (
     <Wrapper>
       <div
@@ -29,6 +32,9 @@ const WhatSidebarBig = () => {
             </div>
 
             <HandPartContainer />
+            <div className={showParts ? 'dropdown show-dropdown' : 'dropdown'}>
+              <HandPartButton />
+            </div>
           </div>
         </div>
       </div>

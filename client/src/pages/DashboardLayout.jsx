@@ -126,7 +126,7 @@ const DashboardLayout = ({
 
   const [showCurriculum, setShowCurriculum] = useState(false)
   const [showCourses, setShowCourses] = useState({ no: false, so: false })
-
+  const [showParts, setShowPart] = useState(false)
   const toggleCourses = (course) => {
     setShowCourses((prevState) => ({
       ...prevState,
@@ -164,6 +164,8 @@ const DashboardLayout = ({
         showCourses,
         toggleCurriculum,
         showCurriculum,
+        showParts,
+        setShowPart,
       }}
     >
       <Wrapper
@@ -183,7 +185,6 @@ const DashboardLayout = ({
             <div className="dashboard-page">
               {isPageLoading ? <Loading /> : <Outlet context={{ user }} />}
             </div>
-            <Footer />
           </div>
           {activeLeftSidebar ? null : (
             <>
@@ -192,6 +193,7 @@ const DashboardLayout = ({
             </>
           )}
         </main>
+        <Footer />
       </Wrapper>
     </DashboardContext.Provider>
   )
