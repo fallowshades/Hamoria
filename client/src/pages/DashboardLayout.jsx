@@ -17,12 +17,13 @@ import customFetch from '../utils/customFetch'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-import { Loading } from '../components'
+import { Loading, Footer } from '../components'
 import { useQuery } from '@tanstack/react-query'
 import { Header, WhatSidebar, WhatSidebarBig } from '../components'
 
 import { useDispatch } from 'react-redux'
 import { toggleTheme } from '../features/user/userSlice'
+
 const userQuery = {
   queryKey: ['user'],
   queryFn: async () => {
@@ -123,6 +124,33 @@ const DashboardLayout = ({
     logoutUser()
   }, [isAuthError])
 
+  const [showCurriculum, setShowCurriculum] = useState(false)
+  const [showCourses, setShowCourses] = useState({ no: false, so: false })
+
+  const toggleCourses = (course) => {
+    setShowCourses((prevState) => ({
+      ...prevState,
+      [course]: !showCourses[course],
+    }))
+    console.log(showCourses[course])
+  }
+  const resetCourses = () => {
+    setShowCourses((prevState) => {
+      // Create a new object with the same keys as showCourses
+      const resetState = Object.keys(prevState).reduce((acc, key) => {
+        acc[key] = false
+        return acc
+      }, {})
+      return resetState
+    })
+  }
+
+  const toggleCurriculum = () => {
+    setShowCurriculum(!showCurriculum)
+
+    if (showCurriculum) resetCourses()
+  }
+
   return (
     <DashboardContext.Provider
       value={{
@@ -132,6 +160,10 @@ const DashboardLayout = ({
         toggleDarkTheme,
         toggleSidebar,
         logoutUser,
+        toggleCourses,
+        showCourses,
+        toggleCurriculum,
+        showCurriculum,
       }}
     >
       <Wrapper
@@ -141,22 +173,23 @@ const DashboardLayout = ({
         {user.name == 'Chuckleberry' ? <Header /> : null}
         <main className="dashboard">
           {activeLeftSidebar ? (
-            <div>
+            <>
               <SmallSidebar />
               <BigSidebar />
-            </div>
+            </>
           ) : null}
           <div>
             <Navbar />
             <div className="dashboard-page">
               {isPageLoading ? <Loading /> : <Outlet context={{ user }} />}
             </div>
+            <Footer />
           </div>
           {activeLeftSidebar ? null : (
-            <div>
+            <>
               <WhatSidebar />
               <WhatSidebarBig />
-            </div>
+            </>
           )}
         </main>
       </Wrapper>

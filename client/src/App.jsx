@@ -32,6 +32,40 @@ import {
   Cart,
 } from './pages'
 
+import {
+  CookieSetting,
+  Events,
+  Help,
+  News,
+  TermsAndConditions,
+} from './pages/footReference'
+
+import {
+  AllHandStatus,
+  AllOrientation,
+  AllReference,
+  AllWord,
+  AllPrefix,
+} from './pages/handparts'
+
+import {
+  AllShock,
+  AllDenial,
+  AllAnger,
+  AllBargain,
+  AllDepression,
+  AllTesting,
+  AllAcceptance,
+} from './pages/courses/so'
+
+import {
+  AllCrud,
+  AllDomain,
+  AllTuple,
+  AllPlace,
+  AllItem,
+} from './pages/courses/no'
+
 import { action as registerAction } from './pages/Register'
 import { action as loginAction } from './pages/Login'
 import { loader as dashboardLoader } from './pages/DashboardLayout'
@@ -173,6 +207,95 @@ const router = createBrowserRouter([
             path: 'orders',
             element: <Orders />,
             loader: ordersLoader(store, queryClient),
+          },
+          {
+            path: 'cookie-setting',
+            element: <CookieSetting />,
+          },
+          {
+            path: 'events',
+            element: <Events />,
+          },
+          {
+            path: 'help',
+            element: <Help />,
+          },
+          {
+            path: 'news',
+            element: <News />,
+          },
+          {
+            path: 'terms-and-conditions',
+            element: <TermsAndConditions />,
+          },
+          {
+            path: 'reference',
+            element: <AllReference />,
+          },
+          {
+            path: 'word',
+            element: <AllWord />,
+          },
+          {
+            path: 'orientation',
+            element: <AllOrientation />,
+          },
+          {
+            path: 'hand-status',
+            element: <AllHandStatus />,
+          },
+          {
+            path: 'prefix',
+            element: <AllPrefix />,
+          },
+          {
+            path: 'crud',
+            element: <AllCrud />,
+          },
+          {
+            path: 'domain',
+            element: <AllDomain />,
+          },
+          {
+            path: 'tuple',
+            element: <AllTuple />,
+          },
+          {
+            path: 'place',
+            element: <AllPlace />,
+          },
+          {
+            path: 'item',
+            element: <AllItem />,
+          },
+          {
+            path: 'shock',
+            element: <AllShock />,
+          },
+          {
+            path: 'denial',
+            element: <AllDenial />,
+          },
+          {
+            path: 'anger',
+            element: <AllAnger />,
+          },
+          {
+            path: 'bargain',
+            element: <AllBargain />,
+          },
+          {
+            path: 'depression',
+            element: <AllDepression />,
+          },
+          {
+            path: 'testing',
+            element: <AllTesting />,
+          },
+
+          {
+            path: 'acceptance',
+            element: <AllAcceptance />,
           },
         ],
       },

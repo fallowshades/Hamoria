@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 
 const Wrapper = styled.aside`
+  padding-bottom: 13vh;
+
   @media (min-width: 992px) {
     display: none;
   }
@@ -31,6 +33,16 @@ const Wrapper = styled.aside`
     display: flex;
     align-items: center;
     flex-direction: column;
+  }
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .col1,
+  .col2 {
+    width: 100%;
+    border: 1px solid red;
   }
   .close-btn {
     position: absolute;
@@ -66,6 +78,29 @@ const Wrapper = styled.aside`
   }
   .active {
     color: var(--primary-500);
+  }
+
+  .dropdown {
+    width: 100%;
+
+    text-align: center;
+    visibility: hidden;
+  }
+
+  .show-dropdown {
+    visibility: visible;
+  }
+  .dropdown-btn {
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+
+    border-color: transparent;
+    color: var(--white);
+    letter-spacing: var(--letter-spacing);
+    text-transform: capitalize;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
   }
 `
 export default Wrapper

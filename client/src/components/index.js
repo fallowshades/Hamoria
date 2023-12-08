@@ -1,8 +1,8 @@
 export { default as Logo } from './Logo'
 export { default as FormRow } from './FormRow'
-export { default as Navbar } from './Navbar'
-export { default as BigSidebar } from './BigSidebar'
-export { default as SmallSidebar } from './SmallSidebar'
+export { default as Navbar } from './navigation/Navbar'
+export { default as BigSidebar } from './navigation/BigSidebar'
+export { default as SmallSidebar } from './navigation/SmallSidebar'
 
 export { default as SearchContainer } from './SearchContainer'
 export { default as AchievementsContainer } from './AchievementsContainer'
@@ -18,9 +18,9 @@ export { default as ErrorElement } from './ErrorElement'
 
 export { default as FormInput } from './FormInput'
 export { default as SubmitBtnSpecialText } from './SubmitBtnSpecialText'
-export { default as Header } from './Header'
-export { default as WhatSidebar } from './WhatSidebar'
-export { default as WhatSidebarBig } from './WhatSidebarBig'
+export { default as Header } from './navigation/Header'
+export { default as WhatSidebar } from './navigation/WhatSidebar'
+export { default as WhatSidebarBig } from './navigation/WhatSidebarBig'
 export { default as Hero } from './Hero'
 
 export { default as Filters } from './Filters'
@@ -36,3 +36,5 @@ export { default as SectionTitle } from './SectionTitle'
 
 export { default as CheckoutForm } from './CheckoutForm'
 export { default as OrdersList } from './OrdersList'
+
+export { default as Footer } from './navigation/Footer'

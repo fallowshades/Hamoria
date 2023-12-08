@@ -100,6 +100,7 @@ body {
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-weight: 400;
   line-height: 1;
+  min-height: 100vh;
 }
 p {
   margin: 0;

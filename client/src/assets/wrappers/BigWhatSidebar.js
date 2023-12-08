@@ -12,11 +12,22 @@ const Wrapper = styled.aside`
       width: 250px;
       margin-right: -250px;
       transition: margin-left 0.3s ease-in-out;
+
+      padding-bottom: 13vh;
     }
     .content {
       position: sticky;
       top: 0;
+      display: flex;
+      flex-direction: column;
+      
     }
+
+    .content > div{
+      flex:   1;
+      
+    }
+
     .show-sidebar {
       margin-right 0;
     }
@@ -57,6 +68,32 @@ const Wrapper = styled.aside`
     .pending {
       background: var(--background-color);
     }
+  }
+
+  .dropdown {
+    width: 100%;
+
+    text-align: center;
+  display:none;
+  
+  }
+
+  .show-dropdown {
+    visibility: visible;
+    display:block
+
+  }
+  .dropdown-btn {
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+
+    border-color: transparent;
+    color: var(--white);
+    letter-spacing: var(--letter-spacing);
+    text-transform: capitalize;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
   }
 `
 export default Wrapper
