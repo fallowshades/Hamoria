@@ -1,5 +1,0 @@
-export { default as Crud } from './Crud'
-export { default as Domain } from './Crud'
-export { default as Tuple } from './Crud'
-export { default as Place } from './Place'
-export { default as Item } from './Item'

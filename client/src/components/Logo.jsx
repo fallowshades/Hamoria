@@ -2,9 +2,9 @@ import styled from 'styled-components'
 const Logo = () => {
   return (
     <Wrapper>
-      <h2 className="logo">
+      <h3 className="logo">
         <span className="color">H</span>amoria
-      </h2>
+      </h3>
     </Wrapper>
   )
 }

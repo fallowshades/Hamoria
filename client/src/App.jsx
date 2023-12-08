@@ -41,24 +41,30 @@ import {
 } from './pages/footReference'
 
 import {
-  HandStatus,
-  Orientation,
-  Reference,
-  Word,
-  Prefix,
+  AllHandStatus,
+  AllOrientation,
+  AllReference,
+  AllWord,
+  AllPrefix,
 } from './pages/handparts'
 
 import {
-  Shock,
-  Denial,
-  Anger,
-  Bargain,
-  Depression,
-  Testing,
-  Acceptance,
+  AllShock,
+  AllDenial,
+  AllAnger,
+  AllBargain,
+  AllDepression,
+  AllTesting,
+  AllAcceptance,
 } from './pages/courses/so'
 
-import { Crud, Domain, Tuple, Place, Item } from './pages/courses/no'
+import {
+  AllCrud,
+  AllDomain,
+  AllTuple,
+  AllPlace,
+  AllItem,
+} from './pages/courses/no'
 
 import { action as registerAction } from './pages/Register'
 import { action as loginAction } from './pages/Login'
@@ -224,72 +230,72 @@ const router = createBrowserRouter([
           },
           {
             path: 'reference',
-            element: <Reference />,
+            element: <AllReference />,
           },
           {
             path: 'word',
-            element: <Word />,
+            element: <AllWord />,
           },
           {
             path: 'orientation',
-            element: <Orientation />,
+            element: <AllOrientation />,
           },
           {
             path: 'hand-status',
-            element: <HandStatus />,
+            element: <AllHandStatus />,
           },
           {
             path: 'prefix',
-            element: <Prefix />,
+            element: <AllPrefix />,
           },
           {
             path: 'crud',
-            element: <Crud />,
+            element: <AllCrud />,
           },
           {
             path: 'domain',
-            element: <Domain />,
+            element: <AllDomain />,
           },
           {
             path: 'tuple',
-            element: <Tuple />,
+            element: <AllTuple />,
           },
           {
             path: 'place',
-            element: <Place />,
+            element: <AllPlace />,
           },
           {
             path: 'item',
-            element: <Item />,
+            element: <AllItem />,
           },
           {
             path: 'shock',
-            element: <Shock />,
+            element: <AllShock />,
           },
           {
             path: 'denial',
-            element: <Denial />,
+            element: <AllDenial />,
           },
           {
             path: 'anger',
-            element: <Anger />,
+            element: <AllAnger />,
           },
           {
             path: 'bargain',
-            element: <Bargain />,
+            element: <AllBargain />,
           },
           {
             path: 'depression',
-            element: <Depression />,
+            element: <AllDepression />,
           },
           {
             path: 'testing',
-            element: <Testing />,
+            element: <AllTesting />,
           },
 
           {
             path: 'acceptance',
-            element: <Acceptance />,
+            element: <AllAcceptance />,
           },
         ],
       },
