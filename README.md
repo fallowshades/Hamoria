@@ -806,3 +806,9 @@ const Wrapper = styled.aside`
   }
 `
 ```
+
+### setup pages for special query courses and handpart
+
+intotal 72 file changes inc name changes to All[name]
+
+## edit and delete parameters
