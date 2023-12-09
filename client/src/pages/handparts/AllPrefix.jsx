@@ -10,6 +10,7 @@ import { useContext, createContext } from 'react'
 export const loader = async ({ request }) => {
   try {
     const { data } = await customFetch.get('/prefixes')
+    console.log(data)
     return {
       data,
     }
@@ -23,12 +24,16 @@ const AllPrefixContext = createContext()
 
 const AllPrefix = () => {
   const { data } = useLoaderData()
-  return (
-    <AllPrefixContext.Provider value={{ data }}>
-      <PrefixContainer />
-      <FilterPrefix />
-    </AllPrefixContext.Provider>
-  )
+  console.log(data)
+
+  if (data)
+    return (
+      <AllPrefixContext.Provider value={{ data }}>
+        <PrefixContainer />
+        <FilterPrefix />
+      </AllPrefixContext.Provider>
+    )
+  return <p>Loading...</p>
 }
 export const useAllPrefixContext = () => useContext(AllPrefixContext)
 export default AllPrefix

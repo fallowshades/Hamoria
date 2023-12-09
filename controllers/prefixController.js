@@ -4,6 +4,7 @@ import 'express-async-errors'
 
 import { readFile } from 'fs/promises'
 import dotenv from 'dotenv'
+import { nanoid } from 'nanoid'
 
 export const createPrefix = async (req, res) => {
   res.send('create prefix')
@@ -15,8 +16,12 @@ export const getAllPrefixes = async (req, res) => {
       new URL('../utils/mockWhat/mockPrefixData.json', import.meta.url)
     )
   )
+  console.log(jsonPrefix)
 
-  res.send(jsonPrefix)
+  // res.status(StatusCodes.OK).send()
+  res
+    .status(StatusCodes.OK)
+    .json({ data: { _id: nanoid(), prefixes: jsonPrefix } })
 }
 
 export const getSinglePrefix = async (req, res) => {

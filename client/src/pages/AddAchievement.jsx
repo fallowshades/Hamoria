@@ -18,7 +18,7 @@ export const action =
       await customFetch.post('/achievements', data)
       queryClient.invalidateQueries(['achievements'])
       toast.success('achievement added successfully')
-      return redirect('all-achievements')
+      return redirect('/dashboard/all-achievements')
     } catch (error) {
       toast.error(error?.response?.data?.msg)
       return error

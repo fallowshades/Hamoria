@@ -293,4 +293,82 @@ export const loader = async ({ request }) => {
 }
 ```
 
+#### in order to render moc data
+
+prefixController.js
+
+```js
+import { nanoid } from 'nanoid'
+
+export const createPrefix = async (req, res) => {
+  ...
+
+  res
+    .status(StatusCodes.OK)
+    .json({ data: { _id: nanoid(), prefixes: jsonPrefix } })
+}
+```
+
 #### render prefix
+
+Prefix.Jsx
+
+```js
+const Prefix = () => {
+  return <div>Prefix</div>
+}
+export default Prefix
+```
+
+PrefixContainer.jsx
+
+````js
+import FooterAddPrefix from './FooterAddPrefix'
+import Prefix from './mappedItems/Prefix'
+import { useAllPrefixContext } from '../../../pages/handparts/AllPrefix'
+const PrefixContainer = () => {
+  const { data } = useAllPrefixContext()
+  if (!data) {
+    return <h2>No prefixes found</h2>
+  }
+  const { prefixes } = data.data
+  if (prefixes.length == 0) {
+    return (
+      <Wrapper>
+        <h2>No Prefixes to display...</h2>
+      </Wrapper>
+    )
+  }
+  return (
+    <>
+      <div>
+        <div>to be toggle</div>
+        <FooterAddPrefix />
+        <div className="prefixes">
+          {prefixes.map((prefix) => {
+            return <Prefix key={prefix._id} {...prefixes}></Prefix>
+          })}
+        </div>
+      </div>
+    </>
+  )
+}
+    ```
+````
+
+#### fixes
+
+links.jsx
+
+```js
+export const links = [
+  { text: 'add Achievement', path: '.', icon: <FaWpforms /> },
+  { text: 'add Achievement', path: 'add-achievement', icon: <FaWpforms /> },
+]
+```
+
+AddAchievement
+
+```js
+return redirect('/dashboard/all-achievements')
+```
