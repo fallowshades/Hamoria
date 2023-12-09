@@ -104,3 +104,103 @@ const PrefixContainer = () => {
 }
 export default PrefixContainer
 ```
+
+#### 2. (extend) dynamicly maped formRow select
+
+```js
+import * as constants from './constants'
+const { HAND_VARIANTS, ORIENTATION, TOUCH_TYPE, FACE_EXPRESSION } = constants
+
+const prefixKeys = [
+  { field: 'Connectionid', identifier: nanoid() },
+  { field: 'position', identifier: nanoid() },
+  {
+    field: 'hand',
+    identifier: nanoid(),
+    list: HAND_VARIANTS,
+    default: HAND_VARIANTS.A,
+  },
+]
+
+const orientationKeys = [
+  {
+    field: 'orderid',
+    identifier: nanoid(),
+    list: ORIENTATION,
+    default: ORIENTATION.FORWARD,
+  },
+  {
+    field: 'fingerdirection',
+    identifier: nanoid(),
+    list: ORIENTATION,
+    default: ORIENTATION.FORWARD,
+  },
+  {
+    field: 'fingerdirection2',
+    identifier: nanoid(),
+    list: ORIENTATION,
+    default: ORIENTATION.FORWARD,
+  },
+  {
+    field: 'palmdirection',
+    identifier: nanoid(),
+    list: ORIENTATION,
+    default: ORIENTATION.FORWARD,
+  },
+  {
+    field: 'palmdirection2',
+    identifier: nanoid(),
+    list: ORIENTATION,
+    default: ORIENTATION.FORWARD,
+  },
+  ,
+]
+
+const referenceKeys = [
+  { field: 'position', identifier: nanoid() },
+  {
+    field: 'bodycontact',
+    identifier: nanoid(),
+  },
+  {
+    field: 'touchtype',
+    identifier: nanoid(),
+    list: TOUCH_TYPE,
+    default: TOUCH_TYPE.NULL,
+  },
+  {
+    field: 'faceexpression',
+    identifier: nanoid(),
+    list: FACE_EXPRESSION,
+    default: FACE_EXPRESSION.NULL,
+  },
+  { field: 'link', identifier: nanoid() },
+]
+```
+
+FooterAddPrefix.jsx
+
+```js
+import { FormRow, SectionTitle, FormRowSelect } from '../../../components'
+const FooterAddPrefix = () => {
+  ...
+  //console.log(constant.hasOwnProperty('default'))
+  const renderDefault = constant
+  console.log()
+  if (!constant.hasOwnProperty('default')) {
+    return (
+      <FormRow key={constant.identifier} type="text" name={constant.field} />
+    )
+  } else {
+    return (
+      <FormRowSelect
+        key={constant.identifier}
+        type="text"
+        name={constant.field}
+        defaultValue={constant?.default}
+        list={Object.values(constant?.list)}
+      />
+    )
+  }
+}
+```
