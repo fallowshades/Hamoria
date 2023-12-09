@@ -2,8 +2,10 @@ import FooterAddPrefix from './FooterAddPrefix'
 const PrefixContainer = () => {
   return (
     <>
-      <div>PrefixContainer</div>
-      <FooterAddPrefix />
+      <div>
+        <div>to be toggle</div>
+        <FooterAddPrefix />
+      </div>
     </>
   )
 }

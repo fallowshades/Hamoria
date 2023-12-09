@@ -223,3 +223,44 @@ export const action = async ({ request }) => {
   }
 }
 ```
+
+## create transfer lifecycle
+
+### context to help map presentational data
+
+#### setup all prefix context
+
+```js
+import { useLoaderData } from 'react-router-dom'
+
+const AllPrefixContext = createContext()
+const AllPrefix = () => {
+  const { data } = useLoaderData()
+  return (
+    <AllPrefixContext.Provider value={{ data }}>
+      <PrefixContainer />
+      <FilterPrefix />
+    </AllPrefixContext.Provider>
+  )
+}
+export const useAllPrefixContext = () => useContext(AllPrefixContext)
+```
+
+#### moc database call from controller
+
+```js
+import { readFile } from 'fs/promises'
+import dotenv from 'dotenv'
+
+export const getAllPrefixes = async (req, res) => {
+  res.send('get all prefixes')
+  const jsonPrefix = JSON.parse(
+    await readFile(
+      new URL('../utils/mockWhat/mockPrefixData.json', import.meta.url)
+    )
+  )
+  res.send(jsonPrefix)
+}
+```
+
+#### render prefix

@@ -1,6 +1,6 @@
 import { readFile } from 'fs/promises'
-import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import mongoose from 'mongoose'
 
 import Prefix from './models/prefixModel.js'
 

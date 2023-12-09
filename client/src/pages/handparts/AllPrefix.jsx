@@ -1,14 +1,19 @@
+import { useLoaderData } from 'react-router-dom'
 import {
   PrefixContainer,
   FilterPrefix,
 } from '../../components/courses/handparts'
 
+const AllPrefixContext = createContext()
+
 const AllPrefix = () => {
+  const { data } = useLoaderData()
   return (
-    <div>
+    <AllPrefixContext.Provider value={{ data }}>
       <PrefixContainer />
       <FilterPrefix />
-    </div>
+    </AllPrefixContext.Provider>
   )
 }
+export const useAllPrefixContext = () => useContext(AllPrefixContext)
 export default AllPrefix
