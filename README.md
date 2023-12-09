@@ -248,6 +248,8 @@ export const useAllPrefixContext = () => useContext(AllPrefixContext)
 
 #### moc database call from controller
 
+prefixController.js
+
 ```js
 import { readFile } from 'fs/promises'
 import dotenv from 'dotenv'
@@ -260,6 +262,34 @@ export const getAllPrefixes = async (req, res) => {
     )
   )
   res.send(jsonPrefix)
+}
+```
+
+#### all prefix loader structure
+
+App.jsx
+
+```js
+import { loader as prefixLoader } from './pages/handparts/AllPrefix'
+
+loader: prefixLoader,
+
+```
+
+```js
+import { toast } from 'react-toastify'
+import customFetch from '../../utils/customFetch'
+import { useContext, createContext } from 'react'
+export const loader = async ({ request }) => {
+  try {
+    const { data } = await customFetch.get('/prefixes')
+    return {
+      data,
+    }
+  } catch (error) {
+    toast.error(error?.response?.data?.msg)
+    return error
+  }
 }
 ```
 
