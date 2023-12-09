@@ -204,3 +204,22 @@ const FooterAddPrefix = () => {
   }
 }
 ```
+
+#### Add prefix
+
+```js
+import { toast } from 'react-toastify'
+export const action = async ({ request }) => {
+  const formData = await request.formData()
+  const data = Object.fromEntries(formData)
+  console.log(data)
+  toast.success('prefix added successfully')
+  try {
+    await customFetch.post('/prefixes', data)
+    return null
+  } catch (error) {
+    toast.error(error?.response?.data?.mst)
+    return error
+  }
+}
+```

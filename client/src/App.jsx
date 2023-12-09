@@ -96,6 +96,8 @@ import { loader as checkoutLoader } from './pages/Checkout'
 import { action as checkoutAction } from './components/CheckoutForm'
 import { loader as ordersLoader } from './pages/Orders'
 
+import { action as prefixAction } from './components/courses/handparts/FooterAddPrefix'
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -247,6 +249,7 @@ const router = createBrowserRouter([
           {
             path: 'prefix',
             element: <AllPrefix />,
+            action: prefixAction,
           },
           {
             path: 'crud',
