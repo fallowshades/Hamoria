@@ -1,6 +1,7 @@
 import FooterAddPrefix from './FooterAddPrefix'
 import Prefix from './mappedItems/Prefix'
 import { useAllPrefixContext } from '../../../pages/handparts/AllPrefix'
+import Wrapper from '../../../assets/wrappers/handparts/PrefixContainer'
 const PrefixContainer = () => {
   const { data } = useAllPrefixContext()
   if (!data) {
@@ -19,7 +20,7 @@ const PrefixContainer = () => {
 
   return (
     <>
-      <div>
+      <Wrapper>
         <div>to be toggle</div>
         <FooterAddPrefix />
 
@@ -28,7 +29,7 @@ const PrefixContainer = () => {
             return <Prefix key={prefix._id} {...prefixes}></Prefix>
           })}
         </div>
-      </div>
+      </Wrapper>
     </>
   )
 }
