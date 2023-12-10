@@ -69,10 +69,6 @@ const Wrapper = styled.div`
   .delete-btn {
     margin-left: 0.5rem;
   }
-
-  .polygon-hover {
-    fill: rgba(0, 47, 95, 0.2);
-  }
 `
 
 export default Wrapper
