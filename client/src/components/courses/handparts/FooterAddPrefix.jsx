@@ -1,10 +1,9 @@
 //Dynamically render keys frontend and backend
 import Wrapper from '../../../assets/wrappers/DashboardFormPage'
 import { Form } from 'react-router-dom'
-import { FormRow, SectionTitle, FormRowSelect } from '../../../components'
-import { prefixKeys } from '../../../../../utils/modelKeyConstants'
+import { SectionTitle } from '../../../components'
 //network submission
-
+import { KeysToMapFormRows } from './mappedItems'
 import customFetch from '../../../utils/customFetch'
 import { useNavigation } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -30,30 +29,7 @@ const FooterAddPrefix = () => {
     <Wrapper>
       <Form method="post" className="form">
         <SectionTitle text="add prefix" />
-        {prefixKeys.map((constant) => {
-          //console.log(constant.hasOwnProperty('default'))
-          const renderDefault = constant
-          console.log()
-          if (!constant.hasOwnProperty('default')) {
-            return (
-              <FormRow
-                key={constant.identifier}
-                type="text"
-                name={constant.field}
-              />
-            )
-          } else {
-            return (
-              <FormRowSelect
-                key={constant.identifier}
-                type="text"
-                name={constant.field}
-                defaultValue={constant?.default}
-                list={Object.values(constant?.list)}
-              />
-            )
-          }
-        })}
+        <KeysToMapFormRows />
         <button
           type="submit"
           className="btn btn-block form-btn"

@@ -595,4 +595,140 @@ export default Wrapper
 
 ---reminder the svg is in .gitignore
 
-### Dynamic updates
+## Dynamic updates
+
+### edit achievement setup
+
+#### refracture key rendered formrows
+
+-create KeysToMapFormRows
+
+KeysToMapFormRows.jsx
+
+```js
+import { prefixKeys } from '../../../../../../utils/modelKeyConstants'
+import { FormRow, FormRowSelect } from '../../..'
+
+const KeysToMapFormRows = () => {
+  {
+    console.log(prefixKeys)
+    return (
+      <>
+        {prefixKeys.map((constant) => {
+          console.log()
+          if (!constant.hasOwnProperty('default')) {
+            return (
+              <FormRow
+                key={constant.identifier}
+                type="text"
+                name={constant.field}
+              />
+            )
+          } else {
+            return (
+              <FormRowSelect
+                key={constant.identifier}
+                type="text"
+                name={constant.field}
+                defaultValue={constant?.default}
+                list={Object.values(constant?.list)}
+              />
+            )
+          }
+        })}
+      </>
+    )
+  }
+}
+export default KeysToMapFormRows
+```
+
+index.js
+
+```js
+export { default as KeysToMapFormRows } from './KeysToMapFormRows'
+```
+
+handparts/FooterAddPrefix.jsx
+
+```js
+import { KeysToMapFormRows } from './mappedItems'
+
+const FooterAddPrefix = () => {
+...
+  return(
+    ...
+<KeysToMapFormRows />
+
+  )
+}
+
+```
+
+components\courses\handparts\mappedItems\EditPrefix.jsx
+
+```js
+import Wrapper from '../../../../assets/wrappers/DashboardFormPage'
+import { Form } from 'react-router-dom'
+import { KeysToMapFormRows } from '../mappedItems'
+const EditPrefix = () => {
+  return (
+    <Wrapper>
+      <Form method="post" className="form">
+        <h4 className="form-title">edit prefix</h4>
+        <div className="form-center"></div>
+        <KeysToMapFormRows />
+      </Form>
+    </Wrapper>
+  )
+}
+export default EditPrefix
+```
+
+#### connect editPrefix to container on each item
+
+Prefix.jsx
+
+```js
+import { EditPrefix } from '../mappedItems'
+import { Form } from 'react-router-dom'
+
+const Prefix = ({ Connectionid, position, hand }) => {
+  return (
+    ...
+     <footer className="actions">
+        <EditPrefix />
+        <Form>
+          <button type="submit" className="btn delete-btn">
+            Delete
+          </button>
+        </Form>
+      </footer>
+
+
+  )}
+```
+
+#### vissible dynamic changes
+
+prefixController.js
+
+```js
+export const getSinglePrefix = async (req, res) => {
+  res.send('get single prefix')
+  const testItem = {
+    Connectionid: req.noRead ? '1' : req.value,
+    position: 'mouth',
+    hand: 'j',
+  }
+  res.status(StatusCodes.OK).json({ prefix: testItem })
+}
+export const updatePrefix = async (req, res) => {
+  res.send('update prefix')
+  getSinglePrefix({ noRead: false, value: nanoid() }, res)
+}
+export const deletePrefix = async (req, res) => {
+  res.send('delete prefix')
+  getSinglePrefix({ noRead: false, value: nanoid() }, res)
+}
+```

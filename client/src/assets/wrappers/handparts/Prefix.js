@@ -54,6 +54,21 @@ const Wrapper = styled.div`
       grid-template-columns: 1fr 1fr;
     }
   }
+  .actions {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+  }
+  .edit-btn,
+  .delete-btn {
+    height: 30px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+  }
+  .delete-btn {
+    margin-left: 0.5rem;
+  }
 
   .polygon-hover {
     fill: rgba(0, 47, 95, 0.2);

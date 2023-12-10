@@ -27,13 +27,18 @@ export const getAllPrefixes = async (req, res) => {
 }
 
 export const getSinglePrefix = async (req, res) => {
-  res.send('get single prefix')
+  const testItem = {
+    Connectionid: req.noRead ? '1' : req.value,
+    position: 'mouth',
+    hand: 'j',
+  }
+  res.status(StatusCodes.OK).json({ prefix: testItem })
 }
 
 export const updatePrefix = async (req, res) => {
-  res.send('update prefix')
+  getSinglePrefix({ noRead: false, value: nanoid() }, res)
 }
 
 export const deletePrefix = async (req, res) => {
-  res.send('delete prefix')
+  getSinglePrefix({ noRead: false, value: nanoid() }, res)
 }

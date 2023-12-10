@@ -2,6 +2,8 @@ import Wrapper from '../../../../assets/wrappers/handparts/Prefix'
 import { SectionTitle } from '../../../../components'
 import SignInfo from './SignInfo'
 import { svgTeenBoyBody, svgAdultManBody } from '../../../common'
+import { EditPrefix } from '../mappedItems'
+import { Form } from 'react-router-dom'
 
 const Prefix = ({ Connectionid, position, hand }) => {
   return (
@@ -13,6 +15,14 @@ const Prefix = ({ Connectionid, position, hand }) => {
           <SignInfo icon={svgTeenBoyBody} text={hand} />
         </div>
       </div>
+      <footer className="actions">
+        <EditPrefix />
+        <Form>
+          <button type="submit" className="btn delete-btn">
+            Delete
+          </button>
+        </Form>
+      </footer>
     </Wrapper>
   )
 }
