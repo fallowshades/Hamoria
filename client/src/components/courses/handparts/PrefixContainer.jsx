@@ -8,7 +8,7 @@ const PrefixContainer = () => {
     return <h2>No prefixes found</h2>
   }
 
-  const { prefixes } = data.data
+  const { prefixes } = data
 
   if (prefixes.length == 0) {
     return (
@@ -26,7 +26,8 @@ const PrefixContainer = () => {
 
         <div className="prefixes">
           {prefixes.map((prefix) => {
-            return <Prefix key={prefix._id} {...prefixes}></Prefix>
+            console.log(prefix)
+            return <Prefix key={prefix._id} {...prefix}></Prefix>
           })}
         </div>
       </Wrapper>

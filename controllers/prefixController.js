@@ -18,10 +18,12 @@ export const getAllPrefixes = async (req, res) => {
   )
   console.log(jsonPrefix)
 
+  const packagedData = jsonPrefix.map((keyless) => {
+    return { ...keyless, _id: nanoid() }
+  })
+
   // res.status(StatusCodes.OK).send()
-  res
-    .status(StatusCodes.OK)
-    .json({ data: { _id: nanoid(), prefixes: jsonPrefix } })
+  res.status(StatusCodes.OK).json({ prefixes: packagedData })
 }
 
 export const getSinglePrefix = async (req, res) => {

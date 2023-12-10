@@ -408,3 +408,191 @@ const Wrapper = styled.section`
 `
 export default Wrapper
 ```
+
+## understandable
+
+### understandable
+
+#### mapping of svg for each prefix with added id
+
+.gitignore
+
+```gitignore
+public/assets/images/parts/*
+src/components/common/*
+
+```
+
+--must add id since data is not from database
+
+prefixController
+
+```js
+const packagedData = jsonPrefix.map((keyless) => {
+  return { ...keyless, _id: nanoid() }
+})
+res.status(StatusCodes.OK).json({ prefixes: packagedData })
+```
+
+-- fixed wierd {data: {data:jsonData}}
+
+PrefixContainer.jsx
+
+```jsx
+const { prefixes } = data
+
+prefixes.map((prefix) => {
+  return <Prefix key={prefix._id} {...prefix}></Prefix>
+})
+```
+
+#### prefix css
+
+```js
+import styled from 'styled-components'
+const Wrapper = styled.div`
+  background: white;
+  // background: var(--background-secondary-color);
+  border-radius: var(--border-radius);
+  display: grid;
+  grid-template-rows: 1fr auto;
+  box-shadow: var(--shadow-2);
+  header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--grey-100);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+  .main-icon {
+    width: 60px;
+    height: 60px;
+    display: grid;
+    place-items: center;
+    background: var(--primary-500);
+    border-radius: var(--border-radius);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-right: 2rem;
+  }
+  .info {
+    h5 {
+      margin-bottom: 0.5rem;
+    }
+    p {
+      margin: 0;
+      text-transform: capitalize;
+      color: var(--text-secondary-color);
+      letter-spacing: var(--letter-spacing);
+    }
+  }
+  .content {
+    padding: 1rem 1.5rem;
+  }
+  .content-center {
+    display: grid;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    grid-template-columns: 1fr;
+    row-gap: 1.5rem;
+    align-items: center;
+    @media (min-width: 576px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .polygon-hover {
+    fill: rgba(0, 47, 95, 0.2);
+  }
+`
+export default Wrapper
+```
+
+#### prefix component
+
+Prefix
+
+```js
+import Wrapper from '../../../../assets/wrappers/handparts/Prefix'
+import { SectionTitle, AchievementInfo } from '../../../../components'
+import SignInfo from './SignInfo'
+import { svgTeenBoyBody, svgAdultManBody } from '../../../common'
+const Prefix = ({ position, hand }) => {
+  return (
+    <Wrapper>
+      <SectionTitle text="Prefix" AddclassName="text-black" />
+      <div className="content">
+        <div className="content-center">
+          <SignInfo icon={svgAdultManBody} text={position} />
+          <SignInfo icon={svgTeenBoyBody} text={hand} />
+        </div>
+      </div>
+    </Wrapper>
+  )
+}
+```
+
+-- the card is the same regardless theme
+
+SectionTitle.jsx
+
+```jsx
+const SectionTitle = ({ text, AddclassName }) => {
+  const combinedClassName = `text-3xl font-medium tracking-wider capitalize ${
+    AddclassName || ''
+  }`
+  return (
+    <div className="border-b border-base-300 pb-5">
+      <h2 className={combinedClassName}>{text}</h2>
+    </div>
+  )
+}
+```
+
+#### SignInfo and css
+
+```js
+import Wrapper from '../../../../assets/wrappers/handparts/SignInfo'
+const SignInfo = ({ icon, text }) => {
+  return (
+    <Wrapper>
+      <span className="sign-icon">{icon}</span>
+      <span className="sign-text">{text}</span>
+    </Wrapper>
+  )
+}
+export default SignInfo
+```
+
+```js
+import styled from 'styled-components'
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+
+  .sign-icon {
+    font-size: 1rem;
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    svg {
+      color: var(--text-secondary-color);
+    }
+  }
+  .sign-text {
+    text-transform: capitalize;
+    letter-spacing: var(--letter-spacing);
+    color: black;
+  }
+`
+
+export default Wrapper
+```
+
+#### common
+
+---reminder the svg is in .gitignore
+
+### Dynamic updates
