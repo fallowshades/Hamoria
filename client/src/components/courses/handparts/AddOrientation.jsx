@@ -1,7 +1,6 @@
 import Wrapper from '../../../assets/wrappers/DashboardFormPage'
 import { Form } from 'react-router-dom'
-import { FormRow, SectionTitle } from '../../../components'
-import { orientationKeys } from '../../../../../utils/modelKeyConstants'
+import { SectionTitle } from '../../../components'
 //network submission
 import { toast } from 'react-toastify'
 import customFetch from '../../../utils/customFetch'

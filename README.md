@@ -218,3 +218,83 @@ export default AllOrientation
 
 export const useAllOrientationContext = () => useContext(AllOrientationContext)
 ```
+
+### render Orientation
+
+#### OrientationContainer css
+
+```js
+@ -0,0 +1,31 @@
+import styled from 'styled-components'
+
+const Wrapper = styled.section`
+  margin-top: 4rem;
+  h2 {
+    text-transform: none;
+  }
+  & > h5 {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+  .orientations {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 2rem;
+  }
+   @media (min-width: 765px) {
+    .orientations {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+  @media (min-width: 1120px) {
+    .orientations {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+    }
+  }
+`
+export default Wrapper
+```
+
+####
+
+```js
+import { useAllOrientationContext } from '../../../pages/handparts/AllOrientation'
+import { Orientation } from './mappedItems'
+import Wrapper from '../../../assets/wrappers/handparts/OrientationContainer'
+```
+
+```js
+  const { data } = useAllOrientationContext()
+
+  const { orientations } = data
+
+  if (orientations.length == 0) {
+    return (
+      <Wrapper>
+        <h2>No orientations found</h2>
+      </Wrapper>
+    )
+  }
+
+  return (
+    ...
+       <div className="orientations">
+        {orientations.map((orientation) => {
+          return <Orientation key={orientation._id} {...orientation} />
+        })}
+      </div>
+
+  )
+```
+
+Orientation
+
+```JS
+const Orientation = () => {
+  return <div>Orientation</div>
+}
+export default Orientation
+```
