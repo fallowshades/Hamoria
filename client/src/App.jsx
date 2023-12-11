@@ -99,6 +99,9 @@ import { loader as ordersLoader } from './pages/Orders'
 import { action as prefixAction } from './components/courses/handparts/FooterAddPrefix'
 import { loader as prefixLoader } from './pages/handparts/AllPrefix'
 import { action as deletePrefixAction } from './pages/handparts/DeletePrefix'
+import { action as orientationAction } from './components/courses/handparts/AddOrientation'
+import { loader as orientationLoader } from './pages/handparts/AllOrientation'
+import { action as deleteOrientationAction } from './pages/handparts/DeleteOrientation'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -243,6 +246,12 @@ const router = createBrowserRouter([
           {
             path: 'orientation',
             element: <AllOrientation />,
+            action: orientationAction,
+            loader: orientationLoader,
+          },
+          {
+            path: 'delete-orientation/:id',
+            action: deleteOrientationAction,
           },
           {
             path: 'hand-status',
