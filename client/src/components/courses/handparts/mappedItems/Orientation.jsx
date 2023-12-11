@@ -6,6 +6,7 @@ import { EditOrientation } from '../mappedItems'
 import { Form } from 'react-router-dom'
 
 const Orientation = ({
+  _id,
   orderid,
   fingerdirection,
   fingerdirection2,
@@ -31,7 +32,7 @@ const Orientation = ({
           )}
         </div>
         <footer className="actions">
-          <EditOrientation />
+          <EditOrientation _id={_id} />
           <Form>
             <button type="submit" className="btn delete-btn">
               Delete

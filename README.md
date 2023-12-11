@@ -363,6 +363,10 @@ const Orientation = ({
 
 ### edit orientation
 
+#### EditOrientation setup
+
+EditOrientation.jsx
+
 ```js
 import Wrapper from '../../../../assets/wrappers/DashboardFormPage'
 import { Form } from 'react-router-dom'
@@ -380,10 +384,6 @@ const EditOrientation = () => {
 }
 export default EditOrientation
 ```
-
-#### EditOrientation setup
-
-EditOrientation.jsx
 
 Orientation.jsx
 
@@ -428,5 +428,98 @@ export const updateOrientation = async (req, res) => {
 export const deleteOrientation = async (req, res) => {
   res.send('delete orientation')
   getSinglePrefix({ noRead: false, value: nanoid() }, res)
+}
+```
+
+### orientation action setup. (btn w identiry)
+
+Orientation.jsx
+
+```js
+const Orientation = ({
+  _id,...}) =>{
+
+    return(
+      <footer className="actions">
+      <EditOrientation _id={_id} />
+      </footer>
+    )
+  }
+```
+
+EditOrientation.jsx
+
+```js
+import { useNavigation } from 'react-router-dom'
+const EditOrientation = ({ _id }) => {
+  const navigation = useNavigation()
+  const isSubmitting = navigation.state === 'submitting'
+  const identifyAction = `patch ${_id}`
+
+
+return(
+   <input name="form-id" hidden defaultValue={identifyAction} />
+        <KeysToMapFormRows isOrientation />
+        <button
+          type="submit"
+          className="btn btn-block form-btn "
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'submitting...' : 'submit'}
+        </button>
+)
+}
+```
+
+AddOrientation
+
+```js
+
+export const action = async ({ request }) => {
+ ...
+
+ const formId = formData.get('form-id')
+
+  const parts = formId.split(/\s+/)
+  // The first part will be 'edit'
+  const crudOperationPart = parts[0]
+  // The remaining part will be everything after 'edit'
+  const idPart = parts.slice(1).join(' ')
+
+  switch (crudOperationPart) {
+    case 'create':
+      try {
+        await customFetch.post('/orientations', data)
+        toast.success('orientation added successfully')
+
+        return null
+      } catch (error) {
+        toast.error(error?.response?.data?.mst)
+        return error
+      }
+    case 'patch':
+      const nanoidRegex = /^[a-zA-Z0-9_-]{21}$/
+      const mongooseObjectIdRegex = /^[0-9a-fA-F]{24}$/
+
+      if (nanoidRegex.test(idPart)) {
+        toast.success(`${idPart}`)
+        return null
+      }
+      toast.error('sad developer')
+      return null
+
+    default:
+      toast.success('default')
+      return null
+  }
+}
+
+const AddOrientation = () => {
+
+return(
+  ...
+   <input name="form-id" hidden defaultValue="create" />
+  ...
+)
 }
 ```
