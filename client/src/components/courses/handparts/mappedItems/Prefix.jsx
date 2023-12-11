@@ -18,7 +18,7 @@ const Prefix = ({ _id, Connectionid, position, hand }) => {
       </div>
       <footer className="actions">
         <EditPrefix _id={_id} />
-        <Form>
+        <Form method="post" action={`../delete-prefix/${_id}`}>
           <button type="submit" className="btn delete-btn">
             Delete
           </button>
