@@ -42,7 +42,7 @@ import { SiCodeproject, SiTestinglibrary } from 'react-icons/si'
 import { MdSwitchAccessShortcut } from 'react-icons/md'
 
 export const links = [
-  { text: 'add Achievement', path: '.', icon: <FaWpforms /> },
+  { text: 'add Achievement', path: 'add-achievement', icon: <FaWpforms /> },
   {
     text: 'all Achievements',
     path: 'all-achievements',

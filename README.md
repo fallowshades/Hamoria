@@ -1,850 +1,864 @@
-# v0.5.6
+# v0.6.0
 
-## footer element
+## Support tree for object transfer to set
 
-### links
+### object request/response session
 
-#### create footer links
+#### 1.0 extra
 
 ```js
-//we
-import { MdOutlineEventNote } from 'react-icons/md'
-import { FcAbout } from 'react-icons/fc'
-import { RiNewspaperLine } from 'react-icons/ri'
-import { IoIosHelpCircleOutline } from 'react-icons/io'
-import { GoCodeOfConduct } from 'react-icons/go'
-import { LiaCookieBiteSolid } from 'react-icons/lia'
+//dynamically generating components
+import { nanoid } from 'nanoid'
 
-export const footerLinks = [
-  { id: 1, path: 'about-us', text: 'about', icon: <FcAbout /> },
-  { id: 2, path: 'events', text: 'events', icon: <MdOutlineEventNote /> },
-  { id: 3, path: 'news', text: 'news', icon: <RiNewspaperLine /> },
-  { id: 4, path: 'help', text: 'help', icon: <IoIosHelpCircleOutline /> },
-  {
-    id: 5,
-    path: 'terms-and-conditions',
-    text: 'terms and conditions',
-    icon: <GoCodeOfConduct />,
-  },
-  {
-    id: 6,
-    path: 'cookie-setting',
-    text: 'cookie setting',
-    icon: <LiaCookieBiteSolid />,
-  },
+const prefixKeys = [
+  { field: 'Connectionid', identifier: nanoid() },
+  { field: 'position', identifier: nanoid() },
+  { field: 'hand', identifier: nanoid() },
 ]
+const orientationKeys = [
+  { field1: 'orderid', identifier: nanoid() },
+  { field2: 'fingerdirection', identifier: nanoid() },
+  { field3: 'fingerdirection2', identifier: nanoid() },
+  { field4: 'palmdirection', identifier: nanoid() },
+  { field5: 'palmdirection2', identifier: nanoid() },
+  ,
+]
+const signKeys = [
+  { field1: 'active_hand', identifier: nanoid() },
+  { field2: 'aktive_hand2', identifier: nanoid() },
+  { field3: 'passive_hand2', identifier: nanoid() },
+  { field4: 'singlehandform', identifier: nanoid() },
+  { field5: 'transform', identifier: nanoid() },
+]
+const wordKeys = [
+  { field1: 'word', identifier: nanoid() },
+  { field2: 'subgroup', identifier: nanoid() },
+  { field3: 'subsection', identifier: nanoid() },
+  { field4: 'prefixid', identifier: nanoid() },
+]
+const referenceKeys = [
+  { field1: 'position', identifier: nanoid() },
+  { field2: 'bodycontact', identifier: nanoid() },
+  { field3: 'touchtype', identifier: nanoid() },
+  { field4: 'faceexpression', identifier: nanoid() },
+  { field5: 'link', identifier: nanoid() },
+]
+
+export { prefixKeys, orientationKeys, signKeys, wordKeys, referenceKeys }
 ```
 
-#### weLink
+#### 1. AddAchievement - Structure
+
+components/FooterAddPrefix.jsx
 
 ```js
-import { footerLinks } from '../utils/links'
-import { NavLink } from 'react-router-dom'
-const WeLinks = () => {
-  return (
-    <div className="nav-links">
-      {footerLinks.map((link) => {
-        const { text, path, icon } = link
-        return (
-          <NavLink to={path} key={text} className="nav-link" end>
-            <span className="icon">{icon}</span>
-            {text}
-          </NavLink>
-        )
-      })}
-    </div>
-  )
-}
-export default WeLinks
-```
-
-### footer
-
-####
-
-Footer.jsx
-
-```js
-import WeLinks from './WeLinks'
-import Wrapper from '../assets/wrappers/Footer'
-import Logo from './Logo'
-import { useState } from 'react'
-const Footer = () => {
-  const [showFooter, setShowFooter] = useState(true)
+//Dynamically render keys frontend and backend
+import Wrapper from '../../../assets/wrappers/DashboardFormPage'
+import { Form } from 'react-router-dom'
+import { FormRow, SectionTitle } from '../../../components'
+import { prefixKeys } from '../../../../../utils/modelKeyConstants'
+//network submission
+import { Toast } from 'react-toastify'
+import customFetch from '../../../utils/customFetch'
+import { useNavigation, redirect } from 'react-router-dom'
+const FooterAddPrefix = () => {
+  const navigation = useNavigation()
+  const isSubmitting = navigation.state === 'submitting'
   return (
     <Wrapper>
-      <div
-        className={
-          showFooter ? 'footer-container' : 'footer-container show-footer'
-        }
+      <Form method="post" className="form"></Form>
+      <SectionTitle text="add prefix" />
+      {prefixKeys.map((constant) => {
+        return (
+          <FormRow
+            key={constant.identifier}
+            type="text"
+            name={constant.field}
+          />
+        )
+      })}
+      <button
+        type="submit"
+        className="btn btn-block form-btn"
+        disabled={isSubmitting}
       >
-        <div className="content">
-          <header>
-            <Logo />
-          </header>
-          <WeLinks />
-        </div>
-      </div>
+        {isSubmitting ? 'submitting...' : 'submit'}
+      </button>
     </Wrapper>
   )
 }
-export default Footer
+export default FooterAddPrefix
 ```
 
-index.js
+PrefixContainer
 
 ```js
-export { default as Footer } from './Footer'
+import FooterAddPrefix from './FooterAddPrefix'
+const PrefixContainer = () => {
+  return (
+    <>
+      <div>PrefixContainer</div>
+      <FooterAddPrefix />
+    </>
+  )
+}
+export default PrefixContainer
 ```
 
-DashboardLayout
+#### 2. (extend) dynamicly maped formRow select
 
 ```js
-import { Loading, Footer } from '../components'
+import * as constants from './constants'
+const { HAND_VARIANTS, ORIENTATION, TOUCH_TYPE, FACE_EXPRESSION } = constants
 
-<div className="dashboard-page">
-              {isPageLoading ? <Loading /> : <Outlet context={{ user }} />}
-            </div>
-            <Footer />
+const prefixKeys = [
+  { field: 'Connectionid', identifier: nanoid() },
+  { field: 'position', identifier: nanoid() },
+  {
+    field: 'hand',
+    identifier: nanoid(),
+    list: HAND_VARIANTS,
+    default: HAND_VARIANTS.A,
+  },
+]
+
+const orientationKeys = [
+  {
+    field: 'orderid',
+    identifier: nanoid(),
+    list: ORIENTATION,
+    default: ORIENTATION.FORWARD,
+  },
+  {
+    field: 'fingerdirection',
+    identifier: nanoid(),
+    list: ORIENTATION,
+    default: ORIENTATION.FORWARD,
+  },
+  {
+    field: 'fingerdirection2',
+    identifier: nanoid(),
+    list: ORIENTATION,
+    default: ORIENTATION.FORWARD,
+  },
+  {
+    field: 'palmdirection',
+    identifier: nanoid(),
+    list: ORIENTATION,
+    default: ORIENTATION.FORWARD,
+  },
+  {
+    field: 'palmdirection2',
+    identifier: nanoid(),
+    list: ORIENTATION,
+    default: ORIENTATION.FORWARD,
+  },
+  ,
+]
+
+const referenceKeys = [
+  { field: 'position', identifier: nanoid() },
+  {
+    field: 'bodycontact',
+    identifier: nanoid(),
+  },
+  {
+    field: 'touchtype',
+    identifier: nanoid(),
+    list: TOUCH_TYPE,
+    default: TOUCH_TYPE.NULL,
+  },
+  {
+    field: 'faceexpression',
+    identifier: nanoid(),
+    list: FACE_EXPRESSION,
+    default: FACE_EXPRESSION.NULL,
+  },
+  { field: 'link', identifier: nanoid() },
+]
 ```
 
-#### Footer css
+FooterAddPrefix.jsx
 
-Footer.js
+```js
+import { FormRow, SectionTitle, FormRowSelect } from '../../../components'
+const FooterAddPrefix = () => {
+  ...
+  //console.log(constant.hasOwnProperty('default'))
+  const renderDefault = constant
+  console.log()
+  if (!constant.hasOwnProperty('default')) {
+    return (
+      <FormRow key={constant.identifier} type="text" name={constant.field} />
+    )
+  } else {
+    return (
+      <FormRowSelect
+        key={constant.identifier}
+        type="text"
+        name={constant.field}
+        defaultValue={constant?.default}
+        list={Object.values(constant?.list)}
+      />
+    )
+  }
+}
+```
+
+#### Add prefix
+
+```js
+import { toast } from 'react-toastify'
+export const action = async ({ request }) => {
+  const formData = await request.formData()
+  const data = Object.fromEntries(formData)
+  console.log(data)
+  toast.success('prefix added successfully')
+  try {
+    await customFetch.post('/prefixes', data)
+    return null
+  } catch (error) {
+    toast.error(error?.response?.data?.mst)
+    return error
+  }
+}
+```
+
+## create transfer lifecycle
+
+### context to help map presentational data
+
+#### setup all prefix context
+
+```js
+import { useLoaderData } from 'react-router-dom'
+
+const AllPrefixContext = createContext()
+const AllPrefix = () => {
+  const { data } = useLoaderData()
+  return (
+    <AllPrefixContext.Provider value={{ data }}>
+      <PrefixContainer />
+      <FilterPrefix />
+    </AllPrefixContext.Provider>
+  )
+}
+export const useAllPrefixContext = () => useContext(AllPrefixContext)
+```
+
+#### moc database call from controller
+
+prefixController.js
+
+```js
+import { readFile } from 'fs/promises'
+import dotenv from 'dotenv'
+
+export const getAllPrefixes = async (req, res) => {
+  res.send('get all prefixes')
+  const jsonPrefix = JSON.parse(
+    await readFile(
+      new URL('../utils/mockWhat/mockPrefixData.json', import.meta.url)
+    )
+  )
+  res.send(jsonPrefix)
+}
+```
+
+#### all prefix loader structure
+
+App.jsx
+
+```js
+import { loader as prefixLoader } from './pages/handparts/AllPrefix'
+
+loader: prefixLoader,
+
+```
+
+```js
+import { toast } from 'react-toastify'
+import customFetch from '../../utils/customFetch'
+import { useContext, createContext } from 'react'
+export const loader = async ({ request }) => {
+  try {
+    const { data } = await customFetch.get('/prefixes')
+    return {
+      data,
+    }
+  } catch (error) {
+    toast.error(error?.response?.data?.msg)
+    return error
+  }
+}
+```
+
+#### in order to render moc data
+
+prefixController.js
+
+```js
+import { nanoid } from 'nanoid'
+
+export const createPrefix = async (req, res) => {
+  ...
+
+  res
+    .status(StatusCodes.OK)
+    .json({ data: { _id: nanoid(), prefixes: jsonPrefix } })
+}
+```
+
+#### render prefix
+
+Prefix.Jsx
+
+```js
+const Prefix = () => {
+  return <div>Prefix</div>
+}
+export default Prefix
+```
+
+PrefixContainer.jsx
+
+````js
+import FooterAddPrefix from './FooterAddPrefix'
+import Prefix from './mappedItems/Prefix'
+import { useAllPrefixContext } from '../../../pages/handparts/AllPrefix'
+const PrefixContainer = () => {
+  const { data } = useAllPrefixContext()
+  if (!data) {
+    return <h2>No prefixes found</h2>
+  }
+  const { prefixes } = data.data
+  if (prefixes.length == 0) {
+    return (
+      <Wrapper>
+        <h2>No Prefixes to display...</h2>
+      </Wrapper>
+    )
+  }
+  return (
+    <>
+      <div>
+        <div>to be toggle</div>
+        <FooterAddPrefix />
+        <div className="prefixes">
+          {prefixes.map((prefix) => {
+            return <Prefix key={prefix._id} {...prefixes}></Prefix>
+          })}
+        </div>
+      </div>
+    </>
+  )
+}
+    ```
+````
+
+#### fixes
+
+links.jsx
+
+```js
+export const links = [
+  { text: 'add Achievement', path: '.', icon: <FaWpforms /> },
+  { text: 'add Achievement', path: 'add-achievement', icon: <FaWpforms /> },
+]
+```
+
+AddAchievement
+
+```js
+return redirect('/dashboard/all-achievements')
+```
+
+#### prefix container css
 
 ```js
 import styled from 'styled-components'
-const Wrapper = styled.footer`
-  background: var(--background-secondary-color);
-  .content {
-    display: flex;
-    flex-direction: row;
+
+const Wrapper = styled.section`
+  margin-top: 4rem;
+  h2 {
+    text-transform: none;
+  }
+  & > h5 {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+  .prefixes {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 2rem;
+  }
+   @media (min-width: 765px) {
+    .prefixes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+  @media (min-width: 1120px) {
+    .prefixes {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+    }
   }
 `
 export default Wrapper
 ```
 
-### footer layout
+## understandable
 
-Footer.jsx
+### understandable
+
+#### mapping of svg for each prefix with added id
+
+.gitignore
+
+```gitignore
+public/assets/images/parts/*
+src/components/common/*
+
+```
+
+--must add id since data is not from database
+
+prefixController
 
 ```js
-const Footer = () => {
+const packagedData = jsonPrefix.map((keyless) => {
+  return { ...keyless, _id: nanoid() }
+})
+res.status(StatusCodes.OK).json({ prefixes: packagedData })
+```
+
+-- fixed wierd {data: {data:jsonData}}
+
+PrefixContainer.jsx
+
+```jsx
+const { prefixes } = data
+
+prefixes.map((prefix) => {
+  return <Prefix key={prefix._id} {...prefix}></Prefix>
+})
+```
+
+#### prefix css
+
+```js
+import styled from 'styled-components'
+const Wrapper = styled.div`
+  background: white;
+  // background: var(--background-secondary-color);
+  border-radius: var(--border-radius);
+  display: grid;
+  grid-template-rows: 1fr auto;
+  box-shadow: var(--shadow-2);
+  header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--grey-100);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+  .main-icon {
+    width: 60px;
+    height: 60px;
+    display: grid;
+    place-items: center;
+    background: var(--primary-500);
+    border-radius: var(--border-radius);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-right: 2rem;
+  }
+  .info {
+    h5 {
+      margin-bottom: 0.5rem;
+    }
+    p {
+      margin: 0;
+      text-transform: capitalize;
+      color: var(--text-secondary-color);
+      letter-spacing: var(--letter-spacing);
+    }
+  }
+  .content {
+    padding: 1rem 1.5rem;
+  }
+  .content-center {
+    display: grid;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    grid-template-columns: 1fr;
+    row-gap: 1.5rem;
+    align-items: center;
+    @media (min-width: 576px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .polygon-hover {
+    fill: rgba(0, 47, 95, 0.2);
+  }
+`
+export default Wrapper
+```
+
+#### prefix component
+
+Prefix
+
+```js
+import Wrapper from '../../../../assets/wrappers/handparts/Prefix'
+import { SectionTitle, AchievementInfo } from '../../../../components'
+import SignInfo from './SignInfo'
+import { svgTeenBoyBody, svgAdultManBody } from '../../../common'
+const Prefix = ({ position, hand }) => {
   return (
-    <div className="content">
-      <div className="link-column">
-        <WeLinks startIndex={0} endIndex={2} />
+    <Wrapper>
+      <SectionTitle text="Prefix" AddclassName="text-black" />
+      <div className="content">
+        <div className="content-center">
+          <SignInfo icon={svgAdultManBody} text={position} />
+          <SignInfo icon={svgTeenBoyBody} text={hand} />
+        </div>
       </div>
-      <div className="link-column">
-        <WeLinks startIndex={3} endIndex={6} />
-      </div>
+    </Wrapper>
+  )
+}
+```
+
+-- the card is the same regardless theme
+
+SectionTitle.jsx
+
+```jsx
+const SectionTitle = ({ text, AddclassName }) => {
+  const combinedClassName = `text-3xl font-medium tracking-wider capitalize ${
+    AddclassName || ''
+  }`
+  return (
+    <div className="border-b border-base-300 pb-5">
+      <h2 className={combinedClassName}>{text}</h2>
     </div>
   )
 }
 ```
 
-Welinks.jsx
+#### SignInfo and css
 
 ```js
-const WeLinks = ({ startIndex, endIndex }) => {
-  const linksInRange = footerLinks.slice(startIndex, endIndex + 1)
-
-   {linksInRange.map((link) => {...})}
-}
-```
-
-## Fix dashboard
-
-## sidebar with parts linked to
-
--- div is not the appropriate method
-
-/pages/DashboardLayout.jsx
-
-```js
-{
-  activeLeftSidebar ? (
-    <>
-      <SmallSidebar />
-      <BigSidebar />
-    </>
-  ) : null
-}
-```
-
-### links
-
-/utils/links
-
-```js
-import { SiSemanticweb } from 'react-icons/si'
-import { VscReferences } from 'react-icons/vsc'
-import { PiHandEye } from 'react-icons/pi'
-import { FaHandPointer } from 'react-icons/fa'
-
-export const partLinks = [
-  { id: 1, path: 'reference', text: 'reference', icon: <VscReferences /> },
-  { id: 2, path: 'word', text: 'word', icon: <SiSemanticweb /> },
-  { id: 3, path: 'orientation', text: 'orientation', icon: <FaHandPointer /> },
-  {
-    id: 4,
-    path: 'hand-status',
-    text: 'hand status',
-    icon: <PiHandEye />,
-  },
-  {
-    id: 5,
-    path: 'prefix',
-    text: 'terms and conditions',
-    icon: <GoCodeOfConduct />,
-  },
-]
-```
-
-### containers to fill up multiple
-
-#### the sidebars
-
-components/WhatSidebarBig and components/WhatSidebar
-
-```js
-import HandPartContainer from './HandPartContainer'
-;<HandPartContainer />
-```
-
-#### toggle in sidebar
-
-HandPartContainer.jsx
-
-```js
-import { useState } from 'react'
-import { FaCaretDown } from 'react-icons/fa'
-import { FaHandScissors } from 'react-icons/fa'
-import Wrapper from '../assets/wrappers/SidebarContainer'
-import { NavLinksNested } from './NavLinksNested'
-const HandPartContainer = () => {
-  const [showParts, setShowPart] = useState(false)
-  const [handform, setHandform] = useState('v' === 'j')
+import Wrapper from '../../../../assets/wrappers/handparts/SignInfo'
+const SignInfo = ({ icon, text }) => {
   return (
-    <Wrapper className="nav-link">
-      <button
-        type="button"
-        className="toggle-btn"
-        onClick={() => setShowPart(!showParts)}
-      >
-        {handform ? <FaHandScissors /> : <FaHandScissors />}
-        handparts
-      </button>
-      <div className={showParts ? 'dropdown show-dropdown' : 'dropdown'}>
-        <NavLinksNested />
-      </div>
-      <FaCaretDown />
+    <Wrapper>
+      <span className="sign-icon">{icon}</span>
+      <span className="sign-text">{text}</span>
     </Wrapper>
   )
 }
-export default HandPartContainer
+export default SignInfo
 ```
-
-NavLinksNested.jsx
-
-```js
-import { NavLink } from 'react-router-dom'
-import { partLinks } from '../utils/links'
-const NavLinksNested = () => {
-  return (
-    <>
-      {partLinks.map((link) => {
-        const { id, text, path, icon } = link
-        return (
-          <div key={id} className="dropdown-item">
-            <NavLink
-              to={path}
-              key={id}
-              className="nav-link"
-              // will discuss in a second
-              end
-            >
-              <span className="icon">{icon}</span>
-              {text}
-            </NavLink>
-            {id}
-          </div>
-        )
-      })}
-    </>
-  )
-}
-export default NavLinksNested
-```
-
-#### non toggle in logoutcontainer in navbar (why need fragment)
-
-LogoutContainer.jsx
-
-```js
-import NavLinksNested from './NavLinksNested'
-
-const LogoutContainer = () => {
-  ;<NavLinksNested />
-}
-```
-
-#### css HandPartContainer
 
 ```js
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-  position: relative;
   display: flex;
-  flex-direction: row;
+  align-items: center;
 
-  .logout-btn {
+  .sign-icon {
+    font-size: 1rem;
+    margin-right: 1rem;
     display: flex;
-
     align-items: center;
-    justify-content: center;
-    gap: 0 0.5rem;
+    svg {
+      color: var(--text-secondary-color);
+    }
   }
-  .img {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-  }
-  .dropdown {
-    position: absolute;
-    top: 50px;
-    left: 0;
-    width: 100%;
-    box-shadow: var(--shadow-2);
-    visibility: hidden;
-    border-radius: var(--border-radius);
-  }
-  .show-dropdown {
-    visibility: visible;
-  }
-
-  .toggle-btn {
-    flex: 0.6; /* Adjust the value as needed */
-  }
-  .dropdown {
-    flex: 1; /* Adjust the value as needed */
-  }
-
-  .dropdown-item {
-    border-radius: var(--border-radius);
-    background: transparent;
-    border-color: transparent;
-    color: var(--white);
-    letter-spacing: var(--letter-spacing);
+  .sign-text {
     text-transform: capitalize;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
+    letter-spacing: var(--letter-spacing);
+    color: black;
   }
 `
 
 export default Wrapper
 ```
 
-### course container with cirrculum links
+#### common
 
-#### links to courses
+---reminder the svg is in .gitignore
 
-```js
-import { GiMaterialsScience } from 'react-icons/gi'
-import { GiHumanPyramid } from 'react-icons/gi'
+## Dynamic updates
 
-export const curriculumLinks = [
-  { id: 1, path: 'no', text: 'no', icon: <GiMaterialsScience /> },
-  { id: 2, path: 'so', text: 'so', icon: <GiHumanPyramid /> },
-]
-export const noLinks = [
-  { id: 1, path: 'crud', text: 'crud', icon: <GiMaterialsScience /> },
-  { id: 2, path: 'domain', text: 'domain', icon: <GiHumanPyramid /> },
-  { id: 2, path: 'tuple', text: 'tuple', icon: <GiHumanPyramid /> },
-  { id: 2, path: 'place', text: 'place', icon: <GiHumanPyramid /> },
-  { id: 2, path: 'item', text: 'item', icon: <GiHumanPyramid /> },
-]
-export const soLinks = [
-  { id: 1, path: 'shock', text: 'shock', icon: <GiMaterialsScience /> },
-  { id: 2, path: 'denial', text: 'denial', icon: <GiHumanPyramid /> },
-  { id: 2, path: 'anger', text: 'anger', icon: <GiHumanPyramid /> },
-  { id: 2, path: 'bargain', text: 'bargain', icon: <GiHumanPyramid /> },
-  { id: 2, path: 'depression', text: 'depression', icon: <GiHumanPyramid /> },
-  { id: 2, path: 'testing', text: 'testing', icon: <GiHumanPyramid /> },
-  { id: 2, path: 'acceptance', text: 'acceptance', icon: <GiHumanPyramid /> },
-]
-```
+### edit achievement setup
 
-#### course container
+#### refracture key rendered formrows
+
+-create KeysToMapFormRows
+
+KeysToMapFormRows.jsx
 
 ```js
-const CoursesContainer = () => {
-  const [showCourses, setShowCourses] = useState(false)
-  return (
-    <Wrapper className="nav-link">
-      <button
-        type="button"
-        className="toggle-btn"
-        onClick={() => setShowCourses(!showCourses)}
-      >
-        {showCourses ? <FaPeopleRoof /> : <FaPeopleRoof />}
-        Courses
-      </button>
-      <div className={showCourses ? 'dropdown show-dropdown' : 'dropdown'}>
-        <NavLinksNested coursesLinks />
-      </div>
-      <FaCaretDown />
-    </Wrapper>
-  )
-}
-export default CoursesContainer
-```
+import { prefixKeys } from '../../../../../../utils/modelKeyConstants'
+import { FormRow, FormRowSelect } from '../../..'
 
-NavLinksNested.jsx
-
-```js
-import { partLinks, curriculumLinks } from '../utils/links'
-
-const NavLinksNested = ({ coursesLinks }) => {
-  const linkesToMap = coursesLinks ? curriculumLinks : partLinks
+const KeysToMapFormRows = () => {
   {
-    linkesToMap.map((link) => {...})
-  }
-}
-```
-
-#### connect to sidebar
-
-WhatSidebar.jsx and WhatSidebarBig.jsx
-
-```js
-
-import CoursesContainer from './CoursesContainer'
-
-const whatSidebar(){
-  return(<div className="col2">
-              <HandPartContainer />
-              <CoursesContainer />
-            </div>)
-}
-```
-
-### Refracture
-
-navigational folder in /components
-
-## setup pages for courses and parts
-
-create
-
-- ./pages/courses/no
-- ./pages/courses/no
-- ./pages/footReference
-
-### toogle container with curriculum
-
-#### basic container to be nested
-
-#### setup curriculum to setup courses
-
-package.json
-
-```js
-"nanoid": "^5.0.4",
-```
-
-- update all id
-
-links.jsx
-
-```js
-import { nanoid } from 'nanoid'
-```
-
-#### refracture to toggle in dashboard
-
-DashboardLayout
-
-````js
-  const [showCourses, setShowCourses] = useState(false)
-  const toggleCourses = () => {
-    setShowCourses(!showCourses)
-    console.log(showCourses)
-
-     <DashboardContext.Provider
-      value={{
-        toggleDarkTheme,
-        toggleSidebar,
-        logoutUser,
-        toggleCourses,
-        showCourses,
-      }}
-    >
-  }```
-````
-
-whatSidebar.jsx
-
-```js
-import CurriculumContainerButton from './CurriculumContainerButton'
-const { showCourses } = useDashboardContext()
-
-
-return<>...
-            <div className="col2">
-              <CurriculumContainer />
-              <CurriculumContainerButton />
-              <div
-                className={showCourses ? 'dropdown show-dropdown' : 'dropdown'}
-              >
-                <CurriculumContainer />
-              </div>
-              <>
-```
-
-CurriculumContainerButton.jsx
-
-```js
-import { useState } from 'react'
-import { FaCaretDown } from 'react-icons/fa'
-import Wrapper from '../../assets/wrappers/SidebarContainer'
-import { FaPeopleRoof } from 'react-icons/fa6'
-import NavLinksNested from './NavLinksNested'
-import CourseContainer from './CourseContainer'
-import { useEffect } from 'react'
-import { useDashboardContext } from '../../pages/DashboardLayout'
-const CurriculumContainer = () => {
-  const [dropdownHeight, setDropdownHeight] = useState('auto') // Set initial height to auto
-  const { showCourses, toggleCourses } = useDashboardContext()
-  return (
-    <Wrapper className="nav-link">
-      <button
-        type="button"
-        className="toggle-btn"
-        onClick={() => toggleCourses()}
-      >
-        {showCourses ? <FaPeopleRoof /> : <FaPeopleRoof />}
-        Courses
-      </button>
-      <FaCaretDown />
-    </Wrapper>
-  )
-}
-export default CurriculumContainer
-```
-
-#### prepare for future
-
-- create course container
-
-```js
-import { curriculumLinks } from '../../utils/links'
-import { useState } from 'react'
-import Wrapper from '../../assets/wrappers/SidebarContainer'
-import { FaCaretDown } from 'react-icons/fa'
-const CourseContainer = () => {
-  const [showCourses, setShowCourses] = useState(false)
-
-  return (
-    <div className="nav-links">
-      {curriculumLinks.map((link) => {
-        const { id, text, path, icon } = link
-
-        return (
-          <Wrapper key={id} className="nav-link">
-            <button
-              type="button"
-              className="toggle-btn"
-              onClick={() => setShowCourses(!showCourses)}
-            >
-              {showCourses ? <i>{link.icon}</i> : <i>{link.icon}</i>}
-              Courses
-            </button>
-
-            <div
-              className={showCourses ? 'dropdown show-dropdown' : 'dropdown'}
-            >
-              <p>{link.text}</p>
-            </div>
-            <FaCaretDown />
-          </Wrapper>
-        )
-      })}
-    </div>
-  )
-}
-export default CourseContainer
-```
-
-### nested collapse
-
-#### toggleble icons and future fragment application
-
-links.js
-
-```js
-import { LuBoxes, LuPersonStanding } from 'react-icons/lu'
-export const curriculumLinks = [
-  {
-    id: nanoid(),
-    fragmentId: nanoid(),
-    path: 'no',
-    text: 'no',
-    icon: <GiMaterialsScience />,
-    activeIcon: <LuBoxes />,
-  },
-  {
-    id: nanoid(),
-    fragmentId: nanoid(),
-    path: 'so',
-    text: 'so',
-    icon: <GiHumanPyramid />,
-    activeIcon: <LuPersonStanding />,
-  },
-]
-```
-
-#### cascade delete when close parent
-
-DashboardLayout.jsx
-
-````js
- const [showCurriculum, setShowCurriculum] = useState(false)
-  const [showCourses, setShowCourses] = useState({ no: false, so: false })
-  const toggleCourses = (course) => {
-    setShowCourses((prevState) => ({
-      ...prevState,
-      [course]: !showCourses[course],
-    }))
-    console.log(showCourses[course])
-  }
-  const resetCourses = () => {
-    setShowCourses((prevState) => {
-      // Create a new object with the same keys as showCourses
-      const resetState = Object.keys(prevState).reduce((acc, key) => {
-        acc[key] = false
-        return acc
-      }, {})
-      return resetState
-    })
-  }
-  const toggleCurriculum = () => {
-    setShowCurriculum(!showCurriculum)
-       if (showCurriculum) resetCourses()
-  }
-    ```
-````
-
-#### --!update misstake of using showCourse instead of show circulum
-
-whatSidebar.jsx
-
-```js
-const { showCourses, showCurriculum } = useDashboardContext()
-
- <div
-
-                className={
-                  showCurriculum ? 'dropdown show-dropdown' : 'dropdown'
-                }
-              >
-                <CurriculumContainer />
-              </div>
-```
-
-#### give curriculumbutton toggle icons depend on show
-
-CurriculumContainerButton
-
---update onClick onClick={() => toggleCurriculum()}
-
-```js
-import { FaPeopleRoof, FaPeopleLine } from 'react-icons/fa6'
-
-const CurriculumContainerButton = () => {
-  const { showCurriculum, toggleCurriculum } = useDashboardContext()
-}
-```
-
-#### fragments such utelize space in parent div
-
-curriculumContainer.jsx
-
-```js
-import CourseContainerButton from './CourseContainerButton'
-const CurriculumContainer = () => {
-  return <NavLinksNested coursesLinks />
-  return (
-    <>
-      <CourseContainerButton />
-    </>
-  )
-}
-```
-
-```js
-import { useState } from 'react'
-import { FaCaretDown } from 'react-icons/fa'
-import Wrapper from '../../assets/wrappers/SidebarContainer'
-import CourseContainer from './CourseContainer'
-import { useDashboardContext } from '../../pages/DashboardLayout'
-import { curriculumLinks } from '../../utils/links'
-import React from 'react'
-
-const CourseContainerButton = () => {
-  const { showCourses, toggleCourses } = useDashboardContext()
-
-  return curriculumLinks.map((button) => {
-    const { id, text, icon, activeIcon, fragmentId } = button
+    console.log(prefixKeys)
     return (
-      <React.Fragment key={fragmentId}>
-        <Wrapper key={id} className="nav-link">
-          <button
-            value={text}
-            type="button"
-            className="toggle-btn"
-            onClick={(e) => toggleCourses(e.target.value)}
-          >
-            {showCourses.text ? <span>{icon}</span> : <span>{activeIcon}</span>}
-            {text}
-          </button>
-          <FaCaretDown />
-        </Wrapper>
-
-        <div
-          key={fragmentId}
-          className={showCourses[text] ? 'dropdown show-dropdown' : 'dropdown'}
-        >
-          <CourseContainer course={text} />
-        </div>
-      </React.Fragment>
+      <>
+        {prefixKeys.map((constant) => {
+          console.log()
+          if (!constant.hasOwnProperty('default')) {
+            return (
+              <FormRow
+                key={constant.identifier}
+                type="text"
+                name={constant.field}
+              />
+            )
+          } else {
+            return (
+              <FormRowSelect
+                key={constant.identifier}
+                type="text"
+                name={constant.field}
+                defaultValue={constant?.default}
+                list={Object.values(constant?.list)}
+              />
+            )
+          }
+        })}
+      </>
     )
-  })
+  }
+}
+export default KeysToMapFormRows
+```
+
+index.js
+
+```js
+export { default as KeysToMapFormRows } from './KeysToMapFormRows'
+```
+
+handparts/FooterAddPrefix.jsx
+
+```js
+import { KeysToMapFormRows } from './mappedItems'
+
+const FooterAddPrefix = () => {
+...
+  return(
+    ...
+<KeysToMapFormRows />
+
+  )
 }
 
-export default CourseContainerButton
 ```
 
-CourseContainer
+components\courses\handparts\mappedItems\EditPrefix.jsx
 
 ```js
-import NavLinksNested from './NavLinksNested'
-const CourseContainer = ({ course }) => {
-  return <NavLinksNested course={course} />
+import Wrapper from '../../../../assets/wrappers/DashboardFormPage'
+import { Form } from 'react-router-dom'
+import { KeysToMapFormRows } from '../mappedItems'
+const EditPrefix = () => {
+  return (
+    <Wrapper>
+      <Form method="post" className="form">
+        <h4 className="form-title">edit prefix</h4>
+        <div className="form-center"></div>
+        <KeysToMapFormRows />
+      </Form>
+    </Wrapper>
+  )
+}
+export default EditPrefix
+```
+
+#### connect editPrefix to container on each item
+
+Prefix.jsx
+
+```js
+import { EditPrefix } from '../mappedItems'
+import { Form } from 'react-router-dom'
+
+const Prefix = ({ Connectionid, position, hand }) => {
+  return (
+    ...
+     <footer className="actions">
+        <EditPrefix />
+        <Form>
+          <button type="submit" className="btn delete-btn">
+            Delete
+          </button>
+        </Form>
+      </footer>
+
+
+  )}
+```
+
+#### vissible dynamic changes
+
+prefixController.js
+
+```js
+export const getSinglePrefix = async (req, res) => {
+  res.send('get single prefix')
+  const testItem = {
+    Connectionid: req.noRead ? '1' : req.value,
+    position: 'mouth',
+    hand: 'j',
+  }
+  res.status(StatusCodes.OK).json({ prefix: testItem })
+}
+export const updatePrefix = async (req, res) => {
+  res.send('update prefix')
+  getSinglePrefix({ noRead: false, value: nanoid() }, res)
+}
+export const deletePrefix = async (req, res) => {
+  res.send('delete prefix')
+  getSinglePrefix({ noRead: false, value: nanoid() }, res)
 }
 ```
 
-### fix
+### set switch case need identify id each submit
 
-#### nested links icon
+- remove logs in AllPrefix, Prefix container and keys to map formRows
 
-links.jsx
-
-```js
-import { GiMaterialsScience, GiFamilyTree } from 'react-icons/gi'
-import { GiHumanPyramid, GiMisdirection, GiEvilMinion } from 'react-icons/gi'
-
-import { LuBoxes, LuBox, LuPersonStanding, LuReplaceAll } from 'react-icons/lu'
-import { FaSitemap } from 'react-icons/fa'
-import { ImShocked } from 'react-icons/im'
-import { TfiHandStop } from 'react-icons/tfi'
-import { TbMoneybag } from 'react-icons/tb'
-import { SiCodeproject, SiTestinglibrary } from 'react-icons/si'
-import { MdSwitchAccessShortcut } from 'react-icons/md'
-```
-
-#### nested map conditional access
-
---save my self from unnecessary refracture
-
-whatBigSidebar.jsx
+Prefix.jsx
 
 ```js
-import CurriculumContainerButton from './CurriculumContainerButton'
-
-const { showSidebar, showCurriculum } = useDashboardContext()
-
- () =>{...
-  <div className="col2">
-            <CurriculumContainerButton />
-          <CurriculumContainer />
-            <div
-              className={showCurriculum ? 'dropdown show-dropdown' : 'dropdown'}
-            >
-              <CurriculumContainer />
-            </div>
-          <HandPartContainer />
-            <HandPartContainer />
-          </div>
- }
+const Prefix = ({ _id, Connectionid, position, hand }) => {
+  return(
+    ...
+    <EditPrefix _id={_id} />
+    ...
+  )
+}
 ```
 
-wrappers\whatBigSidbarCss.js
+mappedItems\EditPrefix.jsx
 
 ```js
-const Wrapper = styled.aside`
-  .dropdown {
-    width: 100%;
-    text-align: center;
-    visibility: hidden;
-  }
-  .show-dropdown {
-    visibility: visible;
-  }
-  .dropdown-btn {
-    border-radius: var(--border-radius);
-    padding: 0.5rem;
-    border-color: transparent;
-    color: var(--white);
-    letter-spacing: var(--letter-spacing);
-    text-transform: capitalize;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-  }
-`
+
+import { useLoaderData } from 'react-router-dom'
+import { useNavigation, redirect } from 'react-router-dom'
+import customFetch from '../../../../utils/customFetch'
+
+const EditPrefix = ({ _id }) => {
+  const navigation = useNavigation()
+  const isSubmitting = navigation.state === 'submitting'
+  const identifyAction = `patch ${_id}`
+  return (
+   <input name="form-id" hidden defaultValue={identifyAction} />
+
+...
+
+    <button
+          type="submit"
+          className="btn btn-block form-btn "
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'submitting...' : 'submit'}
+        </button>
+
+    )
+}
 ```
 
-### setup pages for special query courses and handpart
+#### refracture action to switch case
 
-intotal 72 file changes inc name changes to All[name]
-
-### more fixes
-
-#### footer hover
-
-WeLinks.jsx
+FooterAddPrefix.jsx
 
 ```js
-    <NavLink
-            to={path}
-            key={text}
-            className="nav-link flex flex-row gap-2 py-2"
-            end
-          >
-```
+export const action = async ({ request }) => {
+  const formId = formData.get('form-id')
 
-Footer.jsx
+  const parts = formId.split(/\s+/)
+  // The first part will be 'edit'
+  const crudOperationPart = parts[0]
+  // The remaining part will be everything after 'edit'
+  const idPart = parts.slice(1).join(' ')
+  switch (crudOperationPart) {
+    case 'create':
+      toast.success('prefix added successfully')
+      try {
+        await customFetch.post('/prefixes', data)
+        return null
+      } catch (error) {
+        toast.error(error?.response?.data?.mst)
+        return error
+      }
+    case 'patch':
+      const nanoidRegex = /^[a-zA-Z0-9_-]{21}$/
+      const mongooseObjectIdRegex = /^[0-9a-fA-F]{24}$/
+
+      if (nanoidRegex.test(idPart)) {
+        toast.success(`${idPart}`)
+        return null
+      }
+      toast.error('sad developer')
+      return null
+
+    default:
+      toast.success('default')
+      return null
+  }
+}
+```
 
 ```js
-const Wrapper = style.style` .nav-link {
-    display: flex;
-    align-items: center;
-    color: var(--text-secondary-color);
-    padding: 1rem 0;
-    padding-left: 2.5rem;
-    text-transform: capitalize;
-    transition: color 0.3s ease-in-out;
-  }
-  .nav-link:hover {
-    color: var(--primary-500);
-    transition: var(--transition);
-  }
-  `
+return <input name="form-id" hidden defaultValue="create" />
 ```
 
-#### small sidebar close button
+### Delete Prefix
 
-## edit and delete parameters
+App.jsx
+
+```js
+import { action as deletePrefixAction } from './pages/handparts/DeletePrefix'
+
+    {
+            path: 'delete-prefix/:id',
+            action: deletePrefixAction,
+          },
+```
+
+pages/handparts/deletePrefix
+
+```js
+import { redirect } from 'react-router-dom'
+import customFetch from '../../utils/customFetch'
+import { toast } from 'react-toastify'
+
+export async function action({ params }) {
+  try {
+    await customFetch.delete(`/prefixes/${params.id}`)
+    toast.success('Prefix deleted successfully')
+  } catch (error) {
+    toast.error(error.response.data.msg)
+  }
+  return redirect('/dashboard/prefix')
+}
+```
+
+Prefix.jsx
+
+```js
+ <Form method="post" action={`../delete-prefix/${_id}`}>
+          <button type="submit" className="btn delete-btn">
+            Delete
+          </button>
+```

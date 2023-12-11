@@ -435,9 +435,9 @@ Pages: (utils\foraignArray, constants, \* diff population, utils\mockWhat, utils
 
 Pages: (AddPrefix, App, AllPrefix, SearchContainer, EditPrefix, DeletePrefix)
 
----[]support tree transfor objects
----[]create transfor lifeCycle
----[]context map presentational data dynamically
+---[x]support tree transfor objects
+---[x]create transfor lifeCycle
+---[x]context map presentational data dynamically
 
 ### Orientation page v0.6.1
 
