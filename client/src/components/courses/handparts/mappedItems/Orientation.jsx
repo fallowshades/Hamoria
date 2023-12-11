@@ -2,6 +2,9 @@ import Wrapper from '../../../../assets/wrappers/handparts/Prefix'
 import { SectionTitle } from '../../../../components'
 import SignInfo from './SignInfo'
 import { svgCrossProductr } from '../../../common'
+import { EditOrientation } from '../mappedItems'
+import { Form } from 'react-router-dom'
+
 const Orientation = ({
   orderid,
   fingerdirection,
@@ -27,6 +30,14 @@ const Orientation = ({
             </div>
           )}
         </div>
+        <footer className="actions">
+          <EditOrientation />
+          <Form>
+            <button type="submit" className="btn delete-btn">
+              Delete
+            </button>
+          </Form>
+        </footer>
       </div>
     </Wrapper>
   )

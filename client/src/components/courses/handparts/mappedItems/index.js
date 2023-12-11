@@ -4,3 +4,4 @@ export { default as SignInfo } from './SignInfo'
 export { default as KeysToMapFormRows } from './KeysToMapFormRows'
 
 export { default as Orientation } from './Orientation'
+export { default as EditOrientation } from './EditOrientation'
