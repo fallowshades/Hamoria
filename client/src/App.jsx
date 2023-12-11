@@ -100,7 +100,7 @@ import { action as prefixAction } from './components/courses/handparts/FooterAdd
 import { loader as prefixLoader } from './pages/handparts/AllPrefix'
 import { action as deletePrefixAction } from './pages/handparts/DeletePrefix'
 import { action as orientationAction } from './components/courses/handparts/AddOrientation'
-
+import { loader as orientationLoader } from './pages/handparts/AllOrientation'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -245,6 +245,7 @@ const router = createBrowserRouter([
             path: 'orientation',
             element: <AllOrientation />,
             action: orientationAction,
+            loader: orientationLoader,
           },
           {
             path: 'hand-status',

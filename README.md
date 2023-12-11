@@ -144,3 +144,77 @@ const AddOrientation = () => {
   )
 }
 ```
+
+## create transfer lifecycle
+
+### context to help map presentational data
+
+### loadable
+
+App.jsx
+
+```js
+
+import { loader as orientationLoader } from './pages/handparts/AllOrientation'
+
+ loader: orientationLoader,
+```
+
+orientationController.js
+
+```js
+import { readFile } from 'fs/promises'
+import { nanoid } from 'nanoid'
+
+export const getAllOrientations = async (req, res) => {
+  const jsonPrefix = JSON.parse(
+    await readFile(
+      new URL('../utils/mockWhat/mockOrientationData.json', import.meta.url)
+    )
+  )
+
+  const packagedData = jsonPrefix.map((keyless) => {
+    return { ...keyless, _id: nanoid() }
+  })
+
+  res.status(StatusCodes.OK).json({ orientations: packagedData })
+}
+```
+
+#### All orders loader
+
+```js
+import { useContext, createContext } from 'react'
+import { useLoaderData } from 'react-router-dom'
+
+import { toast } from 'react-toastify'
+import customFetch from '../../utils/customFetch'
+
+export const loader = async ({ request }) => {
+  try {
+    const { data } = await customFetch.get('/orientations')
+    return {
+      data,
+    }
+  } catch (error) {
+    toast.error(error?.response?.data?.msg)
+    return error
+  }
+}
+
+const AllOrientationContext = createContext()
+
+const AllOrientation = () => {
+  const { data } = useLoaderData()
+  return (
+    <AllOrientationContext.Provider value={{ data }}>
+      <FilterOrientation />
+
+      <HandOrientationContainer />
+    </AllOrientationContext.Provider>
+  )
+}
+export default AllOrientation
+
+export const useAllOrientationContext = () => useContext(AllOrientationContext)
+```
