@@ -258,7 +258,7 @@ const Wrapper = styled.section`
 export default Wrapper
 ```
 
-####
+#### map orientations
 
 ```js
 import { useAllOrientationContext } from '../../../pages/handparts/AllOrientation'
@@ -297,4 +297,64 @@ const Orientation = () => {
   return <div>Orientation</div>
 }
 export default Orientation
+```
+
+#### Orientation component
+
+index.js
+
+```js
+export { svgCrossProductr } from './corssProductSvg'
+```
+
+Orientation.jsx
+
+```jsx
+const SignInfo = ({ icon, text }) => {
+
+if(text){
+  return()
+}
+}
+```
+
+#### Orientation of one or two hands
+
+```js
+import Wrapper from '../../../../assets/wrappers/handparts/Prefix'
+import { SectionTitle } from '../../../../components'
+import SignInfo from './SignInfo'
+import { svgCrossProductr } from '../../../common'
+```
+
+```js
+const Orientation = ({
+  orderid,
+  fingerdirection,
+  fingerdirection2,
+  palmdirection,
+  palmdirection2,
+}) => {
+  return (
+    <Wrapper>
+      <SectionTitle text={orderid + ' orientation'} AddclassName="text-black" />
+      <div className="content">
+        <div className="content-center">
+          <div>
+            <h4>hand one</h4>
+            <SignInfo icon={svgCrossProductr} text={fingerdirection} />
+            <SignInfo icon={svgCrossProductr} text={palmdirection} />
+          </div>
+          {fingerdirection2 && (
+            <div>
+              <h4>hand two</h4>
+              <SignInfo icon={svgCrossProductr} text={palmdirection2} />
+              <SignInfo icon={svgCrossProductr} text={fingerdirection2} />
+            </div>
+          )}
+        </div>
+      </div>
+    </Wrapper>
+  )
+}
 ```
