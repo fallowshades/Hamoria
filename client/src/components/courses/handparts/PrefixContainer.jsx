@@ -26,7 +26,7 @@ const PrefixContainer = () => {
 
         <div className="prefixes">
           {prefixes.map((prefix) => {
-            console.log(prefix)
+            //console.log(prefix)
             return <Prefix key={prefix._id} {...prefix}></Prefix>
           })}
         </div>

@@ -732,3 +732,93 @@ export const deletePrefix = async (req, res) => {
   getSinglePrefix({ noRead: false, value: nanoid() }, res)
 }
 ```
+
+### set switch case need identify id each submit
+
+- remove logs in AllPrefix, Prefix container and keys to map formRows
+
+Prefix.jsx
+
+```js
+const Prefix = ({ _id, Connectionid, position, hand }) => {
+  return(
+    ...
+    <EditPrefix _id={_id} />
+    ...
+  )
+}
+```
+
+mappedItems\EditPrefix.jsx
+
+```js
+
+import { useLoaderData } from 'react-router-dom'
+import { useNavigation, redirect } from 'react-router-dom'
+import customFetch from '../../../../utils/customFetch'
+
+const EditPrefix = ({ _id }) => {
+  const navigation = useNavigation()
+  const isSubmitting = navigation.state === 'submitting'
+  const identifyAction = `patch ${_id}`
+  return (
+   <input name="form-id" hidden defaultValue={identifyAction} />
+
+...
+
+    <button
+          type="submit"
+          className="btn btn-block form-btn "
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'submitting...' : 'submit'}
+        </button>
+
+    )
+}
+```
+
+#### refracture action to switch case
+
+FooterAddPrefix.jsx
+
+```js
+export const action = async ({ request }) => {
+  const formId = formData.get('form-id')
+
+  const parts = formId.split(/\s+/)
+  // The first part will be 'edit'
+  const crudOperationPart = parts[0]
+  // The remaining part will be everything after 'edit'
+  const idPart = parts.slice(1).join(' ')
+  switch (crudOperationPart) {
+    case 'create':
+      toast.success('prefix added successfully')
+      try {
+        await customFetch.post('/prefixes', data)
+        return null
+      } catch (error) {
+        toast.error(error?.response?.data?.mst)
+        return error
+      }
+    case 'patch':
+      const nanoidRegex = /^[a-zA-Z0-9_-]{21}$/
+      const mongooseObjectIdRegex = /^[0-9a-fA-F]{24}$/
+
+      if (nanoidRegex.test(idPart)) {
+        toast.success(`${idPart}`)
+        return null
+      }
+      toast.error('sad developer')
+      return null
+
+    default:
+      toast.success('default')
+      return null
+  }
+}
+```
+
+```js
+return <input name="form-id" hidden defaultValue="create" />
+```

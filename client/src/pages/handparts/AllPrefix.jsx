@@ -10,7 +10,7 @@ import { useContext, createContext } from 'react'
 export const loader = async ({ request }) => {
   try {
     const { data } = await customFetch.get('/prefixes')
-    console.log(data)
+    // console.log(data)
     return {
       data,
     }

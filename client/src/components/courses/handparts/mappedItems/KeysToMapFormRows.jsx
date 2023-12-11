@@ -3,11 +3,9 @@ import { FormRow, FormRowSelect } from '../../..'
 
 const KeysToMapFormRows = () => {
   {
-    console.log(prefixKeys)
     return (
       <>
         {prefixKeys.map((constant) => {
-          console.log()
           if (!constant.hasOwnProperty('default')) {
             return (
               <FormRow

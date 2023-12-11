@@ -5,7 +5,7 @@ import { svgTeenBoyBody } from '../../../common'
 import { EditPrefix } from '../mappedItems'
 import { Form } from 'react-router-dom'
 
-const Prefix = ({ Connectionid, position, hand }) => {
+const Prefix = ({ _id, Connectionid, position, hand }) => {
   return (
     <Wrapper>
       <SectionTitle text={Connectionid} AddclassName="text-black" />
@@ -17,7 +17,7 @@ const Prefix = ({ Connectionid, position, hand }) => {
         </div>
       </div>
       <footer className="actions">
-        <EditPrefix />
+        <EditPrefix _id={_id} />
         <Form>
           <button type="submit" className="btn delete-btn">
             Delete
