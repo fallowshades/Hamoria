@@ -1,16 +1,7 @@
-# v0.6.1
-
-## Support tree for object transfer
-
-### object request/response session
-
-#### note have keys to identify fields
-
-#### AddOrientation - Structure
-
-AddOrientation.jsx
-
-```js
+import Wrapper from '../../../assets/wrappers/DashboardFormPage'
+import { Form } from 'react-router-dom'
+import { FormRow, SectionTitle } from '../../../components'
+import { orientationKeys } from '../../../../../utils/modelKeyConstants'
 //network submission
 import { toast } from 'react-toastify'
 import customFetch from '../../../utils/customFetch'
@@ -44,20 +35,3 @@ const AddOrientation = () => {
   )
 }
 export default AddOrientation
-```
-
-HandOrientationContainer.jsx
-
-```js
-import AddOrientation from './AddOrientation'
-
-const HandOrientationContainer = () => {
-  return <div>HandOrientationContainer</div>
-  return (
-    <>
-      <div>HandOrientationContainer</div>
-      <AddOrientation />
-    </>
-  )
-}
-```
