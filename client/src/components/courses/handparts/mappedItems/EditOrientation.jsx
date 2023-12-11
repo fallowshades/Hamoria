@@ -9,7 +9,7 @@ const EditOrientation = ({ _id }) => {
   return (
     <Wrapper>
       <Form method="post" className="form">
-        <h4 className="form-title">edit prefix</h4>
+        <h4 className="form-title">edit orientation</h4>
         <div className="form-center"></div>
         <input name="form-id" hidden defaultValue={identifyAction} />
         <KeysToMapFormRows isOrientation />

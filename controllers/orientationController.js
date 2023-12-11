@@ -25,16 +25,16 @@ export const getAllOrientations = async (req, res) => {
 export const getSingleOrientation = async (req, res) => {
   const testItem = {
     Connectionid: req.noRead ? '1' : req.value,
-    position: 'mouth',
-    hand: 'j',
+    fingerdirection: 'forward',
+    palmdirection: 'upward',
   }
-  res.status(StatusCodes.OK).json({ prefix: testItem })
+  res.status(StatusCodes.OK).json({ orientations: testItem })
 }
 
 export const updateOrientation = async (req, res) => {
-  getSinglePrefix({ noRead: false, value: nanoid() }, res)
+  getSingleOrientation({ noRead: false, value: nanoid() }, res)
 }
 
 export const deleteOrientation = async (req, res) => {
-  getSinglePrefix({ noRead: false, value: nanoid() }, res)
+  getSingleOrientation({ noRead: false, value: nanoid() }, res)
 }
