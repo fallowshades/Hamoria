@@ -7,3 +7,4 @@ export { default as Orientation } from './Orientation'
 export { default as EditOrientation } from './EditOrientation'
 
 export { default as Reference } from './Reference'
+export { default as EditReference } from './EditReference'

@@ -2,6 +2,10 @@ import Wrapper from '../../../../assets/wrappers/handparts/Prefix'
 import { SectionTitle } from '../../../../components'
 import SignInfo from './SignInfo'
 import { FaLocationArrow } from 'react-icons/fa'
+
+import { EditReference } from '../mappedItems'
+import { Form } from 'react-router-dom'
+
 const Reference = ({
   position,
   bodycontact,
@@ -36,6 +40,14 @@ const Reference = ({
               text={'bodyContact: ' + (bodycontact ?? '')}
             />
           </div>
+          <footer className="actions">
+            <EditReference />
+            <Form>
+              <button type="submit" className="btn delete-btn">
+                Delete
+              </button>
+            </Form>
+          </footer>
         </div>
       </div>
     </Wrapper>
