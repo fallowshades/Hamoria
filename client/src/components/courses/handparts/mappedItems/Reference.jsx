@@ -11,7 +11,7 @@ const Reference = ({
 }) => {
   return (
     <Wrapper>
-      <SectionTitle text={link} AddclassName="text-black" />
+      <SectionTitle text={link} AddclassName="text-black" link />
 
       <div className="content">
         <div className="content-center">

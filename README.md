@@ -271,7 +271,55 @@ export default Reference
 
 #### Reference component
 
-#### Reference of one or two hands
+-- aware import svg variable or component
+
+Reference.jsx
+
+```js
+              text={'face expression: ' + (faceexpression ?? '')}
+            />
+          </div>
+
+          <div>
+            <SignInfo
+              icon={<FaLocationArrow />}
+              text={'touchtype: ' + (touchtype ?? '')}
+            />
+            <SignInfo
+              icon={<FaLocationArrow />}
+              text={'bodyContact: ' + (bodycontact ?? '')}
+            />
+          </div>
+        </div>
+      </div>
+    </Wrapper>
+  )
+}
+export default Reference
+```
+
+#### section title upgrade
+
+SectionTitle
+
+```js
+const SectionTitle = ({ text, AddclassName, link }) => {
+  const combinedClassName = `text-3xl font-medium tracking-wider capitalize ${
+    AddclassName || ''
+  }`
+  return (
+    <div className="border-b border-base-300 pb-5">
+      {link ? (
+        <a className={`${combinedClassName} underline`} href={text}>
+          {text}
+        </a>
+      ) : (
+        <h2 className={combinedClassName}>{text}</h2>
+      )}
+    </div>
+  )
+}
+```
 
 ## Dynamic updates
 
