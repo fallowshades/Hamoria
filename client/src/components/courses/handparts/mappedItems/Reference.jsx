@@ -43,7 +43,7 @@ const Reference = ({
           </div>
           <footer className="actions">
             <EditReference _id={_id} />
-            <Form>
+            <Form method="post" action={`../delete-reference/${_id}`}>
               <button type="submit" className="btn delete-btn">
                 Delete
               </button>

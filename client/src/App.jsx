@@ -105,6 +105,8 @@ import { action as deleteOrientationAction } from './pages/handparts/DeleteOrien
 
 import { action as referenceAction } from './components/courses/handparts/AddReference'
 import { loader as ReferenceLoader } from './pages/handparts/AllReference'
+import { action as deleteReferenceAction } from './pages/handparts/DeleteReference'
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -242,6 +244,10 @@ const router = createBrowserRouter([
             element: <AllReference />,
             action: referenceAction,
             loader: ReferenceLoader,
+          },
+          {
+            path: 'delete-reference/:id',
+            action: deleteReferenceAction,
           },
           {
             path: 'word',

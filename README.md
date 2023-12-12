@@ -511,6 +511,53 @@ export const action = async ({ request }) => {
 
 ### Delete reference
 
+Reference.jsx
+
+```js
+ <Form method="post" action={`../delete-reference/${_id}`}>
+              <button type="submit" className="btn delete-btn">
+```
+
+App.jsx
+
+```js
+
+import { action as deleteReferenceAction } from './pages/handparts/DeleteReference'
+
+  {
+            path: 'delete-reference/:id',
+            action: deleteReferenceAction,
+          },
+```
+
+DeleteReference.jsx
+
+```js
+import { redirect } from 'react-router-dom'
+import customFetch from '../../utils/customFetch'
+import { toast } from 'react-toastify'
+
+export async function action({ params }) {
+  try {
+    await customFetch.delete(`/references/${params.id}`)
+    toast.success('reference deleted successfully')
+  } catch (error) {
+    toast.error(error.response.data.msg)
+  }
+  return redirect('/dashboard/prefix')
+}
+```
+
 #### fix routing to page
 
-#### fix cpy misstake (name method)
+-same naming misstake
+
+```js
+export const updateReference = async (req, res) => {
+  getAllReferences({ noRead: false, value: nanoid() }, res)
+}
+
+export const deleteReference = async (req, res) => {
+  getAllReferences({ noRead: false, value: nanoid() }, res)
+}
+```
