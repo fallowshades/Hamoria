@@ -8,6 +8,20 @@ import { useNavigation, redirect } from 'react-router-dom'
 //mapping
 import { KeysToMapFormRows } from './mappedItems'
 
+export const action = async ({ request }) => {
+  const formData = await request.formData()
+  const data = Object.fromEntries(formData)
+  console.log(data)
+  toast.success('reference added successfully')
+  try {
+    await customFetch.post('/references', data)
+    return null
+  } catch (error) {
+    toast.error(error?.response?.data?.mst)
+    return error
+  }
+}
+
 const AddReference = () => {
   const navigation = useNavigation()
   const isSubmitting = navigation.state === 'submitting'

@@ -73,7 +73,44 @@ return (
 )
 ```
 
-#### note dynamically map formRow select aswell
+#### create reference (dynamically mappable data from future loads)
+
+--mapped items are located elsewhere. access api router
+
+App.js
+
+```js
+import { action as referenceAction } from './components/courses/handparts/AddReference'
+          {
+            path: 'reference',
+            element: <AllReference />,
+            action: referenceAction,
+          },
+```
+
+```js
+export const action = async ({ request }) => {
+  const formData = await request.formData()
+  const data = Object.fromEntries(formData)
+  console.log(data)
+  toast.success('reference added successfully')
+  try {
+    await customFetch.post('/references', data)
+    return null
+  } catch (error) {
+    toast.error(error?.response?.data?.mst)
+    return error
+  }
+}
+```
+
+```js
+
+```
+
+```js
+
+```
 
 ### create Reference
 
