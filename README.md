@@ -104,21 +104,37 @@ export const action = async ({ request }) => {
 }
 ```
 
-```js
-
-```
-
-```js
-
-```
-
-### create Reference
-
 ## create transfer lifecycle
 
-### context to help map presentational data
+### loadable (for context to help map presentational data)
 
-### loadable
+App.jsx
+
+```js
+import { loader as ReferenceLoader } from './pages/handparts/AllReference'
+
+ loader: ReferenceLoader,
+```
+
+Reference controller
+
+```js
+export const getAllReferences = async (req, res) => {
+  const jsonPrefix = JSON.parse(
+    await readFile(
+      new URL('../utils/mockWhat/mockReferenceData.json', import.meta.url)
+    )
+  )
+
+  const packagedData = jsonPrefix.map((keyless) => {
+    return { ...keyless, _id: nanoid() }
+  })
+
+  res.status(StatusCodes.OK).json({ references: packagedData })
+}
+```
+
+- test in postman
 
 #### All orders loader
 
