@@ -28,9 +28,9 @@ export const getSingleReference = async (req, res) => {
 }
 
 export const updateReference = async (req, res) => {
-  res.send('update reference')
+  getSinglePrefix({ noRead: false, value: nanoid() }, res)
 }
 
 export const deleteReference = async (req, res) => {
-  res.send('delete reference')
+  getSinglePrefix({ noRead: false, value: nanoid() }, res)
 }

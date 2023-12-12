@@ -7,6 +7,7 @@ import { EditReference } from '../mappedItems'
 import { Form } from 'react-router-dom'
 
 const Reference = ({
+  _id,
   position,
   bodycontact,
   touchtype,
@@ -41,7 +42,7 @@ const Reference = ({
             />
           </div>
           <footer className="actions">
-            <EditReference />
+            <EditReference _id={_id} />
             <Form>
               <button type="submit" className="btn delete-btn">
                 Delete

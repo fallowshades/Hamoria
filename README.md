@@ -186,11 +186,9 @@ export const useAllOrientationContext = () => useContext(AllReferenceContext)
 ReferenceContainer.js
 
 ```js
-@ -0,0 +1,31 @@
 import styled from 'styled-components'
 
-const Wrapper = styled.section`
-  margin-top: 4rem;
+const Wrapper = styled.section`  margin-top: 4rem;
   h2 {
     text-transform: none;
   }
@@ -215,8 +213,7 @@ const Wrapper = styled.section`
       grid-template-columns: 1fr 1fr 1fr;
       gap: 2rem;
     }
-  }
-`
+  }`
 export default Wrapper
 ```
 
@@ -276,6 +273,26 @@ export default Reference
 Reference.jsx
 
 ```js
+const Reference = ({
+  position,
+  bodycontact,
+  touchtype,
+  faceexpression,
+  link,
+}) => {
+  return (
+    <Wrapper>
+      <SectionTitle text={link} AddclassName="text-black" link />
+
+      <div className="content">
+        <div className="content-center">
+          <div>
+            <SignInfo
+              icon={<FaLocationArrow />}
+              text={'position: ' + (position ?? '')}
+            />
+            <SignInfo
+              icon={<FaLocationArrow />}
               text={'face expression: ' + (faceexpression ?? '')}
             />
           </div>
@@ -372,12 +389,128 @@ import { Form } from 'react-router-dom'
 
 ### Reference action setup. (btn w identiry)
 
+#### remote
+
+referenceController.js
+
+```js
+export const updateReference = async (req, res) => {
+  getSinglePrefix({ noRead: false, value: nanoid() }, res)
+}
+
+export const deleteReference = async (req, res) => {
+  getSinglePrefix({ noRead: false, value: nanoid() }, res)
+}
+```
+
+#### each item
+
+Reference.jsx
+
+```js
+const Reference = ({
+  _id,...}) =>{
+
+    return(
+      <footer className="actions">
+      <EditOrientation _id={_id} />
+      </footer>
+    )
+  }
+```
+
+EditOrientation.jsx
+
+```js
+import { useNavigation } from 'react-router-dom'
+
+const EditReference = ({ _id }) => {
+  const navigation = useNavigation()
+  const isSubmitting = navigation.state === 'submitting'
+  const identifyAction = `patch ${_id}`
+}
+```
+
+```js
+return (
+  <button
+    type="submit"
+    className="btn btn-block form-btn "
+    disabled={isSubmitting}
+  >
+    {isSubmitting ? 'submitting...' : 'submit'}
+  </button>
+)
+```
+
+```js
+return(
+  div>
+      <input name="form-id" hidden defaultValue={identifyAction} />
+     <KeysToMapFormRows mapKey="reference" />
+ </div>
+)
+```
+
+#### distinguish which action
+
+AddReference.jsx
+
+```js
+const AddReference = () => {
+
+return(
+...
+<input name="form-id" hidden defaultValue="create" />
+...
+)
+}
+
+```
+
+```js
+export const action = async ({ request }) => {
+  ...
+  const formId = formData.get('form-id')
+
+  const parts = formId.split(/\s+/)
+  // The first part will be 'edit'
+  const crudOperationPart = parts[0]
+  // The remaining part will be everything after 'edit'
+  const idPart = parts.slice(1).join(' ')
+
+  switch (crudOperationPart) {
+    case 'create':
+      try {
+        await customFetch.post('/references', data)
+        toast.success('reference added successfully')
+
+        return null
+      } catch (error) {
+        toast.error(error?.response?.data?.mst)
+        return error
+      }
+    case 'patch':
+      const nanoidRegex = /^[a-zA-Z0-9_-]{21}$/
+      const mongooseObjectIdRegex = /^[0-9a-fA-F]{24}$/
+
+      if (nanoidRegex.test(idPart)) {
+        toast.success(`${idPart}`)
+        return null
+      }
+      toast.error('sad developer')
+      return null
+
+    default:
+      toast.success('default')
+      return null
+  }
+}
+
+```
+
 ### Delete reference
 
 #### fix routing to page
 
 #### fix cpy misstake (name method)
-
-```
-
-```
