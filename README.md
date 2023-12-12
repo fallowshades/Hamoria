@@ -183,7 +183,91 @@ export const useAllOrientationContext = () => useContext(AllReferenceContext)
 
 #### ReferenceContainer css
 
+ReferenceContainer.js
+
+```js
+@ -0,0 +1,31 @@
+import styled from 'styled-components'
+
+const Wrapper = styled.section`
+  margin-top: 4rem;
+  h2 {
+    text-transform: none;
+  }
+  & > h5 {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+  .references {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 2rem;
+  }
+   @media (min-width: 765px) {
+    .references {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+  @media (min-width: 1120px) {
+    .references {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+    }
+  }
+`
+export default Wrapper
+```
+
 #### map Reference
+
+- ! possible misstakes in AllContext
+
+  - invoce const AllReferenceContext = createContext()
+  - pass object <AllReferenceContext.Provider value={{ data }}>
+
+  -put items on grid
+
+ReferenceContainer.jsx
+
+```js
+import { useAllReferenceContext } from '../../../pages/handparts/AllReference'
+import { Reference } from './mappedItems'
+import Wrapper from '../../../assets/wrappers/handparts/ReferenceContainer'
+```
+
+```js
+const { data } = useAllReferenceContext()
+const { references } = data
+
+if (references == 0) {
+  return (
+    <Wrapper>
+      <h2>No references found</h2>
+    </Wrapper>
+  )
+}
+```
+
+```js
+return (
+  <div className="references">
+    {references.map((reference) => {
+      return <Reference key={reference._id} {...reference} />
+    })}
+  </div>
+)
+```
+
+Reference
+
+```JS
+const Reference = () => {
+  return <div>Reference</div>
+}
+export default Reference
+```
 
 #### Reference component
 

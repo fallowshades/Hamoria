@@ -12,6 +12,7 @@ import customFetch from '../../utils/customFetch'
 export const loader = async ({ request }) => {
   try {
     const { data } = await customFetch.get('/references')
+    console.log(data)
     return {
       data,
     }
@@ -21,18 +22,18 @@ export const loader = async ({ request }) => {
   }
 }
 
-const AllReferenceContext = createContext
+const AllReferenceContext = createContext()
 
 const AllReference = () => {
   const { data } = useLoaderData()
   return (
-    <AllReferenceContext.Provider value={data}>
+    <AllReferenceContext.Provider value={{ data }}>
       <SearchReferenceContainer />
       <ReferenceContainer />
     </AllReferenceContext.Provider>
   )
 }
 
-export const useAllOrientationContext = () => useContext(AllReferenceContext)
+export const useAllReferenceContext = () => useContext(AllReferenceContext)
 
 export default AllReference
