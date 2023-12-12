@@ -1,4 +1,6 @@
+import AddWord from './AddWord'
+
 const WordContainer = () => {
-  return <div>WordContainer</div>
+  return <AddWord />
 }
 export default WordContainer

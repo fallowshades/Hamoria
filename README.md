@@ -60,18 +60,47 @@ Wordcontainer.jsx
 
 ```
 
-#### create reference (dynamically mappable data from future loads)
+-- FormRow and FormRowSelect already collected Object.values
+
+#### create word (dynamically mappable data from future loads)
 
 --mapped items are located elsewhere. access api router
 
 App.js
 
 ```js
-
+import { action as wordAction } from './components/courses/handparts/AddWord'
+   {
+            path: 'word',
+            element: <AllWord />,
+            action: wordAction,
+          },
 ```
 
-```js
+AddWord.jsx
 
+```js
+export const action = async ({ request }) => {
+  const formData = await request.formData()
+  const data = Object.fromEntries(formData)
+
+  try {
+    await customFetch.post('/words', data)
+    toast.success('word added successfully')
+    return null
+  } catch (error) {
+    toast.error(error?.response?.data?.msg)
+    return error
+  }
+}
+```
+
+WordContainer.jsx
+
+```js
+import AddWord from './AddWord'
+
+return <AddWord />
 ```
 
 ## create transfer lifecycle

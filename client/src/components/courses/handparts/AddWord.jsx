@@ -1,9 +1,23 @@
 import Wrapper from '../../../assets/wrappers/DashboardFormPage'
-import { Form, FormRow } from 'react-router-dom'
+import { FormRow } from '../../../components'
 //network submission
 import { toast } from 'react-toastify'
 import customFetch from '../../../utils/customFetch'
-import { useNavigation, redirect } from 'react-router-dom'
+import { Form, useNavigation, redirect } from 'react-router-dom'
+
+export const action = async ({ request }) => {
+  const formData = await request.formData()
+  const data = Object.fromEntries(formData)
+
+  try {
+    await customFetch.post('/words', data)
+    toast.success('word added successfully')
+    return null
+  } catch (error) {
+    toast.error(error?.response?.data?.msg)
+    return error
+  }
+}
 
 const AddWord = () => {
   const navigation = useNavigation()

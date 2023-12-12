@@ -15,3 +15,5 @@ export { default as WordContainer } from './WordContainer'
 
 export { default as ReferenceContainer } from './ReferenceContainer'
 export { default as SearchReferenceContainer } from './SearchReferenceContainer'
+
+export { default as AddWord } from './AddWord'
