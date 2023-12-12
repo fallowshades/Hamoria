@@ -20,7 +20,7 @@ export const getAllWords = async (req, res) => {
     return { ...keyless, _id: nanoid() }
   })
 
-  res.status(StatusCodes.OK).json({ orientations: packagedData })
+  res.status(StatusCodes.OK).json({ words: packagedData })
 }
 
 export const getSingleWord = async (req, res) => {

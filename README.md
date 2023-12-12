@@ -184,7 +184,31 @@ export const useAllWordContext = () => useContext(AllWordContext)
 WordContainer.js
 
 ```js
+import styled from 'styled-components'
 
+const Wrapper = styled.section`
+  margin-top: 4rem;
+  h2 {
+    text-transform: none;
+  }
+  & > h5 {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+  .words {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 2rem;
+  }
+  @media (min-width: 1120px) {
+    .words {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+  }
+`
+export default Wrapper
 ```
 
 #### map Reference
@@ -194,21 +218,48 @@ WordContainer.js
 WordContainer.jsx
 
 ```js
-
+import { useAllWordContext } from '../../../pages/handparts/AllWord'
+import { Word } from './mappedItems'
+import Wrapper from '../../../assets/wrappers/handparts/WordContainer'
 ```
 
 ```js
+const WordContainer = () => {
+  const { data } = useAllWordContext()
+  const { words } = data
 
+  if (words.length == 0) {
+    return (
+      <Wrapper>
+        <h2>No words found</h2>
+      </Wrapper>
+    )
+  }
+  return (
+    <div className="words">
+      <AddWord />
+      {words.map((word) => {
+        return <Word key={word._id} {...word} />
+      })}
+    </div>
+  )
+}
+export default WordContainer
 ```
 
-```js
+mappedItems/index.js
 
+```js
+export { default as Word } from './Word'
 ```
 
 Word.jsx
 
 ```JS
-
+const Word = () => {
+  return <div>Word</div>
+}
+export default Word
 ```
 
 #### Reference component
