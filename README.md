@@ -6,170 +6,123 @@
 
 #### note have keys to identify fields
 
-#### AddOrientation - Structure
+#### AddReference- Structure
 
-AddOrientation.jsx
-
-```js
-//network submission
-import { toast } from 'react-toastify'
-import customFetch from '../../../utils/customFetch'
-import { useNavigation, redirect } from 'react-router-dom'
-
-const AddOrientation = () => {
-  const navigation = useNavigation()
-  const isSubmitting = navigation.state === 'submitting'
-
-  return (
-    <Wrapper>
-      <Form method="post" className="form"></Form>
-      <SectionTitle text="add prefix" />
-      {orientationKeys.map((constant) => {
-        return (
-          <FormRow
-            key={constant.identifier}
-            type="text"
-            name={constant.field}
-          />
-        )
-      })}
-      <button
-        type="submit"
-        className="btn btn-block form-btn"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? 'submitting...' : 'submit'}
-      </button>
-    </Wrapper>
-  )
-}
-export default AddOrientation
-```
-
-HandOrientationContainer.jsx
-
-```js
-import AddOrientation from './AddOrientation'
-
-const HandOrientationContainer = () => {
-  return <div>HandOrientationContainer</div>
-  return (
-    <>
-      <div>HandOrientationContainer</div>
-      <AddOrientation />
-    </>
-  )
-}
-```
-
-#### note dynamically map formRow select aswell
-
-### create orientation
-
-App.jsx
-
-```js
-import { action as orientationAction } from './components/courses/handparts/AddOrientation'
- {
-            path: 'orientation',
-            element: <AllOrientation />,
-            action: orientationAction,
-          },
-```
-
-KeysToMapFormRowws.jsx
+- Mapping (when)
+- network form identity (who)
+- existence (when)
 
 ```js
 import {
   prefixKeys,
   orientationKeys,
+  referenceKeys,
 } from '../../../../../../utils/modelKeyConstants'
+
+const KeysToMapFormRows = ({ isOrientation, mapKey }) => {
+  if (mapKey) {
+    mappedKeys = referenceKeys
+  }
+}
 ```
 
-KeysToMapFormRows.jsx
+AddReference.jsx
 
 ```js
-const KeysToMapFormRows = ({ isOrientation }) => {
-  {
-    let mappedKeys = isOrientation ? orientationKeys : prefixKeys
-
-    return (
-      <>
-
-        {mappedKeys.map((constant) => {
-          ...
-
-        })})
-        </>
-        }}
-
-```
-
--- but the forms in form...
---update request
-
-AddOrientation.jsx
-
-```js
+import Wrapper from '../../../assets/wrappers/DashboardFormPage'
+import { Form } from 'react-router-dom'
+import { SectionTitle } from '../../../components'
+//network submission
+import { toast } from 'react-toastify'
+import customFetch from '../../../utils/customFetch'
+import { useNavigation, redirect } from 'react-router-dom'
+//mapping
 import { KeysToMapFormRows } from './mappedItems'
 
+const AddReference = () => {
+  const navigation = useNavigation()
+  const isSubmitting = navigation.state === 'submitting'
+
+  return (
+    <Wrapper>
+      <Form method="post" className="form">
+        <SectionTitle text="add reference" />
+        <KeysToMapFormRows mapKey="reference" />
+        <button
+          type="submit"
+          className="btn btn-block form-btn"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'submitting...' : 'submit'}
+        </button>
+      </Form>
+    </Wrapper>
+  )
+}
+export default AddReference
+```
+
+Reference container
+
+```js
+return (
+  <>
+    <div>ReferenceContainer</div>
+    <AddReference />
+  </>
+)
+```
+
+#### create reference (dynamically mappable data from future loads)
+
+--mapped items are located elsewhere. access api router
+
+App.js
+
+```js
+import { action as referenceAction } from './components/courses/handparts/AddReference'
+          {
+            path: 'reference',
+            element: <AllReference />,
+            action: referenceAction,
+          },
+```
+
+```js
 export const action = async ({ request }) => {
   const formData = await request.formData()
   const data = Object.fromEntries(formData)
   console.log(data)
-  toast.success('orientation added successfully')
+  toast.success('reference added successfully')
   try {
-    await customFetch.post('/orientations', data)
+    await customFetch.post('/references', data)
     return null
   } catch (error) {
     toast.error(error?.response?.data?.mst)
     return error
   }
 }
-
-const AddOrientation = () => {
-  return (
-    <Form method="post" className="form">
-      <SectionTitle text="add orientation" />
-
-      <KeysToMapFormRows isOrientation />
-      <button
-        type="submit"
-        className="btn btn-block form-btn"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? 'submitting...' : 'submit'}
-      </button>
-    </Form>
-  )
-}
 ```
 
 ## create transfer lifecycle
 
-### context to help map presentational data
-
-### loadable
+### loadable (for context to help map presentational data)
 
 App.jsx
 
 ```js
+import { loader as ReferenceLoader } from './pages/handparts/AllReference'
 
-import { loader as orientationLoader } from './pages/handparts/AllOrientation'
-
- loader: orientationLoader,
+ loader: ReferenceLoader,
 ```
 
-orientationController.js
+Reference controller
 
 ```js
-import { readFile } from 'fs/promises'
-import { nanoid } from 'nanoid'
-
-export const getAllOrientations = async (req, res) => {
+export const getAllReferences = async (req, res) => {
   const jsonPrefix = JSON.parse(
     await readFile(
-      new URL('../utils/mockWhat/mockOrientationData.json', import.meta.url)
+      new URL('../utils/mockWhat/mockReferenceData.json', import.meta.url)
     )
   )
 
@@ -177,11 +130,18 @@ export const getAllOrientations = async (req, res) => {
     return { ...keyless, _id: nanoid() }
   })
 
-  res.status(StatusCodes.OK).json({ orientations: packagedData })
+  res.status(StatusCodes.OK).json({ references: packagedData })
 }
 ```
 
+- test in postman
+
 #### All orders loader
+
+- accumulate data
+- export a searchable wrapper
+
+AllReferences
 
 ```js
 import { useContext, createContext } from 'react'
@@ -192,7 +152,7 @@ import customFetch from '../../utils/customFetch'
 
 export const loader = async ({ request }) => {
   try {
-    const { data } = await customFetch.get('/orientations')
+    const { data } = await customFetch.get('/references')
     return {
       data,
     }
@@ -201,34 +161,34 @@ export const loader = async ({ request }) => {
     return error
   }
 }
-
-const AllOrientationContext = createContext()
-
-const AllOrientation = () => {
-  const { data } = useLoaderData()
-  return (
-    <AllOrientationContext.Provider value={{ data }}>
-      <FilterOrientation />
-
-      <HandOrientationContainer />
-    </AllOrientationContext.Provider>
-  )
-}
-export default AllOrientation
-
-export const useAllOrientationContext = () => useContext(AllOrientationContext)
 ```
 
-### render Orientation
+```js
+const AllReferenceContext = createContext
 
-#### OrientationContainer css
+const AllReference = () => {
+  const { data } = useLoaderData()
+  return (
+    <AllReferenceContext.Provider value={data}>
+      <SearchReferenceContainer />
+      <ReferenceContainer />
+    </AllReferenceContext.Provider>
+  )
+}
+
+export const useAllOrientationContext = () => useContext(AllReferenceContext)
+```
+
+### render Reference
+
+#### ReferenceContainer css
+
+ReferenceContainer.js
 
 ```js
-@ -0,0 +1,31 @@
 import styled from 'styled-components'
 
-const Wrapper = styled.section`
-  margin-top: 4rem;
+const Wrapper = styled.section`  margin-top: 4rem;
   h2 {
     text-transform: none;
   }
@@ -236,207 +196,219 @@ const Wrapper = styled.section`
     font-weight: 700;
     margin-bottom: 1.5rem;
   }
-  .orientations {
+  .references {
     display: grid;
     grid-template-columns: 1fr;
     row-gap: 2rem;
   }
    @media (min-width: 765px) {
-    .orientations {
+    .references {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 2rem;
     }
   @media (min-width: 1120px) {
-    .orientations {
+    .references {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 2rem;
     }
-  }
-`
+  }`
 export default Wrapper
 ```
 
-#### map orientations
+#### map Reference
+
+- ! possible misstakes in AllContext
+
+  - invoce const AllReferenceContext = createContext()
+  - pass object <AllReferenceContext.Provider value={{ data }}>
+
+  -put items on grid
+
+ReferenceContainer.jsx
 
 ```js
-import { useAllOrientationContext } from '../../../pages/handparts/AllOrientation'
-import { Orientation } from './mappedItems'
-import Wrapper from '../../../assets/wrappers/handparts/OrientationContainer'
+import { useAllReferenceContext } from '../../../pages/handparts/AllReference'
+import { Reference } from './mappedItems'
+import Wrapper from '../../../assets/wrappers/handparts/ReferenceContainer'
 ```
 
 ```js
-  const { data } = useAllOrientationContext()
+const { data } = useAllReferenceContext()
+const { references } = data
 
-  const { orientations } = data
-
-  if (orientations.length == 0) {
-    return (
-      <Wrapper>
-        <h2>No orientations found</h2>
-      </Wrapper>
-    )
-  }
-
+if (references == 0) {
   return (
-    ...
-       <div className="orientations">
-        {orientations.map((orientation) => {
-          return <Orientation key={orientation._id} {...orientation} />
-        })}
-      </div>
-
+    <Wrapper>
+      <h2>No references found</h2>
+    </Wrapper>
   )
+}
 ```
 
-Orientation
+```js
+return (
+  <div className="references">
+    {references.map((reference) => {
+      return <Reference key={reference._id} {...reference} />
+    })}
+  </div>
+)
+```
+
+Reference
 
 ```JS
-const Orientation = () => {
-  return <div>Orientation</div>
+const Reference = () => {
+  return <div>Reference</div>
 }
-export default Orientation
+export default Reference
 ```
 
-#### Orientation component
+#### Reference component
 
-index.js
+-- aware import svg variable or component
+
+Reference.jsx
 
 ```js
-export { svgCrossProductr } from './corssProductSvg'
-```
-
-Orientation.jsx
-
-```jsx
-const SignInfo = ({ icon, text }) => {
-
-if(text){
-  return()
-}
-}
-```
-
-#### Orientation of one or two hands
-
-```js
-import Wrapper from '../../../../assets/wrappers/handparts/Prefix'
-import { SectionTitle } from '../../../../components'
-import SignInfo from './SignInfo'
-import { svgCrossProductr } from '../../../common'
-```
-
-```js
-const Orientation = ({
-  orderid,
-  fingerdirection,
-  fingerdirection2,
-  palmdirection,
-  palmdirection2,
+const Reference = ({
+  position,
+  bodycontact,
+  touchtype,
+  faceexpression,
+  link,
 }) => {
   return (
     <Wrapper>
-      <SectionTitle text={orderid + ' orientation'} AddclassName="text-black" />
+      <SectionTitle text={link} AddclassName="text-black" link />
+
       <div className="content">
         <div className="content-center">
           <div>
-            <h4>hand one</h4>
-            <SignInfo icon={svgCrossProductr} text={fingerdirection} />
-            <SignInfo icon={svgCrossProductr} text={palmdirection} />
+            <SignInfo
+              icon={<FaLocationArrow />}
+              text={'position: ' + (position ?? '')}
+            />
+            <SignInfo
+              icon={<FaLocationArrow />}
+              text={'face expression: ' + (faceexpression ?? '')}
+            />
           </div>
-          {fingerdirection2 && (
-            <div>
-              <h4>hand two</h4>
-              <SignInfo icon={svgCrossProductr} text={palmdirection2} />
-              <SignInfo icon={svgCrossProductr} text={fingerdirection2} />
-            </div>
-          )}
+
+          <div>
+            <SignInfo
+              icon={<FaLocationArrow />}
+              text={'touchtype: ' + (touchtype ?? '')}
+            />
+            <SignInfo
+              icon={<FaLocationArrow />}
+              text={'bodyContact: ' + (bodycontact ?? '')}
+            />
+          </div>
         </div>
       </div>
     </Wrapper>
+  )
+}
+export default Reference
+```
+
+#### section title upgrade
+
+SectionTitle
+
+```js
+const SectionTitle = ({ text, AddclassName, link }) => {
+  const combinedClassName = `text-3xl font-medium tracking-wider capitalize ${
+    AddclassName || ''
+  }`
+  return (
+    <div className="border-b border-base-300 pb-5">
+      {link ? (
+        <a className={`${combinedClassName} underline`} href={text}>
+          {text}
+        </a>
+      ) : (
+        <h2 className={combinedClassName}>{text}</h2>
+      )}
+    </div>
   )
 }
 ```
 
 ## Dynamic updates
 
-### edit orientation
+### edit Reference
 
-#### EditOrientation setup
-
-EditOrientation.jsx
+EditReference.jsx
 
 ```js
 import Wrapper from '../../../../assets/wrappers/DashboardFormPage'
 import { Form } from 'react-router-dom'
 import { KeysToMapFormRows } from '../mappedItems'
-const EditOrientation = () => {
+
+const EditReference = () => {
   return (
     <Wrapper>
       <Form method="post" className="form">
-        <h4 className="form-title">edit prefix</h4>
+        <h4 className="form-title">edit reference</h4>
         <div className="form-center"></div>
-        <KeysToMapFormRows />
+        <div>
+          <KeysToMapFormRows mapKey="reference" />
+        </div>
       </Form>
     </Wrapper>
   )
 }
-export default EditOrientation
+export default EditReference
 ```
 
-Orientation.jsx
+Reference.jsx
 
 ```js
-import { EditOrientation } from '../mappedItems'
+import { EditReference } from '../mappedItems'
 import { Form } from 'react-router-dom'
-
-...
-
-return (
-  <footer className="actions">
-    <EditOrientation />
-    <Form>
-      <button type="submit" className="btn delete-btn">
-        Delete
-      </button>
-    </Form>
-  </footer>
-)
 ```
+
+```js
+<footer className="actions">
+  <EditReference />
+  <Form>
+    <button type="submit" className="btn delete-btn">
+      Delete
+    </button>
+  </Form>
+</footer>
+```
+
+#### EditReference setup
 
 #### more to work with
 
-orientationController.js
+### Reference action setup. (btn w identiry)
+
+#### remote
+
+referenceController.js
 
 ```js
-export const getSingleOrientation = async (req, res) => {
-  res.send('get single orientation')
-  const testItem = {
-    Connectionid: req.noRead ? '1' : req.value,
-    position: 'mouth',
-    hand: 'j',
-  }
-  res.status(StatusCodes.OK).json({ prefix: testItem })
-}
-
-export const updateOrientation = async (req, res) => {
-  res.send('update orientation')
+export const updateReference = async (req, res) => {
   getSinglePrefix({ noRead: false, value: nanoid() }, res)
 }
 
-export const deleteOrientation = async (req, res) => {
-  res.send('delete orientation')
+export const deleteReference = async (req, res) => {
   getSinglePrefix({ noRead: false, value: nanoid() }, res)
 }
 ```
 
-### orientation action setup. (btn w identiry)
+#### each item
 
-Orientation.jsx
+Reference.jsx
 
 ```js
-const Orientation = ({
+const Reference = ({
   _id,...}) =>{
 
     return(
@@ -451,34 +423,55 @@ EditOrientation.jsx
 
 ```js
 import { useNavigation } from 'react-router-dom'
-const EditOrientation = ({ _id }) => {
+
+const EditReference = ({ _id }) => {
   const navigation = useNavigation()
   const isSubmitting = navigation.state === 'submitting'
   const identifyAction = `patch ${_id}`
-
-
-return(
-   <input name="form-id" hidden defaultValue={identifyAction} />
-        <KeysToMapFormRows isOrientation />
-        <button
-          type="submit"
-          className="btn btn-block form-btn "
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'submitting...' : 'submit'}
-        </button>
-)
 }
 ```
 
-AddOrientation
+```js
+return (
+  <button
+    type="submit"
+    className="btn btn-block form-btn "
+    disabled={isSubmitting}
+  >
+    {isSubmitting ? 'submitting...' : 'submit'}
+  </button>
+)
+```
 
 ```js
+return(
+  div>
+      <input name="form-id" hidden defaultValue={identifyAction} />
+     <KeysToMapFormRows mapKey="reference" />
+ </div>
+)
+```
 
+#### distinguish which action
+
+AddReference.jsx
+
+```js
+const AddReference = () => {
+
+return(
+...
+<input name="form-id" hidden defaultValue="create" />
+...
+)
+}
+
+```
+
+```js
 export const action = async ({ request }) => {
- ...
-
- const formId = formData.get('form-id')
+  ...
+  const formId = formData.get('form-id')
 
   const parts = formId.split(/\s+/)
   // The first part will be 'edit'
@@ -489,8 +482,8 @@ export const action = async ({ request }) => {
   switch (crudOperationPart) {
     case 'create':
       try {
-        await customFetch.post('/orientations', data)
-        toast.success('orientation added successfully')
+        await customFetch.post('/references', data)
+        toast.success('reference added successfully')
 
         return null
       } catch (error) {
@@ -514,27 +507,30 @@ export const action = async ({ request }) => {
   }
 }
 
-const AddOrientation = () => {
-
-return(
-  ...
-   <input name="form-id" hidden defaultValue="create" />
-  ...
-)
-}
 ```
 
-### Delete orientation
+### Delete reference
 
-Orientatinon.jsx
-
-#### fix routing to page
+Reference.jsx
 
 ```js
-<Form method="post" action={`../delete-orientation/${_id}`}>
+ <Form method="post" action={`../delete-reference/${_id}`}>
+              <button type="submit" className="btn delete-btn">
 ```
 
-DeleteOrientation.jsx
+App.jsx
+
+```js
+
+import { action as deleteReferenceAction } from './pages/handparts/DeleteReference'
+
+  {
+            path: 'delete-reference/:id',
+            action: deleteReferenceAction,
+          },
+```
+
+DeleteReference.jsx
 
 ```js
 import { redirect } from 'react-router-dom'
@@ -543,8 +539,8 @@ import { toast } from 'react-toastify'
 
 export async function action({ params }) {
   try {
-    await customFetch.delete(`/orientations/${params.id}`)
-    toast.success('orientation deleted successfully')
+    await customFetch.delete(`/references/${params.id}`)
+    toast.success('reference deleted successfully')
   } catch (error) {
     toast.error(error.response.data.msg)
   }
@@ -552,16 +548,16 @@ export async function action({ params }) {
 }
 ```
 
-#### fix cpy misstake (name method)
+#### fix routing to page
 
-orientationController.jsx
+-same naming misstake
 
 ```js
-export const updateOrientation = async (req, res) => {
-  getSingleOrientation({ noRead: false, value: nanoid() }, res)
+export const updateReference = async (req, res) => {
+  getAllReferences({ noRead: false, value: nanoid() }, res)
 }
 
-export const deleteOrientation = async (req, res) => {
-  getSingleOrientation({ noRead: false, value: nanoid() }, res)
+export const deleteReference = async (req, res) => {
+  getAllReferences({ noRead: false, value: nanoid() }, res)
 }
 ```

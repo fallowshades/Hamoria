@@ -1,13 +1,17 @@
 import {
   prefixKeys,
   orientationKeys,
+  referenceKeys,
 } from '../../../../../../utils/modelKeyConstants'
 import { FormRow, FormRowSelect } from '../../..'
 
-const KeysToMapFormRows = ({ isOrientation }) => {
+const KeysToMapFormRows = ({ isOrientation, mapKey }) => {
   {
     let mappedKeys = isOrientation ? orientationKeys : prefixKeys
 
+    if (mapKey) {
+      mappedKeys = referenceKeys
+    }
     return (
       <>
         {mappedKeys.map((constant) => {

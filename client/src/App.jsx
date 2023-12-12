@@ -103,6 +103,10 @@ import { action as orientationAction } from './components/courses/handparts/AddO
 import { loader as orientationLoader } from './pages/handparts/AllOrientation'
 import { action as deleteOrientationAction } from './pages/handparts/DeleteOrientation'
 
+import { action as referenceAction } from './components/courses/handparts/AddReference'
+import { loader as ReferenceLoader } from './pages/handparts/AllReference'
+import { action as deleteReferenceAction } from './pages/handparts/DeleteReference'
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -238,6 +242,12 @@ const router = createBrowserRouter([
           {
             path: 'reference',
             element: <AllReference />,
+            action: referenceAction,
+            loader: ReferenceLoader,
+          },
+          {
+            path: 'delete-reference/:id',
+            action: deleteReferenceAction,
           },
           {
             path: 'word',

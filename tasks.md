@@ -443,17 +443,17 @@ Pages: (AddPrefix, App, AllPrefix, SearchContainer, EditPrefix, DeletePrefix)
 
 Pages: (AddOrientation, App, AllOrientations, SearchContainer, EditOrientation, DeleteOrientation)
 
----[]support tree transfor objects
----[]create transfor lifeCycle
----[]context map presentational data dynamically
+---[x]support tree transfor objects
+---[x]create transfor lifeCycle
+---[x]context map presentational data dynamically
 
-### handStatus page v0.6.2
+### Reference page v0.6.2
 
-Pages: (AddHandStatus, App, AllHandStatuses, SearchContainer, EditHandStatus, DeleteHandStatus)
+Pages: (AddHandStatus, App, AllHandStatus, SearchContainer, EditHandStatus, DeleteHandStatus)
 
----[]support tree transfor objects
----[]create transfor lifeCycle
----[]context map presentational data dynamically
+---[x]support tree transfor objects
+---[x]create transfor lifeCycle
+---[x]context map presentational data dynamically
 
 ### Word page v0.6.3
 
@@ -463,9 +463,9 @@ Pages: (AddHandStatus, App, AllHandStatuss, SearchContainer, EditHandStatus, Del
 ---[]create transfor lifeCycle
 ---[]context map presentational data dynamically
 
-### Reference page v0.6.4
+### handStatus page v0.6.4
 
-Pages: (AddHandStatus, App, AllHandStatus, SearchContainer, EditHandStatus, DeleteHandStatus)
+Pages: (AddHandStatus, App, AllHandStatuses, SearchContainer, EditHandStatus, DeleteHandStatus)
 
 ---[]support tree transfor objects
 ---[]create transfor lifeCycle
