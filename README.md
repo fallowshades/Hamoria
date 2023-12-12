@@ -116,7 +116,19 @@ App.jsx
 Word controller
 
 ```js
+export const getAllWords = async (req, res) => {
+  const jsonPrefix = JSON.parse(
+    await readFile(
+      new URL('../utils/mockWhat/mockWordData.json', import.meta.url)
+    )
+  )
 
+  const packagedData = jsonPrefix.map((keyless) => {
+    return { ...keyless, _id: nanoid() }
+  })
+
+  res.status(StatusCodes.OK).json({ orientations: packagedData })
+}
 ```
 
 - test in postman
@@ -129,11 +141,40 @@ Word controller
 AllWords
 
 ```js
+import { useContext, createContext } from 'react'
+import { useLoaderData } from 'react-router-dom'
 
+import { toast } from 'react-toastify'
+import customFetch from '../../utils/customFetch'
+
+export const loader = async ({ request }) => {
+  try {
+    const { data } = await customFetch.get('/words')
+    return {
+      data,
+    }
+  } catch (error) {
+    toast.error(error?.response?.data?.msg)
+    return error
+  }
+}
 ```
 
 ```js
+const AllWordContext = createContext()
 
+const AllWord = () => {
+  const { data } = useLoaderData()
+  return (
+    <AllWordContext.Provider value={{ data }}>
+      <SearchWordContainer />
+      <WordContainer />
+    </AllWordContext.Provider>
+  )
+}
+export default AllWord
+
+export const useAllWordContext = () => useContext(AllWordContext)
 ```
 
 ### render Reference
