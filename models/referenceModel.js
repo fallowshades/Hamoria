@@ -1,13 +1,17 @@
 import mongoose from 'mongoose'
-import { TOUCH_TYPE, FACE_EXPRESSION } from '../utils/constants.js'
+import { TOUCH_TYPE, FACE_EXPRESSION, POSITION } from '../utils/constants.js'
 
 const ReferenceSchema = new mongoose.Schema({
   orderid: String,
   position: {
     type: String,
+    enum: [TOUCH_TYPE],
+    default: POSITION.NAN,
   },
   bodycontact: {
     type: String,
+    enum: [TOUCH_TYPE],
+    default: POSITION.NAN,
   },
   touchtype: {
     type: String,

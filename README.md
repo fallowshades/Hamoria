@@ -76,4 +76,69 @@ export const deleteReference = async (req, res) => {
 }
 ```
 
-##
+## constant and middleware setup
+
+referenceMiddleware.js
+
+```js
+import { body, validationResult } from 'express-validator'
+import { BadRequestError } from '../errors/customErrors'
+
+const withValidationErrors = (validateValues) => {
+  return [
+    validateValues,
+    (req, res, next) => {
+      const errors = validationResult(req)
+
+      if (!errors.isEmpty()) {
+        const errorMessages = errors.array().map((error) => error.msg)
+        throw new BadRequestError(errorMessages)
+      }
+      next()
+    },
+  ]
+}
+```
+
+referenceModel
+
+```js
+import { TOUCH_TYPE, FACE_EXPRESSION, POSITION } from '../utils/constants.js'
+
+const ReferenceSchema = new mongoose.Schema({
+  orderid: String,
+  position: {
+    type: String,
+    enum: [TOUCH_TYPE],
+    default: POSITION.NAN,
+  },
+  bodycontact: {
+    type: String,
+    enum: [TOUCH_TYPE],
+    default: POSITION.NAN,
+  },
+  ...
+})
+```
+
+utils\constants.js
+
+```js
+export const POSITION = {
+  SHOULDER: 'shoulder',
+  CHEST: 'chest',
+  HAND: 'hand',
+  BACKHAND: 'backhand',
+  FINGERS: 'fingers',
+  PALM: 'palm',
+  HEAD: 'head',
+  STOMACHCHEST: 'stomach chest',
+  FACE: 'face',
+  SHOULDERCHEST: 'shoulder chest',
+  CHESTHEAD: 'chest head',
+  CHESTSHOULDER: 'chest shoulder',
+  ARM: 'arm',
+  NULL: 'null',
+  NAN: 'NaN',
+}
+```
