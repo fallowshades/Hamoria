@@ -15,7 +15,7 @@ export const createReference = async (req, res) => {
 export const getAllReferences = async (req, res) => {
   const reference = await Reference.find({})
 
-  res.status(StatusCodes.OK).json({ reference })
+  res.status(StatusCodes.OK).json({ references: reference })
 
   /**const jsonPrefix = JSON.parse(
     await readFile(

@@ -1,6 +1,8 @@
-import { body, validationResult } from 'express-validator'
-import { BadRequestError } from '../errors/customErrors.js'
+import { body, validationResult, param } from 'express-validator'
+import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
 import { POSITION, TOUCH_TYPE, FACE_EXPRESSION } from '../utils/constants.js'
+
+import mongoose from 'mongoose'
 
 const withValidationErrors = (validateValues) => {
   return [
@@ -10,6 +12,9 @@ const withValidationErrors = (validateValues) => {
 
       if (!errors.isEmpty()) {
         const errorMessages = errors.array().map((error) => error.msg)
+        if (errorMessages[0].startsWith('no reference')) {
+          throw new NotFoundError(errorMessages)
+        }
         throw new BadRequestError(errorMessages)
       }
       next()
@@ -30,4 +35,14 @@ export const validateReferenceInput = withValidationErrors([
   body('faceexpression')
     .isIn(Object.values(FACE_EXPRESSION))
     .withMessage('invalid face expression'),
+])
+import Reference from '../models/referenceModel.js'
+
+export const validateIdParam = withValidationErrors([
+  param('id').custom(async (value) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value)
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
+    const reference = await Reference.findById(value)
+    if (!reference) throw new NotFoundError(`no reference with id : ${value}`)
+  }),
 ])

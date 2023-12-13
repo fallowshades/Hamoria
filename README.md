@@ -201,3 +201,44 @@ router
     -
   .patch(validateReferenceInput, updateReference)
 ```
+
+### validate ip param reference
+
+referenceController
+
+- fix mistake
+
+```js
+res.status(StatusCodes.OK).json({ references: reference })
+```
+
+validateReferenceRouter.js
+
+```js
+import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
+const withValidationErrors = (validateValues) => {
+...
+if (errorMessages[0].startsWith('no reference')) {
+  throw new NotFoundError(errorMessages)
+}
+}
+```
+
+```js
+import mongoose from 'mongoose'
+import { param } from 'express-validator'
+import { Reference } from '../client/src/components/courses/handparts/mappedItems/index.js'
+
+import Reference from '../models/referenceModel.js'
+
+export const validateIdParam = withValidationErrors([
+  param('id').custom(async (value) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value)
+    isValid(value)
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
+    const reference = await Reference.findById(value)
+    isValidId(!achievement)
+    throw new NotFoundError(`no reference with id : ${value}`)
+  }),
+])
+```
