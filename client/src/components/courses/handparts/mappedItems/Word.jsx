@@ -1,10 +1,12 @@
 import Wrapper from '../../../../assets/wrappers/handparts/Word'
 import SignInfo from './SignInfo'
 import { FaLocationArrow, FaCalendarAlt } from 'react-icons/fa'
-
-import { Link } from 'react-router-dom'
+import { EditWord } from '../mappedItems'
 import { Form } from 'react-router-dom'
+import { useState } from 'react'
 const Word = ({ word, subgroup, subsection, prefixid }) => {
+  const [isEdit, setIsEdit] = useState(false)
+
   return (
     <Wrapper>
       <header>
@@ -16,12 +18,28 @@ const Word = ({ word, subgroup, subsection, prefixid }) => {
       </header>
       <div className="content">
         <div className="content-center">
-          <SignInfo icon={<FaLocationArrow />} text={subgroup} />
-          <SignInfo icon={<FaCalendarAlt />} text={subsection} />
+          {isEdit ? (
+            <div>
+              <EditWord />
+            </div>
+          ) : (
+            <div>
+              {' '}
+              <SignInfo icon={<FaLocationArrow />} text={subgroup} />
+              <SignInfo icon={<FaCalendarAlt />} text={subsection} />
+            </div>
+          )}
         </div>
 
         <footer className="actions">
-          <Link className="btn edit-btn">Edit</Link>
+          <button
+            className="btn edit-btn"
+            onClick={() => {
+              setIsEdit(!isEdit)
+            }}
+          >
+            {isEdit ? 'word' : ' Edit'}
+          </button>
           <Form>
             <button type="submit" className="btn delete-btn">
               Delete

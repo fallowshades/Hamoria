@@ -334,6 +334,65 @@ WordContainer.js
 
 #### EditReference setup
 
+EditWord.jsx
+
+```js
+import Wrapper from '../../../../assets/wrappers/DashboardFormPage'
+import { Form } from 'react-router-dom'
+import { FormRow } from '../../../../components'
+
+const EditWord = () => {
+  return (
+    <Wrapper>
+      <Form method="post" className="form">
+        <h4 className="form-title">edit prefix</h4>
+        <div className="form-center">
+          <FormRow type="text" name="word"></FormRow>
+          <FormRow type="text" name="subgroup"></FormRow>
+          <FormRow type="text" name="subsection"></FormRow>
+          <FormRow type="text" name="prefixid"></FormRow>
+        </div>
+      </Form>
+    </Wrapper>
+  )
+}
+export default EditWord
 ```
 
+Word.jsx
+
+```js
+import { EditWord } from '../mappedItems'
+import { useState } from 'react'
+```
+
+```js
+<div className="content-center">
+  {isEdit ? (
+    <div>
+      <EditWord />
+    </div>
+  ) : (
+    <div>
+      {' '}
+      <SignInfo icon={<FaLocationArrow />} text={subgroup} />
+      <SignInfo icon={<FaCalendarAlt />} text={subsection} />
+    </div>
+  )}
+</div>
+```
+
+```js
+<footer className="actions">
+  <Link className="btn edit-btn">Edit</Link>
+  <button
+    className="btn edit-btn"
+    onClick={() => {
+      setIsEdit(!isEdit)
+    }}
+  >
+    {isEdit ? 'word' : ' Edit'}
+  </button>
+  ...
+</footer>
 ```

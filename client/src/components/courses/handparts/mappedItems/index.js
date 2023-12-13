@@ -10,3 +10,4 @@ export { default as Reference } from './Reference'
 export { default as EditReference } from './EditReference'
 
 export { default as Word } from './Word'
+export { default as EditWord } from './EditWord'
