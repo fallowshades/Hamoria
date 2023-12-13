@@ -24,13 +24,19 @@ export const getAllWords = async (req, res) => {
 }
 
 export const getSingleWord = async (req, res) => {
-  res.send('get single word')
+  const testItem = {
+    word: req.noRead ? '1' : req.value,
+    subgroup: 'money',
+    subsection: 'a',
+    prefixid: 1000,
+  }
+  res.status(StatusCodes.OK).json({ prefix: testItem })
 }
 
 export const updateWord = async (req, res) => {
-  res.send('update word')
+  getSingleWord({ noRead: false, value: nanoid() }, res)
 }
 
 export const deleteWord = async (req, res) => {
-  res.send('delete word')
+  getSingleWord({ noRead: false, value: nanoid() }, res)
 }

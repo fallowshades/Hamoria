@@ -4,7 +4,7 @@ import { FaLocationArrow, FaCalendarAlt } from 'react-icons/fa'
 import { EditWord } from '../mappedItems'
 import { Form } from 'react-router-dom'
 import { useState } from 'react'
-const Word = ({ word, subgroup, subsection, prefixid }) => {
+const Word = ({ _id, word, subgroup, subsection, prefixid }) => {
   const [isEdit, setIsEdit] = useState(false)
 
   return (
@@ -20,7 +20,7 @@ const Word = ({ word, subgroup, subsection, prefixid }) => {
         <div className="content-center">
           {isEdit ? (
             <div>
-              <EditWord />
+              <EditWord _id={_id} />
             </div>
           ) : (
             <div>
