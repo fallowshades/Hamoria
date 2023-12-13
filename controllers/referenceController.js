@@ -16,9 +16,7 @@ export const getAllReferences = async (req, res) => {
   const { position, bodycontact, touchtype, faceexpression, link, sort } =
     req.query
 
-  const queryObject = {
-    createdBy: req.user.userId,
-  }
+  const queryObject = {}
 
   if (position && position !== 'all') {
     queryObject.position = position
@@ -52,14 +50,12 @@ export const getAllReferences = async (req, res) => {
   const totalReferences = await Reference.countDocuments(queryObject)
   const numOfPages = Math.ceil(totalReferences / limit)
 
-  res
-    .status(StatusCodes.OK)
-    .json({
-      totalReferences,
-      numOfPages,
-      currentPage: page,
-      references: reference,
-    })
+  res.status(StatusCodes.OK).json({
+    totalReferences,
+    numOfPages,
+    currentPage: page,
+    references: reference,
+  })
 
   /**const jsonPrefix = JSON.parse(
     await readFile(
