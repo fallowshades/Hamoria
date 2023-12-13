@@ -149,8 +149,45 @@ return {
 
 #### 5. Debounce
 
-```js
+utils/utils.jsx
 
+```js
+export const debounce = (onChange) => {
+  let timeout
+  return (e) => {
+    const form = e.currentTarget.form
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      onChange(form)
+    }, 2000)
+  }
+}
+```
+
+SearchWordContainer.jsx
+
+- add attribute
+
+```js
+import { debounce } from '../../../utils/utils'
+
+     onChange={debounce((form) => {
+              submit(form)
+            })}
+
+             <FormRowSelect
+            name="sort"
+            defaultValue={sort}
+            list={['a-z', 'z-a']}
+            onChange={(e) => {
+              submit(e.currentTarget.form)
+            }}
+```
+
+SearchWordContainer.jsx
+
+```js
+defaultValue = { status } //forgot to set default values
 ```
 
 ## Pagination of response data

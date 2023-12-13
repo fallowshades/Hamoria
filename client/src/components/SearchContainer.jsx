@@ -7,19 +7,11 @@ import {
   ACHIEVEMENT_SORT_BY,
 } from '../../../utils/constants'
 import { useAllAchievementsContext } from '../pages/AllAchievements'
-
-const debounce = (onChange) => {
-  let timeout
-  return (e) => {
-    const form = e.currentTarget.form
-    clearTimeout(timeout)
-    timeout = setTimeout(() => {
-      onChange(form), 2000
-    })
-  }
-}
+import { debounce } from '../utils/utils'
 
 const SearchContainer = () => {
+  const { searchValues } = useAllAchievementsContext()
+  const { search, status, type, sort } = searchValues
   const submit = useSubmit()
   return (
     <Wrapper>
@@ -31,8 +23,8 @@ const SearchContainer = () => {
           <FormRow
             type="search"
             name="search"
-            defaultValue="a"
-            onChange={debounce((form) => {
+            defaultValue={search}
+            onChange={debounce(() => {
               submit(form)
             })}
           />
@@ -40,7 +32,7 @@ const SearchContainer = () => {
             labelText="achievement status"
             name="achievementStatus"
             list={['all', ...Object.values(ACHIEVEMENT_STATUS)]}
-            defaultValue="all"
+            defaultValue={status}
             onChange={(e) => {
               submit(e.currentTarget.form)
             }}
@@ -49,11 +41,11 @@ const SearchContainer = () => {
             labelText="achievements type"
             name="achievementType"
             list={['all', ...Object.values(ACHIEVEMENT_TYPE)]}
-            defaultValue="all"
+            defaultValue={type}
           />
           <FormRowSelect
             name="sort"
-            defaultValue="newest"
+            defaultValue={sort}
             list={[...Object.values(ACHIEVEMENT_SORT_BY)]}
             onChange={(e) => {
               submit(e.currentTarget.form)

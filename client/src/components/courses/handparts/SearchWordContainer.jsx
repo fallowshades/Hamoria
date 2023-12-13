@@ -3,7 +3,7 @@ import Wrapper from '../../../assets/wrappers/DashboardFormPage'
 import { Form, useSubmit, Link } from 'react-router-dom'
 
 import { useAllWordContext } from '../../../pages/handparts/AllWord'
-
+import { debounce } from '../../../utils/utils'
 const SearchWordContainer = () => {
   const { searchValues } = useAllWordContext()
   const { search, subgroup, subsection, sort } = searchValues
@@ -20,30 +20,33 @@ const SearchWordContainer = () => {
             type="search"
             name="search"
             defaultValue={search}
-            onChange={(e) => {
-              submit(e.currentTarget.form)
-            }}
+            onChange={debounce((form) => {
+              submit(form)
+            })}
           />
           <FormRow
             name="subgroup"
             labelText="subgroup"
-            defaultValue={subgroup}
-            onChange={(e) => {
-              submit(e.currentTarget.form)
-            }}
+            defaultValue={subgroup == '' ? 'horizontallevel' : subgroup}
+            onChange={debounce((form) => {
+              submit(form)
+            })}
           />
           <FormRow
             name="subsection"
             labelText="subsection"
             defaultValue={subsection}
-            onChange={(e) => {
-              submit(e.currentTarget.form)
-            }}
+            onChange={debounce((form) => {
+              submit(form)
+            })}
           />
           <FormRowSelect
             name="sort"
             defaultValue={sort}
             list={['a-z', 'z-a']}
+            onChange={(e) => {
+              submit(e.currentTarget.form)
+            }}
           />
 
           <Link to="/dashboard/word" className="btn form-btn delete-btn">
