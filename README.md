@@ -269,7 +269,63 @@ export default Word
 Word.jsx
 
 ```js
+import Wrapper from '../../../../assets/wrappers/handparts/Word'
+import SignInfo from './SignInfo'
+import { FaLocationArrow, FaCalendarAlt } from 'react-icons/fa'
 
+import { Link } from 'react-router-dom'
+import { Form } from 'react-router-dom'
+const Word = ({ word, subgroup, subsection, prefixid }) => {
+  return (
+    <Wrapper>
+      <header>
+        <div className="main-icon">{word.charAt(0)}</div>
+        <div className="info">
+          <h5>{word}</h5>
+          <p>{prefixid}</p>
+        </div>
+      </header>
+      <div className="content">
+        <div className="content-center">
+          <SignInfo icon={<FaLocationArrow />} text={subgroup} />
+          <SignInfo icon={<FaCalendarAlt />} text={subsection} />
+        </div>
+
+        <footer className="actions">
+          <Link className="btn edit-btn">Edit</Link>
+          <Form>
+            <button type="submit" className="btn delete-btn">
+              Delete
+            </button>
+          </Form>
+        </footer>
+      </div>
+    </Wrapper>
+  )
+}
+```
+
+#### words css
+
+Word.js
+
+```
+
+```
+
+--misstake
+
+WordContainer.js
+
+```js
+<Wrapper>
+  <div className="words">
+    <AddWord />
+    {words.map((word) => {
+      return <Word key={word._id} {...word} />
+    })}
+  </div>
+</Wrapper>
 ```
 
 ## Dynamic updates
@@ -277,3 +333,7 @@ Word.jsx
 ### edit Reference
 
 #### EditReference setup
+
+```
+
+```

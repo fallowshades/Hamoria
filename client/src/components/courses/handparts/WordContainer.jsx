@@ -16,12 +16,14 @@ const WordContainer = () => {
     )
   }
   return (
-    <div className="words">
-      <AddWord />
-      {words.map((word) => {
-        return <Word key={word._id} {...word} />
-      })}
-    </div>
+    <Wrapper>
+      <div className="words">
+        <AddWord />
+        {words.map((word) => {
+          return <Word key={word._id} {...word} />
+        })}
+      </div>
+    </Wrapper>
   )
 }
 export default WordContainer
