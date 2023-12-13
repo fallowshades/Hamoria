@@ -76,7 +76,9 @@ export const deleteReference = async (req, res) => {
 }
 ```
 
-## constant and middleware setup
+## validation
+
+### constant and middleware setup
 
 referenceMiddleware.js
 
@@ -141,4 +143,61 @@ export const POSITION = {
   NULL: 'null',
   NAN: 'NaN',
 }
+```
+
+### validate create reference
+
+validateReferenceMiddleware.js
+
+```js
+import { body, validationResult } from 'express-validator'
+import { BadRequestError } from '../errors/customErrors.js'
+import { POSITION, TOUCH_TYPE, FACE_EXPRESSION } from '../utils/constants.js'
+
+const withValidationErrors = (validateValues) => {
+  return [
+    validateValues,
+    (req, res, next) => {
+      const errors = validationResult(req)
+
+      if (!errors.isEmpty()) {
+        const errorMessages = errors.array().map((error) => error.msg)
+        throw new BadRequestError(errorMessages)
+      }
+      next()
+    },
+  ]
+}
+
+export const validateReferenceInput = withValidationErrors([
+  body('position')
+    .isIn(Object.values(POSITION))
+    .withMessage('invalid position value'),
+  body('bodycontact')
+    .isIn(Object.values(POSITION))
+    .withMessage('invalid bodycontact value'),
+  body('touchtype')
+    .isIn(Object.values(TOUCH_TYPE))
+    .withMessage('invalid touch type'),
+  body('faceexpression')
+    .isIn(Object.values(FACE_EXPRESSION))
+    .withMessage('invalid face expression'),
+])
+```
+
+referenceRouter.js
+
+```js
+import { validateReferenceInput } from '../middleware/validateReferenceMiddleware.js'
+
+
+router
+  .route('/')
+  .post(validateReferenceInput, createReference)
+  .get(getAllReferences)
+
+
+    .route('/:id')
+    -
+  .patch(validateReferenceInput, updateReference)
 ```

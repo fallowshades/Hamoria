@@ -8,13 +8,18 @@ import {
   deleteReference,
 } from '../controllers/referenceController.js'
 
+import { validateReferenceInput } from '../middleware/validateReferenceMiddleware.js'
+
 const router = Router()
 
-router.route('/').post(createReference).get(getAllReferences)
+router
+  .route('/')
+  .post(validateReferenceInput, createReference)
+  .get(getAllReferences)
 
 router
   .route('/:id')
   .get(getSingleReference)
-  .patch(updateReference)
+  .patch(validateReferenceInput, updateReference)
   .delete(deleteReference)
 export default router

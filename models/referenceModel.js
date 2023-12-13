@@ -5,12 +5,12 @@ const ReferenceSchema = new mongoose.Schema({
   orderid: String,
   position: {
     type: String,
-    enum: [TOUCH_TYPE],
+    enum: [POSITION],
     default: POSITION.NAN,
   },
   bodycontact: {
     type: String,
-    enum: [TOUCH_TYPE],
+    enum: [POSITION],
     default: POSITION.NAN,
   },
   touchtype: {
