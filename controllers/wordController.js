@@ -35,7 +35,7 @@ export const getAllWords = async (req, res) => {
     'z-a': '-position',
   }
 
-  const sortKey = sortOptions[sort] || sortOptions.newest
+  const sortKey = sortOptions[sort] || sortOptions['a-z']
 
   const correlatedOperationData = filteredWord.sort((a, b) =>
     sortKey.startsWith('-')
