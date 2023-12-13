@@ -65,7 +65,7 @@ const sortOptions = {
   ...
 }
 
-const sortKey = sortOptions[sort] || sortOptions.newest
+const sortKey = sortOptions[sort] || sortOptions['a-z']
 
 const correlatedOperationData = filteredWord.sort((a, b) =>
   sortKey.startsWith('-')
@@ -94,7 +94,54 @@ const packagedData = paginatedData.map((keyless) => ({
 
 #### 2. Search Container
 
+SearchWordContainer.jsx
+
+```js
+import { FormRow, FormRowSelect, SubmitBtn } from '../../../components'
+import Wrapper from '../../../assets/wrappers/DashboardFormPage'
+import { Form, useSubmit, Link } from 'react-router-dom'
+
+import { useAllWordContext } from '../../../pages/handparts/AllWord'
+```
+
+```js
+return (
+  <Wrapper>
+    <Form className="form">
+      <h5 className="form-title">search form</h5>
+      <div className="form-center">
+        {/* search position */}
+
+        <FormRow type="search" name="search" defaultValue="a" />
+        <FormRow name="subgroup" labelText="subgroup" />
+        <FormRow name="subsection" labelText="subsection" />
+        <FormRowSelect name="sort" defaultValue="a-z" list={['a-z', 'z-a']} />
+
+        <Link to="/dashboard/word" className="btn form-btn delete-btn">
+          Reset Search Values
+        </Link>
+        {/* TEMP!!!! */}
+        <SubmitBtn formBtn />
+      </div>
+    </Form>
+  </Wrapper>
+)
+```
+
 #### 3. All Achievements Loader
+
+All word (const loader)
+
+```js
+const params = Object.fromEntries([
+  ...new URL(request.url).searchParams.entries(), ////
+])
+
+return {
+  data,
+  params, ////////
+}
+```
 
 #### 4. Submit Form Programmatically
 
