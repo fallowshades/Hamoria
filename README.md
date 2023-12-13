@@ -1,4 +1,4 @@
-# v0.6.1
+# v0.6.3
 
 ## Support tree for object transfer
 
@@ -6,102 +6,101 @@
 
 #### note have keys to identify fields
 
-#### AddReference- Structure
+#### AddWord- Structure
 
 - Mapping (when)
 - network form identity (who)
 - existence (when)
 
 ```js
-import {
-  prefixKeys,
-  orientationKeys,
-  referenceKeys,
-} from '../../../../../../utils/modelKeyConstants'
 
-const KeysToMapFormRows = ({ isOrientation, mapKey }) => {
-  if (mapKey) {
-    mappedKeys = referenceKeys
-  }
-}
 ```
 
-AddReference.jsx
+AddWord.jsx
 
 ```js
 import Wrapper from '../../../assets/wrappers/DashboardFormPage'
-import { Form } from 'react-router-dom'
-import { SectionTitle } from '../../../components'
+import { Form, FormRow } from 'react-router-dom'
 //network submission
 import { toast } from 'react-toastify'
 import customFetch from '../../../utils/customFetch'
 import { useNavigation, redirect } from 'react-router-dom'
-//mapping
-import { KeysToMapFormRows } from './mappedItems'
 
-const AddReference = () => {
+const AddWord = () => {
   const navigation = useNavigation()
   const isSubmitting = navigation.state === 'submitting'
 
   return (
     <Wrapper>
       <Form method="post" className="form">
-        <SectionTitle text="add reference" />
-        <KeysToMapFormRows mapKey="reference" />
-        <button
-          type="submit"
-          className="btn btn-block form-btn"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'submitting...' : 'submit'}
-        </button>
+        <h4 className="form-title">Word</h4>
+        <div className="form-center">
+          <FormRow type="text" name="word"></FormRow>
+          <FormRow type="text" name="subgroup"></FormRow>
+          <FormRow type="text" name="subsection"></FormRow>
+          <FormRow type="text" name="prefixid"></FormRow>
+          <button
+            type="submit"
+            className="btn btn-block form-btn"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'submitting...' : 'submit'}
+          </button>
+        </div>
       </Form>
     </Wrapper>
   )
 }
-export default AddReference
+export default AddWord
 ```
 
-Reference container
+Wordcontainer.jsx
 
 ```js
-return (
-  <>
-    <div>ReferenceContainer</div>
-    <AddReference />
-  </>
-)
+
 ```
 
-#### create reference (dynamically mappable data from future loads)
+-- FormRow and FormRowSelect already collected Object.values
+
+#### create word (dynamically mappable data from future loads)
 
 --mapped items are located elsewhere. access api router
 
 App.js
 
 ```js
-import { action as referenceAction } from './components/courses/handparts/AddReference'
-          {
-            path: 'reference',
-            element: <AllReference />,
-            action: referenceAction,
+import { action as wordAction } from './components/courses/handparts/AddWord'
+   {
+            path: 'word',
+            element: <AllWord />,
+            action: wordAction,
           },
 ```
+
+AddWord.jsx
 
 ```js
 export const action = async ({ request }) => {
   const formData = await request.formData()
   const data = Object.fromEntries(formData)
-  console.log(data)
-  toast.success('reference added successfully')
+
   try {
-    await customFetch.post('/references', data)
+    await customFetch.post('/words', data)
+    toast.success('word added successfully')
     return null
   } catch (error) {
-    toast.error(error?.response?.data?.mst)
+    toast.error(error?.response?.data?.msg)
     return error
   }
 }
+```
+
+WordContainer.jsx
+
+```js
+import AddWord from './AddWord'
+
+return <AddWord />
 ```
 
 ## create transfer lifecycle
@@ -111,18 +110,16 @@ export const action = async ({ request }) => {
 App.jsx
 
 ```js
-import { loader as ReferenceLoader } from './pages/handparts/AllReference'
 
- loader: ReferenceLoader,
 ```
 
-Reference controller
+Word controller
 
 ```js
-export const getAllReferences = async (req, res) => {
+export const getAllWords = async (req, res) => {
   const jsonPrefix = JSON.parse(
     await readFile(
-      new URL('../utils/mockWhat/mockReferenceData.json', import.meta.url)
+      new URL('../utils/mockWhat/mockWordData.json', import.meta.url)
     )
   )
 
@@ -130,7 +127,7 @@ export const getAllReferences = async (req, res) => {
     return { ...keyless, _id: nanoid() }
   })
 
-  res.status(StatusCodes.OK).json({ references: packagedData })
+  res.status(StatusCodes.OK).json({ orientations: packagedData })
 }
 ```
 
@@ -141,7 +138,7 @@ export const getAllReferences = async (req, res) => {
 - accumulate data
 - export a searchable wrapper
 
-AllReferences
+AllWords
 
 ```js
 import { useContext, createContext } from 'react'
@@ -152,7 +149,7 @@ import customFetch from '../../utils/customFetch'
 
 export const loader = async ({ request }) => {
   try {
-    const { data } = await customFetch.get('/references')
+    const { data } = await customFetch.get('/words')
     return {
       data,
     }
@@ -164,31 +161,33 @@ export const loader = async ({ request }) => {
 ```
 
 ```js
-const AllReferenceContext = createContext
+const AllWordContext = createContext()
 
-const AllReference = () => {
+const AllWord = () => {
   const { data } = useLoaderData()
   return (
-    <AllReferenceContext.Provider value={data}>
-      <SearchReferenceContainer />
-      <ReferenceContainer />
-    </AllReferenceContext.Provider>
+    <AllWordContext.Provider value={{ data }}>
+      <SearchWordContainer />
+      <WordContainer />
+    </AllWordContext.Provider>
   )
 }
+export default AllWord
 
-export const useAllOrientationContext = () => useContext(AllReferenceContext)
+export const useAllWordContext = () => useContext(AllWordContext)
 ```
 
 ### render Reference
 
-#### ReferenceContainer css
+#### WordContainer css
 
-ReferenceContainer.js
+WordContainer.js
 
 ```js
 import styled from 'styled-components'
 
-const Wrapper = styled.section`  margin-top: 4rem;
+const Wrapper = styled.section`
+  margin-top: 4rem;
   h2 {
     text-transform: none;
   }
@@ -196,341 +195,217 @@ const Wrapper = styled.section`  margin-top: 4rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
   }
-  .references {
+  .words {
     display: grid;
     grid-template-columns: 1fr;
     row-gap: 2rem;
   }
-   @media (min-width: 765px) {
-    .references {
+  @media (min-width: 1120px) {
+    .words {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 2rem;
     }
-  @media (min-width: 1120px) {
-    .references {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 2rem;
-    }
-  }`
+  }
+`
 export default Wrapper
 ```
 
 #### map Reference
 
-- ! possible misstakes in AllContext
+-put items on grid
 
-  - invoce const AllReferenceContext = createContext()
-  - pass object <AllReferenceContext.Provider value={{ data }}>
-
-  -put items on grid
-
-ReferenceContainer.jsx
+WordContainer.jsx
 
 ```js
-import { useAllReferenceContext } from '../../../pages/handparts/AllReference'
-import { Reference } from './mappedItems'
-import Wrapper from '../../../assets/wrappers/handparts/ReferenceContainer'
+import { useAllWordContext } from '../../../pages/handparts/AllWord'
+import { Word } from './mappedItems'
+import Wrapper from '../../../assets/wrappers/handparts/WordContainer'
 ```
 
 ```js
-const { data } = useAllReferenceContext()
-const { references } = data
+const WordContainer = () => {
+  const { data } = useAllWordContext()
+  const { words } = data
 
-if (references == 0) {
+  if (words.length == 0) {
+    return (
+      <Wrapper>
+        <h2>No words found</h2>
+      </Wrapper>
+    )
+  }
   return (
-    <Wrapper>
-      <h2>No references found</h2>
-    </Wrapper>
+    <div className="words">
+      <AddWord />
+      {words.map((word) => {
+        return <Word key={word._id} {...word} />
+      })}
+    </div>
   )
 }
+export default WordContainer
 ```
+
+mappedItems/index.js
 
 ```js
-return (
-  <div className="references">
-    {references.map((reference) => {
-      return <Reference key={reference._id} {...reference} />
-    })}
-  </div>
-)
+export { default as Word } from './Word'
 ```
 
-Reference
+Word.jsx
 
 ```JS
-const Reference = () => {
-  return <div>Reference</div>
+const Word = () => {
+  return <div>Word</div>
 }
-export default Reference
+export default Word
 ```
 
 #### Reference component
 
 -- aware import svg variable or component
 
-Reference.jsx
+Word.jsx
 
 ```js
-const Reference = ({
-  position,
-  bodycontact,
-  touchtype,
-  faceexpression,
-  link,
-}) => {
+import Wrapper from '../../../../assets/wrappers/handparts/Word'
+import SignInfo from './SignInfo'
+import { FaLocationArrow, FaCalendarAlt } from 'react-icons/fa'
+
+import { Link } from 'react-router-dom'
+import { Form } from 'react-router-dom'
+const Word = ({ word, subgroup, subsection, prefixid }) => {
   return (
     <Wrapper>
-      <SectionTitle text={link} AddclassName="text-black" link />
-
+      <header>
+        <div className="main-icon">{word.charAt(0)}</div>
+        <div className="info">
+          <h5>{word}</h5>
+          <p>{prefixid}</p>
+        </div>
+      </header>
       <div className="content">
         <div className="content-center">
-          <div>
-            <SignInfo
-              icon={<FaLocationArrow />}
-              text={'position: ' + (position ?? '')}
-            />
-            <SignInfo
-              icon={<FaLocationArrow />}
-              text={'face expression: ' + (faceexpression ?? '')}
-            />
-          </div>
-
-          <div>
-            <SignInfo
-              icon={<FaLocationArrow />}
-              text={'touchtype: ' + (touchtype ?? '')}
-            />
-            <SignInfo
-              icon={<FaLocationArrow />}
-              text={'bodyContact: ' + (bodycontact ?? '')}
-            />
-          </div>
+          <SignInfo icon={<FaLocationArrow />} text={subgroup} />
+          <SignInfo icon={<FaCalendarAlt />} text={subsection} />
         </div>
+
+        <footer className="actions">
+          <Link className="btn edit-btn">Edit</Link>
+          <Form>
+            <button type="submit" className="btn delete-btn">
+              Delete
+            </button>
+          </Form>
+        </footer>
       </div>
     </Wrapper>
   )
 }
-export default Reference
 ```
 
-#### section title upgrade
+#### words css
 
-SectionTitle
+Word.js
+
+```
+
+```
+
+--misstake
+
+WordContainer.js
 
 ```js
-const SectionTitle = ({ text, AddclassName, link }) => {
-  const combinedClassName = `text-3xl font-medium tracking-wider capitalize ${
-    AddclassName || ''
-  }`
-  return (
-    <div className="border-b border-base-300 pb-5">
-      {link ? (
-        <a className={`${combinedClassName} underline`} href={text}>
-          {text}
-        </a>
-      ) : (
-        <h2 className={combinedClassName}>{text}</h2>
-      )}
-    </div>
-  )
-}
+<Wrapper>
+  <div className="words">
+    <AddWord />
+    {words.map((word) => {
+      return <Word key={word._id} {...word} />
+    })}
+  </div>
+</Wrapper>
 ```
 
 ## Dynamic updates
 
 ### edit Reference
 
-EditReference.jsx
+#### EditReference setup
+
+EditWord.jsx
 
 ```js
 import Wrapper from '../../../../assets/wrappers/DashboardFormPage'
 import { Form } from 'react-router-dom'
-import { KeysToMapFormRows } from '../mappedItems'
+import { FormRow } from '../../../../components'
 
-const EditReference = () => {
+const EditWord = () => {
   return (
     <Wrapper>
       <Form method="post" className="form">
-        <h4 className="form-title">edit reference</h4>
-        <div className="form-center"></div>
-        <div>
-          <KeysToMapFormRows mapKey="reference" />
+        <h4 className="form-title">edit prefix</h4>
+        <div className="form-center">
+          <FormRow type="text" name="word"></FormRow>
+          <FormRow type="text" name="subgroup"></FormRow>
+          <FormRow type="text" name="subsection"></FormRow>
+          <FormRow type="text" name="prefixid"></FormRow>
         </div>
       </Form>
     </Wrapper>
   )
 }
-export default EditReference
+export default EditWord
 ```
 
-Reference.jsx
+Word.jsx
 
 ```js
-import { EditReference } from '../mappedItems'
-import { Form } from 'react-router-dom'
+import { EditWord } from '../mappedItems'
+import { useState } from 'react'
+```
+
+```js
+<div className="content-center">
+  {isEdit ? (
+    <div>
+      <EditWord />
+    </div>
+  ) : (
+    <div>
+      {' '}
+      <SignInfo icon={<FaLocationArrow />} text={subgroup} />
+      <SignInfo icon={<FaCalendarAlt />} text={subsection} />
+    </div>
+  )}
+</div>
 ```
 
 ```js
 <footer className="actions">
-  <EditReference />
-  <Form>
-    <button type="submit" className="btn delete-btn">
-      Delete
-    </button>
-  </Form>
+  <Link className="btn edit-btn">Edit</Link>
+  <button
+    className="btn edit-btn"
+    onClick={() => {
+      setIsEdit(!isEdit)
+    }}
+  >
+    {isEdit ? 'word' : ' Edit'}
+  </button>
+  ...
 </footer>
 ```
 
-#### EditReference setup
+### Delete Edit
 
-#### more to work with
-
-### Reference action setup. (btn w identiry)
-
-#### remote
-
-referenceController.js
+Word.jsx
 
 ```js
-export const updateReference = async (req, res) => {
-  getSinglePrefix({ noRead: false, value: nanoid() }, res)
-}
-
-export const deleteReference = async (req, res) => {
-  getSinglePrefix({ noRead: false, value: nanoid() }, res)
-}
+method="post" action={`../delete-word/${_id}`}
 ```
 
-#### each item
-
-Reference.jsx
-
-```js
-const Reference = ({
-  _id,...}) =>{
-
-    return(
-      <footer className="actions">
-      <EditOrientation _id={_id} />
-      </footer>
-    )
-  }
-```
-
-EditOrientation.jsx
-
-```js
-import { useNavigation } from 'react-router-dom'
-
-const EditReference = ({ _id }) => {
-  const navigation = useNavigation()
-  const isSubmitting = navigation.state === 'submitting'
-  const identifyAction = `patch ${_id}`
-}
-```
-
-```js
-return (
-  <button
-    type="submit"
-    className="btn btn-block form-btn "
-    disabled={isSubmitting}
-  >
-    {isSubmitting ? 'submitting...' : 'submit'}
-  </button>
-)
-```
-
-```js
-return(
-  div>
-      <input name="form-id" hidden defaultValue={identifyAction} />
-     <KeysToMapFormRows mapKey="reference" />
- </div>
-)
-```
-
-#### distinguish which action
-
-AddReference.jsx
-
-```js
-const AddReference = () => {
-
-return(
-...
-<input name="form-id" hidden defaultValue="create" />
-...
-)
-}
-
-```
-
-```js
-export const action = async ({ request }) => {
-  ...
-  const formId = formData.get('form-id')
-
-  const parts = formId.split(/\s+/)
-  // The first part will be 'edit'
-  const crudOperationPart = parts[0]
-  // The remaining part will be everything after 'edit'
-  const idPart = parts.slice(1).join(' ')
-
-  switch (crudOperationPart) {
-    case 'create':
-      try {
-        await customFetch.post('/references', data)
-        toast.success('reference added successfully')
-
-        return null
-      } catch (error) {
-        toast.error(error?.response?.data?.mst)
-        return error
-      }
-    case 'patch':
-      const nanoidRegex = /^[a-zA-Z0-9_-]{21}$/
-      const mongooseObjectIdRegex = /^[0-9a-fA-F]{24}$/
-
-      if (nanoidRegex.test(idPart)) {
-        toast.success(`${idPart}`)
-        return null
-      }
-      toast.error('sad developer')
-      return null
-
-    default:
-      toast.success('default')
-      return null
-  }
-}
-
-```
-
-### Delete reference
-
-Reference.jsx
-
-```js
- <Form method="post" action={`../delete-reference/${_id}`}>
-              <button type="submit" className="btn delete-btn">
-```
-
-App.jsx
-
-```js
-
-import { action as deleteReferenceAction } from './pages/handparts/DeleteReference'
-
-  {
-            path: 'delete-reference/:id',
-            action: deleteReferenceAction,
-          },
-```
-
-DeleteReference.jsx
+DeleteWord.jsx
 
 ```js
 import { redirect } from 'react-router-dom'
@@ -539,25 +414,11 @@ import { toast } from 'react-toastify'
 
 export async function action({ params }) {
   try {
-    await customFetch.delete(`/references/${params.id}`)
-    toast.success('reference deleted successfully')
+    await customFetch.delete(`/words/${params.id}`)
+    toast.success('word deleted successfully')
   } catch (error) {
     toast.error(error.response.data.msg)
   }
   return redirect('/dashboard/prefix')
-}
-```
-
-#### fix routing to page
-
--same naming misstake
-
-```js
-export const updateReference = async (req, res) => {
-  getAllReferences({ noRead: false, value: nanoid() }, res)
-}
-
-export const deleteReference = async (req, res) => {
-  getAllReferences({ noRead: false, value: nanoid() }, res)
 }
 ```
