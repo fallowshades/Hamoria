@@ -109,6 +109,7 @@ import { action as deleteReferenceAction } from './pages/handparts/DeleteReferen
 
 import { action as wordAction } from './components/courses/handparts/AddWord'
 import { loader as wordLoader } from './pages/handparts/AllWord'
+import { action as deleteWordAction } from './pages/handparts/DeleteWord'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -258,6 +259,7 @@ const router = createBrowserRouter([
             action: wordAction,
             loader: wordLoader,
           },
+          { path: 'delete-word/:id', action: deleteWordAction },
           {
             path: 'orientation',
             element: <AllOrientation />,

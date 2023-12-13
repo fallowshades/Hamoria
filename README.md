@@ -396,3 +396,29 @@ import { useState } from 'react'
   ...
 </footer>
 ```
+
+### Delete Edit
+
+Word.jsx
+
+```js
+method="post" action={`../delete-word/${_id}`}
+```
+
+DeleteWord.jsx
+
+```js
+import { redirect } from 'react-router-dom'
+import customFetch from '../../utils/customFetch'
+import { toast } from 'react-toastify'
+
+export async function action({ params }) {
+  try {
+    await customFetch.delete(`/words/${params.id}`)
+    toast.success('word deleted successfully')
+  } catch (error) {
+    toast.error(error.response.data.msg)
+  }
+  return redirect('/dashboard/prefix')
+}
+```

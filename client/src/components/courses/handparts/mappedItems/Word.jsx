@@ -40,7 +40,7 @@ const Word = ({ _id, word, subgroup, subsection, prefixid }) => {
           >
             {isEdit ? 'word' : ' Edit'}
           </button>
-          <Form>
+          <Form method="post" action={`../delete-word/${_id}`}>
             <button type="submit" className="btn delete-btn">
               Delete
             </button>

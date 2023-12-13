@@ -459,9 +459,9 @@ Pages: (AddHandStatus, App, AllHandStatus, SearchContainer, EditHandStatus, Dele
 
 Pages: (AddHandStatus, App, AllHandStatuss, SearchContainer, EditHandStatus, DeleteHandStatus)
 
----[]support tree transfor objects
----[]create transfor lifeCycle
----[]context map presentational data dynamically
+---[x]support tree transfor objects
+---[x]create transfor lifeCycle
+---[x]context map presentational data dynamically
 
 ### handStatus page v0.6.4
 
