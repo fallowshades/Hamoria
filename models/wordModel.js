@@ -7,14 +7,17 @@ const WordSchema = new mongoose.Schema({
   word: {
     type: String,
     required: true,
+    default: 'NaN',
   },
   subgroup: {
     type: String,
     required: true,
+    default: 'NaN',
   },
   subsection: {
     type: String,
     required: true,
+    default: NaN,
   },
   prefixid: [singleHandPrefix],
 })
