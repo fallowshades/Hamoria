@@ -307,3 +307,31 @@ ReferenceModel.jsx
     default: 'Nan'
   },
 ```
+
+#### all references loader
+
+AllReference.jsx
+
+```js
+const params = Object.fromEntries([
+  ...new URL(request.url).searchParams.entries(), ////
+])
+```
+
+```js
+return {
+  data,
+  searchValues: { ...params },
+}
+```
+
+```js
+const AllReference = () => {
+
+  const { data, searchValues } = useLoaderData()
+  return (
+
+    <AllReferenceContext.Provider value={{ data, searchValues }}>
+  )
+}
+```

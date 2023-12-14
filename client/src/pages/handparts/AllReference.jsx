@@ -11,10 +11,15 @@ import customFetch from '../../utils/customFetch'
 
 export const loader = async ({ request }) => {
   try {
+    const params = Object.fromEntries([
+      ...new URL(request.url).searchParams.entries(), ////
+    ])
+
     const { data } = await customFetch.get('/references')
     console.log(data)
     return {
       data,
+      searchValues: { ...params },
     }
   } catch (error) {
     toast.error(error?.response?.data?.msg)
@@ -25,9 +30,9 @@ export const loader = async ({ request }) => {
 const AllReferenceContext = createContext()
 
 const AllReference = () => {
-  const { data } = useLoaderData()
+  const { data, searchValues } = useLoaderData()
   return (
-    <AllReferenceContext.Provider value={{ data }}>
+    <AllReferenceContext.Provider value={{ data, searchValues }}>
       <SearchReferenceContainer />
       <ReferenceContainer />
     </AllReferenceContext.Provider>
