@@ -335,3 +335,28 @@ const AllReference = () => {
   )
 }
 ```
+
+#### submit form programmatically
+
+SearchReferenceContainer.jsx
+
+```js
+const SearchReferenceContainer = () => {
+  const { searchValues } = useAllReferenceContext()
+  const { search, status, type, sort } = searchValues
+
+  const submit = useSubmit()
+
+  return (
+      onChange={(e) => {
+              submit(e.currentTarget.form)
+            }}
+
+        onChange={(e) => {
+              submit(e.currentTarget.form)
+            }}
+
+      ...
+  )
+}
+```
