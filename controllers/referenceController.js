@@ -13,10 +13,20 @@ export const createReference = async (req, res) => {
 }
 
 export const getAllReferences = async (req, res) => {
-  const { position, bodycontact, touchtype, faceexpression, link, sort } =
-    req.query
+  const {
+    search,
+    position,
+    bodycontact,
+    touchtype,
+    faceexpression,
+    link,
+    sort,
+  } = req.query
 
   const queryObject = {}
+  if (search) {
+    queryObject.$or = [{ link: { $regex: search, $options: 'i' } }]
+  }
 
   if (position && position !== 'all') {
     queryObject.position = position

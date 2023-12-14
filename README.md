@@ -1,4 +1,4 @@
-# v0.6.5
+# v0.6.4
 
 ## crud referenc controll
 
@@ -360,3 +360,77 @@ const SearchReferenceContainer = () => {
   )
 }
 ```
+
+#### debounce refracture
+
+```js
+
+  const { searchValues } = useAllAchievementsContext()
+  const { search, status, type, sort } = searchValues
+
+   defaultValue={search}
+   defaultValue={status}
+   ...
+```
+
+/utils/utillity
+
+```js
+export const debounce = (onChange) => {
+  let timeout
+  return (e) => {
+    const form = e.currentTarget.form
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      onChange(form), 2000
+    })
+  }
+}
+```
+
+referenceController
+
+```js
+const {
+  search,
+  position,
+  bodycontact,
+  touchtype,
+  faceexpression,
+  //link,
+  sort,
+} = req.query
+
+const queryObject = {}
+if (search) {
+  queryObject.$or = [{ link: { $regex: search, $options: 'i' } }]
+}
+```
+
+SearcchReferenceContainer.jsx
+
+```js
+
+import { debounce } from '../../../utils/utillity'
+
+const SearchReferenceContainer = () => {
+  const { searchValues } = useAllReferenceContext()
+
+  const { search, position, bodycontact, touchtype, faceexpression, sort } =
+    searchValues
+```
+
+````js
+return(
+          <FormRow>
+            name="search"
+            defaultValue={search}
+            onChange={debounce((form) => {
+              submit(form)
+            })}
+            <FormRowSelect>
+             defaultValue={position}
+             ...
+
+)```
+````

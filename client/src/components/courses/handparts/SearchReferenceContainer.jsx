@@ -8,10 +8,12 @@ import {
 } from '../../../../../utils/constants'
 import { referenceKeys } from '../../../../../utils/modelKeyConstants'
 import { useAllReferenceContext } from '../../../pages/handparts/AllReference'
+import { debounce } from '../../../utils/utillity'
 
 const SearchReferenceContainer = () => {
   const { searchValues } = useAllReferenceContext()
-  const { search, status, type, sort } = searchValues
+  const { search, position, bodycontact, touchtype, faceexpression, sort } =
+    searchValues
 
   const submit = useSubmit()
   return (
@@ -21,19 +23,19 @@ const SearchReferenceContainer = () => {
         <div className="form-center">
           {/* search position */}
 
-          <FormRow
+          <FormRow //link
             type="search"
-            name={referenceKeys[4].field}
-            defaultValue="a"
-            onChange={(e) => {
-              submit(e.currentTarget.form)
-            }}
+            name="search"
+            defaultValue={search}
+            onChange={debounce((form) => {
+              submit(form)
+            })}
           />
           <FormRowSelect
             labelText="position"
             name={referenceKeys[0].field}
             list={['all', ...Object.values(POSITION)]}
-            defaultValue="all"
+            defaultValue={position}
             onChange={(e) => {
               submit(e.currentTarget.form)
             }}
@@ -42,7 +44,7 @@ const SearchReferenceContainer = () => {
             labelText="bodycontact"
             name={referenceKeys[1].field}
             list={['all', ...Object.values(POSITION)]}
-            defaultValue="all"
+            defaultValue={bodycontact}
             onChange={(e) => {
               submit(e.currentTarget.form)
             }}
@@ -51,7 +53,7 @@ const SearchReferenceContainer = () => {
             labelText="touchtype type"
             name={referenceKeys[2].field}
             list={['all', ...Object.values(TOUCH_TYPE)]}
-            defaultValue="all"
+            defaultValue={touchtype}
             onChange={(e) => {
               submit(e.currentTarget.form)
             }}
@@ -60,14 +62,14 @@ const SearchReferenceContainer = () => {
             labelText="faceexpresion type"
             name={referenceKeys[3].field}
             list={['all', ...Object.values(FACE_EXPRESSION)]}
-            defaultValue="all"
+            defaultValue={faceexpression}
             onChange={(e) => {
               submit(e.currentTarget.form)
             }}
           />
           <FormRowSelect
             name="sort"
-            defaultValue="newest"
+            defaultValue={sort}
             list={['a-z', 'z-a']}
             onChange={(e) => {
               submit(e.currentTarget.form)
@@ -77,8 +79,6 @@ const SearchReferenceContainer = () => {
           <Link to="/dashboard/reference" className="btn form-btn delete-btn">
             Reset Search Values
           </Link>
-          {/* TEMP!!!! */}
-          <SubmitBtn formBtn />
         </div>
       </Form>
     </Wrapper>
