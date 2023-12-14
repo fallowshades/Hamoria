@@ -1,4 +1,4 @@
-# v0.6.5
+# v0.6.4
 
 ## crud referenc controll
 
@@ -307,3 +307,130 @@ ReferenceModel.jsx
     default: 'Nan'
   },
 ```
+
+#### all references loader
+
+AllReference.jsx
+
+```js
+const params = Object.fromEntries([
+  ...new URL(request.url).searchParams.entries(), ////
+])
+```
+
+```js
+return {
+  data,
+  searchValues: { ...params },
+}
+```
+
+```js
+const AllReference = () => {
+
+  const { data, searchValues } = useLoaderData()
+  return (
+
+    <AllReferenceContext.Provider value={{ data, searchValues }}>
+  )
+}
+```
+
+#### submit form programmatically
+
+SearchReferenceContainer.jsx
+
+```js
+const SearchReferenceContainer = () => {
+  const { searchValues } = useAllReferenceContext()
+  const { search, status, type, sort } = searchValues
+
+  const submit = useSubmit()
+
+  return (
+      onChange={(e) => {
+              submit(e.currentTarget.form)
+            }}
+
+        onChange={(e) => {
+              submit(e.currentTarget.form)
+            }}
+
+      ...
+  )
+}
+```
+
+#### debounce refracture
+
+```js
+
+  const { searchValues } = useAllAchievementsContext()
+  const { search, status, type, sort } = searchValues
+
+   defaultValue={search}
+   defaultValue={status}
+   ...
+```
+
+/utils/utillity
+
+```js
+export const debounce = (onChange) => {
+  let timeout
+  return (e) => {
+    const form = e.currentTarget.form
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      onChange(form), 2000
+    })
+  }
+}
+```
+
+referenceController
+
+```js
+const {
+  search,
+  position,
+  bodycontact,
+  touchtype,
+  faceexpression,
+  //link,
+  sort,
+} = req.query
+
+const queryObject = {}
+if (search) {
+  queryObject.$or = [{ link: { $regex: search, $options: 'i' } }]
+}
+```
+
+SearcchReferenceContainer.jsx
+
+```js
+
+import { debounce } from '../../../utils/utillity'
+
+const SearchReferenceContainer = () => {
+  const { searchValues } = useAllReferenceContext()
+
+  const { search, position, bodycontact, touchtype, faceexpression, sort } =
+    searchValues
+```
+
+````js
+return(
+          <FormRow>
+            name="search"
+            defaultValue={search}
+            onChange={debounce((form) => {
+              submit(form)
+            })}
+            <FormRowSelect>
+             defaultValue={position}
+             ...
+
+)```
+````

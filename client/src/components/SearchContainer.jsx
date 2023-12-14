@@ -20,6 +20,8 @@ const debounce = (onChange) => {
 }
 
 const SearchContainer = () => {
+  const { searchValues } = useAllAchievementsContext()
+  const { search, status, type, sort } = searchValues
   const submit = useSubmit()
   return (
     <Wrapper>
@@ -31,29 +33,29 @@ const SearchContainer = () => {
           <FormRow
             type="search"
             name="search"
-            defaultValue="a"
+            defaultValue={search}
             onChange={debounce((form) => {
               submit(form)
             })}
           />
           <FormRowSelect
             labelText="achievement status"
-            name="achievementStatus"
+            name="status"
             list={['all', ...Object.values(ACHIEVEMENT_STATUS)]}
-            defaultValue="all"
+            defaultValue={status}
             onChange={(e) => {
               submit(e.currentTarget.form)
             }}
           />
           <FormRowSelect
             labelText="achievements type"
-            name="achievementType"
+            name="type"
             list={['all', ...Object.values(ACHIEVEMENT_TYPE)]}
-            defaultValue="all"
+            defaultValue={type}
           />
           <FormRowSelect
             name="sort"
-            defaultValue="newest"
+            defaultValue={sort}
             list={[...Object.values(ACHIEVEMENT_SORT_BY)]}
             onChange={(e) => {
               submit(e.currentTarget.form)
