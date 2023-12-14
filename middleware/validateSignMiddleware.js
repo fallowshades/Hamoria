@@ -1,13 +1,8 @@
-import { body, validationResult } from 'express-validator'
-import { BadRequestError } from '../errors/customErrors.js'
+import { body, validationResult, param } from 'express-validator'
+import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
 import { SIGN_COMPANY, SIGN_CATEGORY } from '../utils/constants.js'
 
 import mongoose from 'mongoose'
-import { param } from 'express-validator'
-
-import Sign from '../models/signModel.js'
-
-import { NotFoundError } from '../errors/customErrors.js'
 
 const withValidationErrors = (validateValues) => {
   return [

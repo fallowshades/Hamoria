@@ -1,424 +1,309 @@
-# v0.6.3
+# v0.6.5
 
-## Support tree for object transfer
+## crud referenc controll
 
-### object request/response session
+### postman testing
 
-#### note have keys to identify fields
-
-#### AddWord- Structure
-
-- Mapping (when)
-- network form identity (who)
-- existence (when)
+referenceController.js
 
 ```js
-
+import Reference from '../models/referenceModel.js'
+import { STATUS_CODES } from 'http'
 ```
 
-AddWord.jsx
-
 ```js
-import Wrapper from '../../../assets/wrappers/DashboardFormPage'
-import { Form, FormRow } from 'react-router-dom'
-//network submission
-import { toast } from 'react-toastify'
-import customFetch from '../../../utils/customFetch'
-import { useNavigation, redirect } from 'react-router-dom'
-
-const AddWord = () => {
-  const navigation = useNavigation()
-  const isSubmitting = navigation.state === 'submitting'
-
-  return (
-    <Wrapper>
-      <Form method="post" className="form">
-        <h4 className="form-title">Word</h4>
-        <div className="form-center">
-          <FormRow type="text" name="word"></FormRow>
-          <FormRow type="text" name="subgroup"></FormRow>
-          <FormRow type="text" name="subsection"></FormRow>
-          <FormRow type="text" name="prefixid"></FormRow>
-          <button
-            type="submit"
-            className="btn btn-block form-btn"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'submitting...' : 'submit'}
-          </button>
-        </div>
-      </Form>
-    </Wrapper>
-  )
+export const createReference = async (req, res) => {
+  const { bodycontact, touchType, faceexpression, link } = req.body
+  const reference = await Reference.create(req.body)
+  res.status(StatusCodes.OK).json({ reference })
 }
-export default AddWord
 ```
 
-Wordcontainer.jsx
-
 ```js
+export const getAllReferences = async (req, res) => {
+  const reference = await Reference.find({})
 
+  res.status(StatusCodes.OK).json({ reference })
+
+  /**const jsonPrefix = JSON.parse(
+   * }
+   */
+}
 ```
 
--- FormRow and FormRowSelect already collected Object.values
-
-#### create word (dynamically mappable data from future loads)
-
---mapped items are located elsewhere. access api router
-
-App.js
-
 ```js
-import { action as wordAction } from './components/courses/handparts/AddWord'
-   {
-            path: 'word',
-            element: <AllWord />,
-            action: wordAction,
-          },
-```
-
-AddWord.jsx
-
-```js
-export const action = async ({ request }) => {
-  const formData = await request.formData()
-  const data = Object.fromEntries(formData)
-
-  try {
-    await customFetch.post('/words', data)
-    toast.success('word added successfully')
-    return null
-  } catch (error) {
-    toast.error(error?.response?.data?.msg)
-    return error
+export const getSingleReference = async (req, res) => {
+  res.send('get single reference')
+  const { id } = req.params
+  const reference = await Reference.findById(id)
+  if (!reference) {
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ msg: 'no reference with id' })
   }
+  res.status(StatusCodes.OK).json({ reference })
 }
 ```
 
-WordContainer.jsx
-
 ```js
-import AddWord from './AddWord'
+export const updateReference = async (req, res) => {
+  const { id } = req.params
 
-return <AddWord />
-```
-
-## create transfer lifecycle
-
-### loadable (for context to help map presentational data)
-
-App.jsx
-
-```js
-
-```
-
-Word controller
-
-```js
-export const getAllWords = async (req, res) => {
-  const jsonPrefix = JSON.parse(
-    await readFile(
-      new URL('../utils/mockWhat/mockWordData.json', import.meta.url)
-    )
-  )
-
-  const packagedData = jsonPrefix.map((keyless) => {
-    return { ...keyless, _id: nanoid() }
+  const updatedReference = await Reference.findByIdAndUpdate(id, req.body, {
+    new: true,
   })
 
-  res.status(StatusCodes.OK).json({ orientations: packagedData })
-}
-```
-
-- test in postman
-
-#### All orders loader
-
-- accumulate data
-- export a searchable wrapper
-
-AllWords
-
-```js
-import { useContext, createContext } from 'react'
-import { useLoaderData } from 'react-router-dom'
-
-import { toast } from 'react-toastify'
-import customFetch from '../../utils/customFetch'
-
-export const loader = async ({ request }) => {
-  try {
-    const { data } = await customFetch.get('/words')
-    return {
-      data,
-    }
-  } catch (error) {
-    toast.error(error?.response?.data?.msg)
-    return error
+  if (!updatedReference) {
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ msg: `no reference with id ${id}` })
   }
+  res.status(StatusCodes.OK).json({ reference: updatedReference })
 }
 ```
 
 ```js
-const AllWordContext = createContext()
+export const deleteReference = async (req, res) => {
+  const { id } = req.params
+  const removedReference = await Reference.findByIdAndUpdate(id)
 
-const AllWord = () => {
-  const { data } = useLoaderData()
-  return (
-    <AllWordContext.Provider value={{ data }}>
-      <SearchWordContainer />
-      <WordContainer />
-    </AllWordContext.Provider>
-  )
-}
-export default AllWord
-
-export const useAllWordContext = () => useContext(AllWordContext)
-```
-
-### render Reference
-
-#### WordContainer css
-
-WordContainer.js
-
-```js
-import styled from 'styled-components'
-
-const Wrapper = styled.section`
-  margin-top: 4rem;
-  h2 {
-    text-transform: none;
+  if (!removedReference) {
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ msg: `no reference with id ${id}` })
   }
-  & > h5 {
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-  }
-  .words {
-    display: grid;
-    grid-template-columns: 1fr;
-    row-gap: 2rem;
-  }
-  @media (min-width: 1120px) {
-    .words {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-    }
-  }
-`
-export default Wrapper
-```
-
-#### map Reference
-
--put items on grid
-
-WordContainer.jsx
-
-```js
-import { useAllWordContext } from '../../../pages/handparts/AllWord'
-import { Word } from './mappedItems'
-import Wrapper from '../../../assets/wrappers/handparts/WordContainer'
-```
-
-```js
-const WordContainer = () => {
-  const { data } = useAllWordContext()
-  const { words } = data
-
-  if (words.length == 0) {
-    return (
-      <Wrapper>
-        <h2>No words found</h2>
-      </Wrapper>
-    )
-  }
-  return (
-    <div className="words">
-      <AddWord />
-      {words.map((word) => {
-        return <Word key={word._id} {...word} />
-      })}
-    </div>
-  )
-}
-export default WordContainer
-```
-
-mappedItems/index.js
-
-```js
-export { default as Word } from './Word'
-```
-
-Word.jsx
-
-```JS
-const Word = () => {
-  return <div>Word</div>
-}
-export default Word
-```
-
-#### Reference component
-
--- aware import svg variable or component
-
-Word.jsx
-
-```js
-import Wrapper from '../../../../assets/wrappers/handparts/Word'
-import SignInfo from './SignInfo'
-import { FaLocationArrow, FaCalendarAlt } from 'react-icons/fa'
-
-import { Link } from 'react-router-dom'
-import { Form } from 'react-router-dom'
-const Word = ({ word, subgroup, subsection, prefixid }) => {
-  return (
-    <Wrapper>
-      <header>
-        <div className="main-icon">{word.charAt(0)}</div>
-        <div className="info">
-          <h5>{word}</h5>
-          <p>{prefixid}</p>
-        </div>
-      </header>
-      <div className="content">
-        <div className="content-center">
-          <SignInfo icon={<FaLocationArrow />} text={subgroup} />
-          <SignInfo icon={<FaCalendarAlt />} text={subsection} />
-        </div>
-
-        <footer className="actions">
-          <Link className="btn edit-btn">Edit</Link>
-          <Form>
-            <button type="submit" className="btn delete-btn">
-              Delete
-            </button>
-          </Form>
-        </footer>
-      </div>
-    </Wrapper>
-  )
+  res.status(StatusCodes.OK).json({ reference: removedReference })
 }
 ```
 
-#### words css
+## validation
 
-Word.js
+### constant and middleware setup
 
-```
-
-```
-
---misstake
-
-WordContainer.js
+referenceMiddleware.js
 
 ```js
-<Wrapper>
-  <div className="words">
-    <AddWord />
-    {words.map((word) => {
-      return <Word key={word._id} {...word} />
-    })}
-  </div>
-</Wrapper>
-```
+import { body, validationResult } from 'express-validator'
+import { BadRequestError } from '../errors/customErrors'
 
-## Dynamic updates
+const withValidationErrors = (validateValues) => {
+  return [
+    validateValues,
+    (req, res, next) => {
+      const errors = validationResult(req)
 
-### edit Reference
-
-#### EditReference setup
-
-EditWord.jsx
-
-```js
-import Wrapper from '../../../../assets/wrappers/DashboardFormPage'
-import { Form } from 'react-router-dom'
-import { FormRow } from '../../../../components'
-
-const EditWord = () => {
-  return (
-    <Wrapper>
-      <Form method="post" className="form">
-        <h4 className="form-title">edit prefix</h4>
-        <div className="form-center">
-          <FormRow type="text" name="word"></FormRow>
-          <FormRow type="text" name="subgroup"></FormRow>
-          <FormRow type="text" name="subsection"></FormRow>
-          <FormRow type="text" name="prefixid"></FormRow>
-        </div>
-      </Form>
-    </Wrapper>
-  )
+      if (!errors.isEmpty()) {
+        const errorMessages = errors.array().map((error) => error.msg)
+        throw new BadRequestError(errorMessages)
+      }
+      next()
+    },
+  ]
 }
-export default EditWord
 ```
 
-Word.jsx
+referenceModel
 
 ```js
-import { EditWord } from '../mappedItems'
-import { useState } from 'react'
-```
+import { TOUCH_TYPE, FACE_EXPRESSION, POSITION } from '../utils/constants.js'
 
-```js
-<div className="content-center">
-  {isEdit ? (
-    <div>
-      <EditWord />
-    </div>
-  ) : (
-    <div>
-      {' '}
-      <SignInfo icon={<FaLocationArrow />} text={subgroup} />
-      <SignInfo icon={<FaCalendarAlt />} text={subsection} />
-    </div>
-  )}
-</div>
-```
-
-```js
-<footer className="actions">
-  <Link className="btn edit-btn">Edit</Link>
-  <button
-    className="btn edit-btn"
-    onClick={() => {
-      setIsEdit(!isEdit)
-    }}
-  >
-    {isEdit ? 'word' : ' Edit'}
-  </button>
+const ReferenceSchema = new mongoose.Schema({
+  orderid: String,
+  position: {
+    type: String,
+    enum: [TOUCH_TYPE],
+    default: POSITION.NAN,
+  },
+  bodycontact: {
+    type: String,
+    enum: [TOUCH_TYPE],
+    default: POSITION.NAN,
+  },
   ...
-</footer>
+})
 ```
 
-### Delete Edit
-
-Word.jsx
+utils\constants.js
 
 ```js
-method="post" action={`../delete-word/${_id}`}
-```
-
-DeleteWord.jsx
-
-```js
-import { redirect } from 'react-router-dom'
-import customFetch from '../../utils/customFetch'
-import { toast } from 'react-toastify'
-
-export async function action({ params }) {
-  try {
-    await customFetch.delete(`/words/${params.id}`)
-    toast.success('word deleted successfully')
-  } catch (error) {
-    toast.error(error.response.data.msg)
-  }
-  return redirect('/dashboard/prefix')
+export const POSITION = {
+  SHOULDER: 'shoulder',
+  CHEST: 'chest',
+  HAND: 'hand',
+  BACKHAND: 'backhand',
+  FINGERS: 'fingers',
+  PALM: 'palm',
+  HEAD: 'head',
+  STOMACHCHEST: 'stomach chest',
+  FACE: 'face',
+  SHOULDERCHEST: 'shoulder chest',
+  CHESTHEAD: 'chest head',
+  CHESTSHOULDER: 'chest shoulder',
+  ARM: 'arm',
+  NULL: 'null',
+  NAN: 'NaN',
 }
+```
+
+### validate create reference
+
+validateReferenceMiddleware.js
+
+```js
+import { body, validationResult } from 'express-validator'
+import { BadRequestError } from '../errors/customErrors.js'
+import { POSITION, TOUCH_TYPE, FACE_EXPRESSION } from '../utils/constants.js'
+
+const withValidationErrors = (validateValues) => {
+  return [
+    validateValues,
+    (req, res, next) => {
+      const errors = validationResult(req)
+
+      if (!errors.isEmpty()) {
+        const errorMessages = errors.array().map((error) => error.msg)
+        throw new BadRequestError(errorMessages)
+      }
+      next()
+    },
+  ]
+}
+
+export const validateReferenceInput = withValidationErrors([
+  body('position')
+    .isIn(Object.values(POSITION))
+    .withMessage('invalid position value'),
+  body('bodycontact')
+    .isIn(Object.values(POSITION))
+    .withMessage('invalid bodycontact value'),
+  body('touchtype')
+    .isIn(Object.values(TOUCH_TYPE))
+    .withMessage('invalid touch type'),
+  body('faceexpression')
+    .isIn(Object.values(FACE_EXPRESSION))
+    .withMessage('invalid face expression'),
+])
+```
+
+referenceRouter.js
+
+```js
+import { validateReferenceInput } from '../middleware/validateReferenceMiddleware.js'
+
+
+router
+  .route('/')
+  .post(validateReferenceInput, createReference)
+  .get(getAllReferences)
+
+
+    .route('/:id')
+    -
+  .patch(validateReferenceInput, updateReference)
+```
+
+### validate ip param reference
+
+referenceController
+
+- fix mistake
+
+```js
+res.status(StatusCodes.OK).json({ references: reference })
+```
+
+validateReferenceRouter.js
+
+```js
+import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
+const withValidationErrors = (validateValues) => {
+...
+if (errorMessages[0].startsWith('no reference')) {
+  throw new NotFoundError(errorMessages)
+}
+}
+```
+
+```js
+import mongoose from 'mongoose'
+import { param } from 'express-validator'
+import { Reference } from '../client/src/components/courses/handparts/mappedItems/index.js'
+
+import Reference from '../models/referenceModel.js'
+
+export const validateIdParam = withValidationErrors([
+  param('id').custom(async (value) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value)
+    isValid(value)
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
+    const reference = await Reference.findById(value)
+    isValidId(!achievement)
+    throw new NotFoundError(`no reference with id : ${value}`)
+  }),
+])
+```
+
+#### get all references - server
+
+referenceController.jsx
+
+```js
+export const getAllReferences = async (req, res) => {
+  const { position, bodycontact, touchtype, faceexpression, link, sort } =
+    req.query
+
+  const queryObject = {
+    createdBy: req.user.userId,
+  }
+
+  if (position && position !== 'all') {
+    queryObject.position = position
+  }
+  if (bodycontact && bodycontact !== 'all') {
+    queryObject.bodycontact = bodycontact
+  }
+  if (touchtype && touchtype !== 'all') {
+    queryObject.touchtype = touchtype
+  }
+  if (faceexpression && faceexpression !== 'all') {
+    queryObject.faceexpression = faceexpression
+  }
+
+  const sortOptions = {
+    'a-z': 'faceexpression',
+    'z-a': '-faceexpression',
+  }
+
+  const sortKey = sortOptions[sort] || sortOptions['a-z']
+  // setup pagination
+  const page = Number(req.query.page) || 1
+  const limit = Number(req.query.limit) || 10
+  const skip = (page - 1) * limit
+
+  const reference = await Reference.find({})
+    .sort(sortKey)
+    .skip(skip)
+    .limit(limit)
+
+  const totalReferences = await Reference.countDocuments(queryObject)
+  const numOfPages = Math.ceil(totalReferences / limit)
+
+  res.status(StatusCodes.OK).json({ references: reference })
+  res.status(StatusCodes.OK).json({
+    totalReferences,
+    numOfPages,
+    currentPage: page,
+    references: reference,
+  })
+}
+```
+
+ReferenceModel.jsx
+
+```js
+ link: {
+    type: String,
+    required: true,
+    default: 'Nan'
+  },
 ```

@@ -84,6 +84,24 @@ export const ORIENTATION = {
   EMPTY: '',
 }
 
+export const POSITION = {
+  SHOULDER: 'shoulder',
+  CHEST: 'chest',
+  HAND: 'hand',
+  BACKHAND: 'backhand',
+  FINGERS: 'fingers',
+  PALM: 'palm',
+  HEAD: 'head',
+  STOMACHCHEST: 'stomach chest',
+  FACE: 'face',
+  SHOULDERCHEST: 'shoulder chest',
+  CHESTHEAD: 'chest head',
+  CHESTSHOULDER: 'chest shoulder',
+  ARM: 'arm',
+  NULL: 'null',
+  NAN: 'NaN',
+}
+
 export const TOUCH_TYPE = {
   LINGER: 'bibehållen',
   MEDIAL: 'medial',

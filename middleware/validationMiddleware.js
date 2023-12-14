@@ -42,7 +42,7 @@ export const validateAchievementInput = withValidationErrors([
 ])
 
 export const validateIdParam = withValidationErrors([
-  param('id').custom(async (value, { req }) => {
+  param('id').custom(async (value) => {
     const isValidId = mongoose.Types.ObjectId.isValid(value)
     if (!isValidId) throw new BadRequestError('invalid MongoDB id')
     const achievement = await Achievement.findById(value)
