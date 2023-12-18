@@ -766,6 +766,37 @@ switch(){
 
 #### edit reference loader
 
+App.jsx
+
+```js
+   action: referenceAction(queryClient),
+```
+
+AddReference
+
+- invalidate both create and update changes (later update particular)
+
 ```js
 
+export const action =
+  (queryClient) =>
+  async ({ request }) => {
+
+    ..
+
+      switch (crudOperationPart) {
+    case 'create':
+await customFetch.patch(`/reference/${idPart}`, data)
+queryClient.invalidateQueries(['achievements'])
+
+    case 'patch':
+ ...
+
+        if (mongooseObjectIdRegex.test(idPart)) {
+          try {
+            await customFetch.patch(`/references/${idPart}`, data)
+
+            queryClient.invalidateQueries(['references'])
+          }}}
+          ...
 ```

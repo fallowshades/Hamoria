@@ -8,51 +8,63 @@ import { useNavigation, redirect } from 'react-router-dom'
 //mapping
 import { KeysToMapFormRows } from './mappedItems'
 
-export const action = async ({ request }) => {
-  const formData = await request.formData()
-  const data = Object.fromEntries(formData)
-  const formId = formData.get('form-id')
+export const action =
+  (queryClient) =>
+  async ({ request }) => {
+    const formData = await request.formData()
+    const data = Object.fromEntries(formData)
+    const formId = formData.get('form-id')
 
-  const parts = formId.split(/\s+/)
-  // The first part will be 'edit'
-  const crudOperationPart = parts[0]
-  // The remaining part will be everything after 'edit'
-  const idPart = parts.slice(1).join(' ')
+    const parts = formId.split(/\s+/)
+    // The first part will be 'edit'
+    const crudOperationPart = parts[0]
+    // The remaining part will be everything after 'edit'
+    const idPart = parts.slice(1).join(' ')
 
-  switch (crudOperationPart) {
-    case 'create':
-      try {
-        await customFetch.post('/references', data)
-        queryClient.invalidateQueries(['references'])
-        toast.success('reference added successfully')
-
-        return null
-      } catch (error) {
-        toast.error(error?.response?.data?.mst)
-        return error
-      }
-    case 'patch':
-      const nanoidRegex = /^[a-zA-Z0-9_-]{21}$/
-      const mongooseObjectIdRegex = /^[0-9a-fA-F]{24}$/
-
-      if (mongooseObjectIdRegex.test(idPart)) {
+    switch (crudOperationPart) {
+      case 'create':
         try {
-          await customFetch.patch(`/references/${idPart}`, data)
-          toast.success(`${idPart}`)
-          return redirect('/dashboard/references')
+          await customFetch.post('/references', data)
+          queryClient.invalidateQueries(['references'])
+          toast.success('reference added successfully')
+
+          return null
         } catch (error) {
-          toast.error(error.response.data.msg)
+          toast.error(error?.response?.data?.mst)
           return error
         }
-      }
-      toast.error('sad developer')
-      return null
+      case 'patch':
+        const nanoidRegex = /^[a-zA-Z0-9_-]{21}$/
+        const mongooseObjectIdRegex = /^[0-9a-fA-F]{24}$/
 
-    default:
-      toast.success('default')
-      return null
+        if (mongooseObjectIdRegex.test(idPart)) {
+          try {
+            await customFetch.patch(`/references/${idPart}`, data)
+            // Manually update the cached data for the specific card
+            queryClient.setQueryData(['reference', idPart], (existingData) => {
+              // Assuming existingData is an object representing the current state of the card
+              // Update relevant fields based on the patch data
+              return {
+                ...existingData,
+                ...data, // Assuming `data` contains fields to update
+              }
+            })
+            queryClient.invalidateQueries(['references'])
+            toast.success(`${idPart}`)
+            return null
+          } catch (error) {
+            toast.error(error.response.data.msg)
+            return error
+          }
+        }
+        toast.error('sad developer')
+        return null
+
+      default:
+        toast.success('default')
+        return null
+    }
   }
-}
 
 const AddReference = () => {
   const navigation = useNavigation()
