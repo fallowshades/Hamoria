@@ -15,7 +15,7 @@ export const loader = async ({ request }) => {
       ...new URL(request.url).searchParams.entries(), ////
     ])
 
-    const { data } = await customFetch.get('/references')
+    const { data } = await customFetch.get('/references', { params })
     console.log(data)
     return {
       data,

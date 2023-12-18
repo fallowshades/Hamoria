@@ -31,7 +31,7 @@ export const loader =
   async ({ request }) => {
     try {
       const params = Object.fromEntries([
-        ...new URL(request.url).searchParams.entries(),
+        ...new URL(request.url).searchParams.entries(), ////
       ])
       await queryClient.ensureQueryData(allAchievementsQuery(params))
       return {

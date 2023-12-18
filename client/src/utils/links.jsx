@@ -99,8 +99,8 @@ export const footerLinks = [
 export const partLinks = [
   {
     id: nanoid(),
-    path: 'reference',
-    text: 'reference',
+    path: 'references',
+    text: 'references',
     icon: <VscReferences />,
   },
   { id: nanoid(), path: 'word', text: 'word', icon: <SiSemanticweb /> },

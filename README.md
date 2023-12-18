@@ -468,3 +468,71 @@ const ReferenceContainer = () => {
  )
 }
 ```
+
+#### basic pageBnContainer
+
+App.jsx
+
+- unnecessary name change
+- had to update links also
+
+```js
+    path: 'references',
+```
+
+HandButtonContainer.jsx
+
+```jsx
+import { useLocation, useNavigate } from 'react-router-dom'
+```
+
+```jsx
+const { search, pathname } = useLocation()
+const navigate = useNavigate()
+const handlePageChange = (pageNumber) => {
+  const searchParams = new URLSearchParams(search)
+  searchParams.set('page', pageNumber)
+  navigate(`${pathname}?${searchParams.toString()}`)
+}
+```
+
+-boundary points
+
+```jsx
+
+return(
+    <button
+        className="btn prev-btn"
+        onClick={() => {
+          let prevPage = currentPage + 1
+          if (prevPage < numOfPages) prevPage = numOfPages
+          handlePageChange(prevPage)
+        }}
+      >
+      ...
+       onClick={() => handlePageChange(pageNumber)}
+
+      ...
+
+
+<button
+        className="btn next-btn"
+        onClick={() => {
+          let nextPage = currentPage + 1
+          if (nextPage > numOfPages) nextPage = 1
+          handlePageChange(nextPage)
+        }}
+      >
+        next
+        <FaHandPointRight />
+      </button>
+)
+```
+
+AllReference.jsx
+
+- fix include param
+
+```js
+const { data } = await customFetch.get('/references', { params })
+```
