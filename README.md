@@ -434,3 +434,37 @@ return(
 
 )```
 ````
+
+#### pagination setup
+
+HandButtonContainer.jsx
+
+```js
+const HandButtonContainer = () => {
+  return <div>HandButtonContainer</div>
+}
+export default HandButtonContainer
+```
+
+ReferenceContainer.jsx
+
+```js
+import HandButtonContainer from './HandButtonContainer'
+
+const ReferenceContainer = () => {
+  console.log(data)
+  const { references, totalReferences, numOfPages } = data
+
+ return (
+    <>
+      <AddReference />
+
+      <h5>
+        {totalReferences} reference{references.length > 1 && 's'} found
+      </h5>
+      ...
+
+         {numOfPages > 1 && <HandButtonContainer />}
+ )
+}
+```
