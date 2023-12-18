@@ -619,6 +619,8 @@ const HandButtonContainer{
 
 ## optimization
 
+### all reference query
+
 AllReference.jsx
 
 -take dependencies and do for us
@@ -670,8 +672,54 @@ const allReferenceQuery = (params) => {
   } }
 ```
 
-### all reference query
-
 ### invalidate references
 
 ### edit reference loader
+
+App.jsx
+
+- actions cover create, update, delete
+
+```js
+ {
+            path: 'references',
+            element: <AllReference />,
+            action: referenceAction(queryClient),
+            loader: ReferenceLoader(queryClient),
+          },
+          {
+            path: 'delete-reference/:id',
+            action: deleteReferenceAction(queryClient),
+          }
+```
+
+/pages/DeleteReference.jsx
+
+- async function => const action ()
+
+```js
+export const action =
+  (queryClient) =>
+  async ({ params }) => {
+    try {
+      await customFetch.delete(`/references/${params.id}`)
+      queryClient.invalidateQueries(['references'])
+
+...
+    }}
+```
+
+components/../handparts/AddReference.jsx
+
+- only the create action
+
+```js
+export const action = async ({ request }) => {
+ ...
+  switch (crudOperationPart) {
+    case 'create':
+      try {
+        await customFetch.post('/references', data)
+        queryClient.invalidateQueries(['references'])¨
+      }}}
+```

@@ -23,6 +23,7 @@ export const action = async ({ request }) => {
     case 'create':
       try {
         await customFetch.post('/references', data)
+        queryClient.invalidateQueries(['references'])
         toast.success('reference added successfully')
 
         return null
