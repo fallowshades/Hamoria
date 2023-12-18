@@ -35,9 +35,15 @@ export const action = async ({ request }) => {
       const nanoidRegex = /^[a-zA-Z0-9_-]{21}$/
       const mongooseObjectIdRegex = /^[0-9a-fA-F]{24}$/
 
-      if (nanoidRegex.test(idPart)) {
-        toast.success(`${idPart}`)
-        return null
+      if (mongooseObjectIdRegex.test(idPart)) {
+        try {
+          await customFetch.patch(`/references/${idPart}`, data)
+          toast.success(`${idPart}`)
+          return redirect('/dashboard/references')
+        } catch (error) {
+          toast.error(error.response.data.msg)
+          return error
+        }
       }
       toast.error('sad developer')
       return null

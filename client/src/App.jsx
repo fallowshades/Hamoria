@@ -246,7 +246,7 @@ const router = createBrowserRouter([
           {
             path: 'references',
             element: <AllReference />,
-            action: referenceAction(queryClient),
+            action: referenceAction,
             loader: ReferenceLoader(queryClient),
           },
           {

@@ -674,8 +674,6 @@ const allReferenceQuery = (params) => {
 
 ### invalidate references
 
-### edit reference loader
-
 App.jsx
 
 - actions cover create, update, delete
@@ -722,4 +720,52 @@ export const action = async ({ request }) => {
         await customFetch.post('/references', data)
         queryClient.invalidateQueries(['references'])¨
       }}}
+```
+
+### edit reference fix FormRowSelect and query
+
+utils\modelKeyConstants.js
+
+- Fix add and edit constants --> dynamically use FormRowSelect
+
+```js
+  {
+    field: 'position',
+    identifier: nanoid(),
+    list: constants.POSITION,
+    default: constants.POSITION.ARM,
+  },
+  {
+    field: 'bodycontact',
+    identifier: nanoid(),
+    list: constants.POSITION,
+    default: constants.POSITION.ARM,
+  },
+```
+
+AddReference.jsx
+
+```js
+switch(){
+    case 'patch':
+
+      if (mongooseObjectIdRegex.test(idPart)) {
+  try {
+    await customFetch.patch(`/references/${idPart}`, data)
+    toast.success(`${idPart}`)
+    return null
+  } catch (error) {
+    toast.error(error.response.data.msg)
+    return error
+  }
+}
+
+}
+
+```
+
+#### edit reference loader
+
+```js
+
 ```

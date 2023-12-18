@@ -61,10 +61,17 @@ const wordKeys = [
   { field: 'prefixid', identifier: nanoid() },
 ]
 const referenceKeys = [
-  { field: 'position', identifier: nanoid() },
+  {
+    field: 'position',
+    identifier: nanoid(),
+    list: constants.POSITION,
+    default: constants.POSITION.ARM,
+  },
   {
     field: 'bodycontact',
     identifier: nanoid(),
+    list: constants.POSITION,
+    default: constants.POSITION.ARM,
   },
   {
     field: 'touchtype',
