@@ -60,7 +60,6 @@ export const getAllReferences = async (req, res) => {
   const totalReferences = await Reference.countDocuments(queryObject)
   const numOfPages = Math.ceil(totalReferences / limit)
 
-  console.log(page)
   res.status(StatusCodes.OK).json({
     totalReferences,
     numOfPages,

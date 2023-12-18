@@ -247,7 +247,7 @@ const router = createBrowserRouter([
             path: 'references',
             element: <AllReference />,
             action: referenceAction,
-            loader: ReferenceLoader,
+            loader: ReferenceLoader(queryClient),
           },
           {
             path: 'delete-reference/:id',

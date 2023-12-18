@@ -616,3 +616,62 @@ const HandButtonContainer{
 )
 }
 ```
+
+## optimization
+
+AllReference.jsx
+
+-take dependencies and do for us
+
+```js
+import { QueryClient, useQuery } from '@tanstack/react-query'
+
+const allReferenceQuery = (params) => {
+  return {
+    queryKey: ['references'],
+    queryFn: async () => {
+      const { data } = await customFetch.get('/references', { params })
+      return data
+    },
+  }
+}
+```
+
+- loader need invoke and only return relevant
+
+```js
+export const loader = (QueryClient = async ({ request }) => {
+  await QueryClient.ensureQueryData(allReferenceQuery(params))
+  return {
+    data,
+    searchValues: { ...params },
+  }
+})
+```
+
+- prevent formRow default text --> optimal key
+
+```js
+const allReferenceQuery = (params) => {
+  const { search, position, bodycontact, touchtype, faceexpression, page } =
+    params
+
+  return {
+    queryKey: [
+      'references',
+      search ?? 'all',
+      position ?? 'all',
+      bodycontact ?? 'all',
+      touchtype ?? 'all',
+      faceexpression ?? 'all',
+      page ?? 1,
+    ],
+    ...
+  } }
+```
+
+### all reference query
+
+### invalidate references
+
+### edit reference loader
