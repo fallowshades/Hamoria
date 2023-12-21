@@ -2,11 +2,21 @@ import Wrapper from '../../../assets/wrappers/handparts/HandButtonContainer'
 import { FaHandPointLeft, FaHandPointRight } from 'react-icons/fa6'
 import { useAllReferenceContext } from '../../../pages/handparts/AllReference'
 import { useLocation, useNavigate } from 'react-router-dom'
-const HandButtonContainer = () => {
-  const {
-    data: { numOfPages, currentPage },
-  } = useAllReferenceContext()
 
+import { useAllWordContext } from '../../../pages/handparts/AllWord'
+
+const HandButtonContainer = ({ dataContext }) => {
+  let numOfPages, currentPage
+  switch (dataContext) {
+    case 'allWords':
+      ;({ numOfPages, currentPage } = useAllWordContext().data)
+      break
+
+    default:
+      ;({ numOfPages, currentPage } = useAllReferenceContext()?.data || {})
+
+      break
+  }
   const pages = Array.from({ length: numOfPages }, (_, index) => {
     return index + 1
   })

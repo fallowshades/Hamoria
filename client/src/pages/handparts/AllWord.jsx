@@ -14,7 +14,7 @@ export const loader = async ({ request }) => {
     const params = Object.fromEntries([
       ...new URL(request.url).searchParams.entries(), ////
     ])
-    const { data } = await customFetch.get('/words')
+    const { data } = await customFetch.get('/words', { params })
     return {
       data,
       searchValues: { ...params }, ////////

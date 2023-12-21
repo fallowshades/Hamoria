@@ -3,10 +3,11 @@ import AddWord from './AddWord'
 import { useAllWordContext } from '../../../pages/handparts/AllWord'
 import { Word } from './mappedItems'
 import Wrapper from '../../../assets/wrappers/handparts/WordContainer'
+import HandButtonContainer from './HandButtonContainer'
 
 const WordContainer = () => {
   const { data } = useAllWordContext()
-  const { words } = data
+  const { words, totalWords, numOfPages } = data
 
   if (words.length == 0) {
     return (
@@ -19,10 +20,14 @@ const WordContainer = () => {
     <Wrapper>
       <div className="words">
         <AddWord />
+        <h5>
+          {totalWords} reference{words.length > 1 && 's'} found
+        </h5>
         {words.map((word) => {
           return <Word key={word._id} {...word} />
         })}
       </div>
+      {numOfPages > 1 && <HandButtonContainer dataContext="allWords" />}
     </Wrapper>
   )
 }

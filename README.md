@@ -136,6 +136,7 @@ All word (const loader)
 const params = Object.fromEntries([
   ...new URL(request.url).searchParams.entries(), ////
 ])
+const { data } = await customFetch.get('/words', { params })
 
 return {
   data,
@@ -262,26 +263,65 @@ defaultValue = { status } //forgot to set default values
 
 ### (1)lots
 
-#### 6. Pagination - Setup
+#### 8. Complex - PageBtnContainer PICK context
 
-- create PageBtnContainer
+wordController.jsx
 
-WordsContainer.jsx
+```jsx
+const totalWords = jsonWord.length
+const numOfPages = Math.ceil(totalWords / limit)
 
-```js
+res.status(StatusCodes.OK).json({
+  words: packagedData,
+  numOfPages,
+  currentPage: page,
+  totalWords,
+})
+```
+
+AllWords.jsx
+
+```jsx
+const { data } = await customFetch.get('/words', { params })
+```
+
+WordContainer.jsx
+
+```jsx
+import HandButtonContainer from './HandButtonContainer'
+
+
+  const { words, totalWords, numOfPages } = data
+
+  return(
+    ...
+       <h5>
+          {totalWords} reference{words.length > 1 && 's'} found
+        </h5>
+      ...
+      {numOfPages > 1 && <HandButtonContainer dataContext="allWords" />}
+  )
 
 ```
 
-#### 7. Basic PageBtnContainer
+HandButtonContainer.jsx
 
 ```js
+import { useAllWordContext } from '../../../pages/handparts/AllWord'
 
-```
+const HandButtonContainer = ({ dataContext }) => {
+  let numOfPages, currentPage
+  switch (dataContext) {
+    case 'allWords':
+      ;({ numOfPages, currentPage } = useAllWordContext().data)
+      break
 
-#### 8. Complex - PageBtnContainer
+    default:
+      ;({ numOfPages, currentPage } = useAllReferenceContext()?.data || {})
 
-```js
-
+      break
+  }
+  ..}
 ```
 
 #### 9. PageBtnContainer CSS (optional)

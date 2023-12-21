@@ -56,7 +56,15 @@ export const getAllWords = async (req, res) => {
     _id: nanoid(),
   }))
 
-  res.status(StatusCodes.OK).json({ words: packagedData })
+  const totalWords = jsonWord.length
+  const numOfPages = Math.ceil(totalWords / limit)
+
+  res.status(StatusCodes.OK).json({
+    words: packagedData,
+    numOfPages,
+    currentPage: page,
+    totalWords,
+  })
 }
 
 export const getSingleWord = async (req, res) => {
