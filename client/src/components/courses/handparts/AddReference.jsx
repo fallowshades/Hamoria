@@ -40,15 +40,7 @@ export const action =
         if (mongooseObjectIdRegex.test(idPart)) {
           try {
             await customFetch.patch(`/references/${idPart}`, data)
-            // Manually update the cached data for the specific card
-            queryClient.setQueryData(['reference', idPart], (existingData) => {
-              // Assuming existingData is an object representing the current state of the card
-              // Update relevant fields based on the patch data
-              return {
-                ...existingData,
-                ...data, // Assuming `data` contains fields to update
-              }
-            })
+
             queryClient.invalidateQueries(['references'])
             toast.success(`${idPart}`)
             return null
