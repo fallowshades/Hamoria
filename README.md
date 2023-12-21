@@ -145,49 +145,117 @@ return {
 
 #### 4. Submit Form Programmatically
 
-### (2)Tool life cycle mounted
-
-#### 5. Debounce
-
-utils/utils.jsx
+constants.js
 
 ```js
-export const debounce = (onChange) => {
-  let timeout
-  return (e) => {
-    const form = e.currentTarget.form
-    clearTimeout(timeout)
-    timeout = setTimeout(() => {
-      onChange(form)
-    }, 2000)
-  }
+export const WORD_SUBSECTION = {}
+export const WORD_SUBGROUP = {}
+```
+
+searchWordContainer.jsx
+
+```jsx
+import { wordKeys } from '../../../../../utils/modelKeyConstants'
+import { WORD_SUBGROUP, WORD_SUBSECTION } from '../../../../../utils/constants'
+```
+
+```jsx
+const SearchWordContainer = () => {
+  const { searchValues } = useAllWordContext()
+  const { search, subgroup, subsection, sort } = searchValues
+  const submit = useSubmit()
+  return(
+    ...
+  )
+
 }
 ```
+
+```jsx
+ return(
+  <FormRow
+            type="search"
+            name="search"
+            defaultValue={search}
+            onChange={(e) => {
+              submit(e.currentTarget.form)
+            }}
+          />
+          <FormRowSelect
+            labelText="subgroup"
+            name={wordKeys[1]}
+            defaultValue={WORD_SUBGROUP.ACCUMULATION}
+            list={['all', ...Object.values(WORD_SUBGROUP)]}
+            onChange={(e) => {
+              submit(e.currentTarget.form)
+            }}
+          />
+          <FormRowSelect
+            labelText="subsection"
+            name={wordKeys[2]}
+            defaultValue={WORD_SUBSECTION.INTRO_1}
+            list={['all', ...Object.values(WORD_SUBSECTION)]}
+            onChange={(e) => {
+              submit(e.currentTarget.form)
+            }}
+          />
+ )
+```
+
+```jsx
+     onChange={(e) => {
+              submit(e.currentTarget.form)
+            }}
+```
+
+AllWord.jsx
+
+- forgot packaging of params
+
+```jsx
+ export const loader = async ({ request }) => {
+
+return{
+  ...
+  searchValues: { ...params }, ////////
+}
+ }
+
+const AllWord = () => {
+    const { data, searchValues } = useLoaderData()
+  return (
+    <AllWordContext.Provider value={{ data, searchValues }}>
+    ...
+  )
+}
+```
+
+### (2)Tool life cycle mounted
+
+#### 5. ammend default value on formRowSelect
 
 SearchWordContainer.jsx
 
 - add attribute
 
 ```js
-import { debounce } from '../../../utils/utils'
-
-     onChange={debounce((form) => {
-              submit(form)
-            })}
-
-             <FormRowSelect
-            name="sort"
-            defaultValue={sort}
-            list={['a-z', 'z-a']}
-            onChange={(e) => {
-              submit(e.currentTarget.form)
-            }}
+defaultValue = { subgroup }
 ```
 
 SearchWordContainer.jsx
 
 ```js
 defaultValue = { status } //forgot to set default values
+ defaultValue={subsection}
+
+        <FormRowSelect
+            name="sort"
+            defaultValue={sort}
+            list={['a-z', 'z-a']}
+            onChange={(e) => {
+              submit(e.currentTarget.form)
+            }}
+          />
 ```
 
 ## Pagination of response data

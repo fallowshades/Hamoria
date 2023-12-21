@@ -17,7 +17,7 @@ export const loader = async ({ request }) => {
     const { data } = await customFetch.get('/words')
     return {
       data,
-      params, ////////
+      searchValues: { ...params }, ////////
     }
   } catch (error) {
     toast.error(error?.response?.data?.msg)
@@ -28,9 +28,9 @@ export const loader = async ({ request }) => {
 const AllWordContext = createContext()
 
 const AllWord = () => {
-  const { data } = useLoaderData()
+  const { data, searchValues } = useLoaderData()
   return (
-    <AllWordContext.Provider value={{ data }}>
+    <AllWordContext.Provider value={{ data, searchValues }}>
       <SearchWordContainer />
       <WordContainer />
     </AllWordContext.Provider>
