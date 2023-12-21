@@ -11,9 +11,13 @@ import customFetch from '../../utils/customFetch'
 
 export const loader = async ({ request }) => {
   try {
+    const params = Object.fromEntries([
+      ...new URL(request.url).searchParams.entries(), ////
+    ])
     const { data } = await customFetch.get('/words')
     return {
       data,
+      params, ////////
     }
   } catch (error) {
     toast.error(error?.response?.data?.msg)
