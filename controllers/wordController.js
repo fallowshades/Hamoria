@@ -12,6 +12,13 @@ export const createWord = async (req, res) => {
 export const getAllWords = async (req, res) => {
   const { search, subgroup, subsection, sort } = req.query
 
+  // Read data from the file
+  const jsonWord = JSON.parse(
+    await readFile(
+      new URL('../utils/mockWhat/mockWordData.json', import.meta.url)
+    )
+  )
+
   // Local filtering based on the query parameters
   const filteredWord = jsonWord.filter((row) => {
     return (
