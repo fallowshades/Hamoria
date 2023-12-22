@@ -271,15 +271,29 @@ OrientationModel.jsx
 AllOrientation.jsx
 
 ```js
+const params = Object.fromEntries([
+  ...new URL(request.url).searchParams.entries(), ////
+])
+```
 
+```js
+const { data } = await customFetch.get('/orientations', { params })
+return {
+  data,
+  searchValues: { ...params },
+}
 ```
 
 ```js
 
-```
+const AllOrientation = () => {
 
-```js
+  const { data, searchValues } = useLoaderData()
 
+  return (
+
+    <AllOrientationContext.Provider value={{ data, searchValues }}>
+  )}
 ```
 
 #### submit form programmatically
