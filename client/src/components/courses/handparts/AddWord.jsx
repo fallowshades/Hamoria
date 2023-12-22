@@ -1,9 +1,10 @@
 import Wrapper from '../../../assets/wrappers/DashboardFormPage'
-import { FormRow } from '../../../components'
+import { FormRow, FormRowSelect } from '../../../components'
 //network submission
 import { toast } from 'react-toastify'
 import customFetch from '../../../utils/customFetch'
 import { Form, useNavigation, redirect } from 'react-router-dom'
+import { WORD_SUBGROUP, WORD_SUBSECTION } from '../../../../../utils/constants'
 
 export const action =
   (queryClient) =>
@@ -66,8 +67,18 @@ const AddWord = () => {
         <div className="form-center">
           <input name="form-id" hidden defaultValue="create" />
           <FormRow type="text" name="word"></FormRow>
-          <FormRow type="text" name="subgroup"></FormRow>
-          <FormRow type="text" name="subsection"></FormRow>
+          <FormRowSelect
+            type="text"
+            name="subgroup"
+            defaultValue={WORD_SUBGROUP.ACCUMULATION}
+            list={['all', ...Object.values(WORD_SUBGROUP)]}
+          ></FormRowSelect>
+          <FormRowSelect
+            type="text"
+            name="subsection"
+            defaultValue={WORD_SUBSECTION.INTRO_1}
+            list={['all', ...Object.values(WORD_SUBSECTION)]}
+          ></FormRowSelect>
           <FormRow type="text" name="prefixid"></FormRow>
           <button
             type="submit"

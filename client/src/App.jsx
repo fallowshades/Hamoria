@@ -256,7 +256,7 @@ const router = createBrowserRouter([
           {
             path: 'word',
             element: <AllWord />,
-            action: wordAction,
+            action: wordAction(queryClient),
             loader: wordLoader(queryClient),
           },
           { path: 'delete-word/:id', action: deleteWordAction(queryClient) },

@@ -1,6 +1,10 @@
 import Wrapper from '../../../../assets/wrappers/DashboardFormPage'
 import { Form } from 'react-router-dom'
-import { FormRow } from '../../../../components'
+import { FormRow, FormRowSelect } from '../../../../components'
+import {
+  WORD_SUBGROUP,
+  WORD_SUBSECTION,
+} from '../../../../../../utils/constants'
 
 import { useNavigation } from 'react-router-dom'
 const EditWord = ({ _id }) => {
@@ -15,8 +19,18 @@ const EditWord = ({ _id }) => {
           <input name="form-id" hidden defaultValue={identifyAction} />
 
           <FormRow type="text" name="word"></FormRow>
-          <FormRow type="text" name="subgroup"></FormRow>
-          <FormRow type="text" name="subsection"></FormRow>
+          <FormRowSelect
+            type="text"
+            name="subgroup"
+            defaultValue={WORD_SUBGROUP.ACCUMULATION}
+            list={['all', ...Object.values(WORD_SUBGROUP)]}
+          />
+          <FormRowSelect
+            type="text"
+            name="subsection"
+            defaultValue={WORD_SUBSECTION.INTRO_1}
+            list={['all', ...Object.values(WORD_SUBSECTION)]}
+          />
           <FormRow type="text" name="prefixid"></FormRow>
           <button
             type="submit"

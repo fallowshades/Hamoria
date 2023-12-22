@@ -429,28 +429,53 @@ export const action = async ({ request }) => {
       }}}
 ```
 
-### edit words
+### edit and add words formRow to formRowSelect
+
+EditWord.jsx
+
+```js
+import { FormRow, FormRowSelect } from '../../../../components'
+import {
+  WORD_SUBGROUP,
+  WORD_SUBSECTION,
+} from '../../../../../../utils/constants'
+```
+
+```js
+ <FormRowSelect
+            type="text"
+            name="subgroup"
+            defaultValue={WORD_SUBGROUP.ACCUMULATION}
+            list={['all', ...Object.values(WORD_SUBGROUP)]}
+          ></FormRowSelect>
+          <FormRowSelect
+            type="text"
+            name="subsection"
+            defaultValue={WORD_SUBSECTION.INTRO_1}
+            list={['all', ...Object.values(WORD_SUBSECTION)]}
+          ></FormRowSelect>
+```
 
 AddWord.jsx
 
 ```js
-switch(){
-    case 'patch':
+import { FormRow, FormRowSelect } from '../../../components'
+import { WORD_SUBGROUP, WORD_SUBSECTION } from '../../../../../utils/constants'
+```
 
-      if (mongooseObjectIdRegex.test(idPart)) {
- try {
-            await customFetch.patch(`/words/${idPart}`, data)
-            queryClient.invalidateQueries(['words'])
-            toast.success(`${idPart}`)
-            return null
-          } catch (error) {
-            toast.error(error.response.data.msg)
-            return error
-          }
-}
-
-}
-
+```js
+      <FormRowSelect
+            type="text"
+            name="subgroup"
+            defaultValue={WORD_SUBGROUP.ACCUMULATION}
+            list={['all', ...Object.values(WORD_SUBGROUP)]}
+          ></FormRowSelect>
+          <FormRowSelect
+            type="text"
+            name="subsection"
+            defaultValue={WORD_SUBSECTION.INTRO_1}
+            list={['all', ...Object.values(WORD_SUBSECTION)]}
+          ></FormRowSelect>
 ```
 
 #### edit words loader
