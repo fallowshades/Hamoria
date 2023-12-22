@@ -259,7 +259,7 @@ const router = createBrowserRouter([
             action: wordAction,
             loader: wordLoader(queryClient),
           },
-          { path: 'delete-word/:id', action: deleteWordAction },
+          { path: 'delete-word/:id', action: deleteWordAction(queryClient) },
           {
             path: 'orientation',
             element: <AllOrientation />,

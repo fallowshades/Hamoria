@@ -388,7 +388,13 @@ App.jsx
 - actions cover create, update, delete
 
 ```js
- {
+  {
+            path: 'word',
+            element: <AllWord />,
+            action: wordAction(queryClient),
+            loader: wordLoader(queryClient),
+          },
+          { path: 'delete-word/:id', action: deleteWordAction(queryClient) },
 
 ```
 
@@ -432,14 +438,15 @@ switch(){
     case 'patch':
 
       if (mongooseObjectIdRegex.test(idPart)) {
-  try {
-    await customFetch.patch(`/words/${idPart}`, data)
-    toast.success(`${idPart}`)
-    return null
-  } catch (error) {
-    toast.error(error.response.data.msg)
-    return error
-  }
+ try {
+            await customFetch.patch(`/words/${idPart}`, data)
+            queryClient.invalidateQueries(['words'])
+            toast.success(`${idPart}`)
+            return null
+          } catch (error) {
+            toast.error(error.response.data.msg)
+            return error
+          }
 }
 
 }

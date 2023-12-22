@@ -5,44 +5,55 @@ import { toast } from 'react-toastify'
 import customFetch from '../../../utils/customFetch'
 import { Form, useNavigation, redirect } from 'react-router-dom'
 
-export const action = async ({ request }) => {
-  const formData = await request.formData()
-  const data = Object.fromEntries(formData)
+export const action =
+  (queryClient) =>
+  async ({ request }) => {
+    const formData = await request.formData()
+    const data = Object.fromEntries(formData)
 
-  const formId = formData.get('form-id')
+    const formId = formData.get('form-id')
 
-  const parts = formId.split(/\s+/)
-  // The first part will be 'edit'
-  const crudOperationPart = parts[0]
-  // The remaining part will be everything after 'edit'
-  const idPart = parts.slice(1).join(' ')
+    const parts = formId.split(/\s+/)
+    // The first part will be 'edit'
+    const crudOperationPart = parts[0]
+    // The remaining part will be everything after 'edit'
+    const idPart = parts.slice(1).join(' ')
 
-  switch (crudOperationPart) {
-    case 'create':
-      try {
-        await customFetch.post('/words', data)
-        toast.success('word added successfully')
+    switch (crudOperationPart) {
+      case 'create':
+        try {
+          await customFetch.post('/words', data)
+          queryClient.invalidateQueries(['words'])
+          toast.success('word added successfully')
+
+          return null
+        } catch (error) {
+          toast.error(error?.response?.data?.msg)
+          return error
+        }
+      case 'patch':
+        const nanoidRegex = /^[a-zA-Z0-9_-]{21}$/
+        const mongooseObjectIdRegex = /^[0-9a-fA-F]{24}$/
+
+        if (nanoidRegex.test(idPart)) {
+          try {
+            await customFetch.patch(`/words/${idPart}`, data)
+            queryClient.invalidateQueries(['words'])
+            toast.success(`${idPart}`)
+            return null
+          } catch (error) {
+            toast.error(error.response.data.msg)
+            return error
+          }
+        }
+        toast.error('sad developer')
         return null
-      } catch (error) {
-        toast.error(error?.response?.data?.msg)
-        return error
-      }
-    case 'patch':
-      const nanoidRegex = /^[a-zA-Z0-9_-]{21}$/
-      const mongooseObjectIdRegex = /^[0-9a-fA-F]{24}$/
 
-      if (nanoidRegex.test(idPart)) {
-        toast.success(`${idPart}`)
+      default:
+        toast.success('default')
         return null
-      }
-      toast.error('sad developer')
-      return null
-
-    default:
-      toast.success('default')
-      return null
+    }
   }
-}
 
 const AddWord = () => {
   const navigation = useNavigation()
