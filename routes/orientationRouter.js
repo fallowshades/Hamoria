@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { validateOrientationInput } from '../middleware/validateOrientationMiddleware.js'
 
 import {
   getAllOrientations,
@@ -10,11 +11,14 @@ import {
 
 const router = Router()
 
-router.route('/').post(createOrientation).get(getAllOrientations)
+router
+  .route('/')
+  .post(validateOrientationInput, createOrientation)
+  .get(getAllOrientations)
 
 router
   .route('/:id')
   .get(getSingleOrientation)
-  .patch(updateOrientation)
+  .patch(validateOrientationInput, updateOrientation)
   .delete(deleteOrientation)
 export default router

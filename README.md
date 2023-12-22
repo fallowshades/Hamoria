@@ -92,7 +92,7 @@ export const deleteOrientation = async (req, res) => {
 
 ## validation
 
-### setup array of possible validation and middleware setup
+### setup array of possible validation and middleware
 
 orientationMiddleware.js
 
@@ -116,18 +116,40 @@ const withValidationErrors = (validateValues) => {
 }
 ```
 
-### validate create reference
+### validate create orientation
 
 validateOrientationeMiddleware.js
 
 ```js
+import { ORIENTATION } from '../utils/constants.js'
 
+export const validateOrientationInput = withValidationErrors([
+  body('fingerdirection')
+    .isIn(Object.values(ORIENTATION))
+    .withMessage('invalid fingerdirection value'),
+  body('fingerdirection2')
+    .isIn(Object.values(ORIENTATION))
+    .withMessage('invalid fingerdirection2 value'),
+  body('palmdirection')
+    .isIn(Object.values(ORIENTATION))
+    .withMessage('invalid palmdirection value'),
+  body('palmdirection2')
+    .isIn(Object.values(ORIENTATION))
+    .withMessage('invalid palmdirection2 value'),
+])
 ```
 
 orientationRouter.js
 
 ```js
+import { validateOrientationInput } from '../middleware/validateOrientationMiddleware.js'
 
+router
+  .route('/')
+  .post(validateOrientationInput, createOrientation)
+  .get(getAllOrientations)
+
+router.route('/:id').patch(validateOrientationInput, updateOrientation)
 ```
 
 ### validate ip param reference
