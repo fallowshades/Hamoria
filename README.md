@@ -296,7 +296,7 @@ import HandButtonContainer from './HandButtonContainer'
   return(
     ...
        <h5>
-          {totalWords} reference{words.length > 1 && 's'} found
+          {totalWords} word{words.length > 1 && 's'} found
         </h5>
       ...
       {numOfPages > 1 && <HandButtonContainer dataContext="allWords" />}
@@ -324,10 +324,161 @@ const HandButtonContainer = ({ dataContext }) => {
   ..}
 ```
 
-#### 9. PageBtnContainer CSS (optional)
+## optimization
 
-wrappers/PageBtnContainer.js
+### all words query
+
+AllWord.jsx
+
+```js
+import { QueryClient, useQuery } from '@tanstack/react-query'
+
+const allWordsQuery = (params) => {
+  return {
+    queryKey: ['words'],
+    queryFn: async () => {
+      const { data } = await customFetch.get('/words', { params })
+      return data
+    },
+  }
+}
+```
+
+```jsx
+const AllWord = () => {
+  const { data } = useQuery(allWordsQuery(searchValues))
+}
+```
+
+- loader need invoke and only return relevant
+
+```js
+export const loader = (QueryClient = async ({ request }) => {
+  await QueryClient.ensureQueryData(allWordsQuery(params))
+  return {
+    data,
+    searchValues: { ...params },
+  }
+})
+```
+
+- prevent formRow default text --> optimal key
+
+```js
+const allWordsReQuery = (params) => {
+  const { search, subgroup,subsection,page } =
+    params
+
+  return {
+    queryKey: [
+      'words',
+      search ?? 'all',
+      subgroup ?? 'all',
+      subsection ?? 'all',
+      page ?? 1,
+    ],
+    ...
+  } }
+```
+
+### invalidate words
+
+App.jsx
+
+- actions cover create, update, delete
+
+```js
+ {
+
+```
+
+/pages/DeleteWord.jsx
+
+- async function => const action ()
+
+```js
+export const action =
+  (queryClient) =>
+  async ({ params }) => {
+    try {
+      await customFetch.delete(`/words/${params.id}`)
+      queryClient.invalidateQueries(['words'])
+
+...
+    }}
+```
+
+components/../handparts/AddWord.jsx
+
+- only the create action
+
+```js
+export const action = async ({ request }) => {
+ ...
+  switch (crudOperationPart) {
+    case 'create':
+      try {
+        await customFetch.post('/words', data)
+        queryClient.invalidateQueries(['words'])¨
+      }}}
+```
+
+### edit words
+
+AddWord.jsx
+
+```js
+switch(){
+    case 'patch':
+
+      if (mongooseObjectIdRegex.test(idPart)) {
+  try {
+    await customFetch.patch(`/words/${idPart}`, data)
+    toast.success(`${idPart}`)
+    return null
+  } catch (error) {
+    toast.error(error.response.data.msg)
+    return error
+  }
+}
+
+}
+
+```
+
+#### edit words loader
+
+App.jsx
+
+```js
+   action: wordAction(queryClient),
+```
+
+AddWord.jsx
+
+- invalidate both create and update changes (later update particular)
 
 ```js
 
+export const action =
+  (queryClient) =>
+  async ({ request }) => {
+
+    ..
+
+      switch (crudOperationPart) {
+    case 'create':
+await customFetch.patch(`/words/${idPart}`, data)
+queryClient.invalidateQueries(['words'])
+
+    case 'patch':
+ ...
+
+        if (mongooseObjectIdRegex.test(idPart)) {
+          try {
+            await customFetch.patch(`/words/${idPart}`, data)
+
+            queryClient.invalidateQueries(['words'])
+          }}}
+          ...
 ```
