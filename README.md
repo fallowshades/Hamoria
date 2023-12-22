@@ -152,20 +152,54 @@ router
 router.route('/:id').patch(validateOrientationInput, updateOrientation)
 ```
 
-### validate ip param reference
+### validate id param orientation
 
 orientationController
-
-- fix mistake
-
-```js
-
-```
 
 validateOrientationRouter.js
 
 ```js
+import {
+  validateOrientationInput,
+  validateIdParam,
+} from '../middleware/validateOrientationMiddleware.js'
 
+router
+  .route('/:id')
+  .get(validateIdParam, getSingleOrientation)
+  .delete(validateIdParam, deleteOrientation)
+```
+
+validateOrientationMiddleware.js
+
+```js
+import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
+
+const withValidationErrors = (validateValues) => {
+  if (!errors.isEmpty()) {
+    const errorMessages = errors.array().map((error) => error.msg)
+    if (errorMessages[0].startsWith('no reference')) {
+      throw new NotFoundError(errorMessages)
+    }
+    throw new BadRequestError(errorMessages)
+  }
+}
+```
+
+```js
+import mongoose from 'mongoose'
+import { param } from 'express-validator'
+import Orientation from '../models/orientationModel.js'
+
+export const validateIdParam = withValidationErrors([
+  param('id').custom(async (value) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value)
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
+    const orientation = await Orientation.findById(value)
+    if (!orientation)
+      throw new NotFoundError(`no orientation with id : ${value}`)
+  }),
+])
 ```
 
 #### get all orientation - server
