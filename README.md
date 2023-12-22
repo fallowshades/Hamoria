@@ -92,24 +92,28 @@ export const deleteOrientation = async (req, res) => {
 
 ## validation
 
-### constant and middleware setup
+### setup array of possible validation and middleware setup
 
 orientationMiddleware.js
 
 ```js
+import { body, validationResult } from 'express-validator'
+import { BadRequestError } from '../errors/customErrors'
 
-```
+const withValidationErrors = (validateValues) => {
+  return [
+    validateValues,
+    (req, res, next) => {
+      const errors = validationResult(req)
 
-orientationModel
-
-```js
-
-```
-
-utils\constants.js
-
-```js
-
+      if (!errors.isEmpty()) {
+        const errorMessages = errors.array().map((error) => error.msg)
+        throw new BadRequestError(errorMessages)
+      }
+      next()
+    },
+  ]
+}
 ```
 
 ### validate create reference
