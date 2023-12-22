@@ -17,7 +17,6 @@ const HandOrientationContainer = () => {
 
   return (
     <>
-      <div>HandOrientationContainer</div>
       <AddOrientation />
       <div className="orientations">
         {orientations.map((orientation) => {

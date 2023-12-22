@@ -1,6 +1,6 @@
 import {
   HandOrientationContainer,
-  FilterOrientation,
+  SearchOrientationContainer,
 } from '../../components/courses/handparts'
 import { useContext, createContext } from 'react'
 import { useLoaderData } from 'react-router-dom'
@@ -31,7 +31,7 @@ const AllOrientation = () => {
 
   return (
     <AllOrientationContext.Provider value={{ data, searchValues }}>
-      <FilterOrientation />
+      <SearchOrientationContainer />
 
       <HandOrientationContainer />
     </AllOrientationContext.Provider>
