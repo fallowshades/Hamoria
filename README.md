@@ -315,10 +315,7 @@ const SearchPrefixContainer = () => {
               submit(e.currentTarget.form)
             }}
           />
-          <Link
-            to="/dashboard/all-achievements"
-            className="btn form-btn delete-btn"
-          >
+          <Link to="/dashboard/prefix" className="btn form-btn delete-btn">
             Reset Search Values
           </Link>
         </div>
@@ -332,6 +329,7 @@ export default SearchPrefixContainer
 KeysToMapFormRow.jsx
 
 - noticed have different names
+- mistake static default
 
 ```jsx
 const KeysToMapFormRows = ({mapKey, event }) => {
@@ -369,6 +367,36 @@ if (!constant.hasOwnProperty('default')) {
 
 #### complex pagination container add context
 
+SearchPrefixContainer.jsx
+
+- fix correct link
+
+```jsx
+ <Link to="/dashboard/prefix" className="btn form-btn delete-btn">
+```
+
+PrefixContainer.jsx
+
+```jsx
+import HandButtonContainer from './HandButtonContainer'
+
+const PrefixContainer = () => {
+  const { prefixes, totalPrefixes, numOfPages } = data
+
+  return (
+    <>
+      <Wrapper>
+        <h5>
+          {totalPrefixes} prefix{prefixes.length > 1 && 's'} found
+        </h5>
+        ...
+        {numOfPages > 1 && <HandButtonContainer dataContext="allPrefix" />}
+      </Wrapper>
+    </>
+  )
+}
+```
+
 HandButtonContainer.jsx
 
 - index all contexts
@@ -390,10 +418,33 @@ import {
       break
 ```
 
-- bug interior point is null
+- bug prev should be -1
 
 ```js
-<div className="btn-container">{numOfPages > 30 && renderPageButtons()}</div>
+let prevPage = currentPage - 1
+```
+
+modelKeyConstants.js
+
+- correct position
+
+```jsx
+const {
+  HAND_VARIANTS,
+  ORIENTATION,
+  TOUCH_TYPE,
+  FACE_EXPRESSION,
+  PREFIX_POSITION,
+} = constants
+
+const prefixKeys = [
+  {
+    field: 'position',
+    identifier: nanoid(),
+    list: PREFIX_POSITION,
+    default: PREFIX_POSITION.BODY,
+  },
+]
 ```
 
 ## optimization

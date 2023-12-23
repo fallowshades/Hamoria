@@ -6,6 +6,7 @@ import {
   useAllReferenceContext,
   useAllWordContext,
   useAllOrientationContext,
+  useAllPrefixContext,
 } from '../../../pages/handparts'
 
 const HandButtonContainer = ({ dataContext }) => {
@@ -18,11 +19,16 @@ const HandButtonContainer = ({ dataContext }) => {
     case 'allOrientation':
       ;({ numOfPages, currentPage } = useAllOrientationContext().data)
       break
+    case 'allPrefix':
+      ;({ numOfPages, currentPage } = useAllPrefixContext().data)
+
+      break
     default:
       ;({ numOfPages, currentPage } = useAllReferenceContext()?.data || {})
 
       break
   }
+
   const pages = Array.from({ length: numOfPages }, (_, index) => {
     return index + 1
   })
@@ -106,7 +112,7 @@ const HandButtonContainer = ({ dataContext }) => {
       <button
         className="btn prev-btn"
         onClick={() => {
-          let prevPage = currentPage + 1
+          let prevPage = currentPage - 1
           if (prevPage < numOfPages) prevPage = numOfPages
           handlePageChange(prevPage)
         }}

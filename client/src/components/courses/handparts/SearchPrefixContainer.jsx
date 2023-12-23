@@ -24,10 +24,7 @@ const SearchPrefixContainer = () => {
               submit(e.currentTarget.form)
             }}
           />
-          <Link
-            to="/dashboard/all-achievements"
-            className="btn form-btn delete-btn"
-          >
+          <Link to="/dashboard/prefix" className="btn form-btn delete-btn">
             Reset Search Values
           </Link>
         </div>
