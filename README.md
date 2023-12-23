@@ -2,30 +2,31 @@
 
 ## crud prefix controll
 
-### postman testing local to remote prefix crud
+### remove local ctrl setup / make localRead dynamic
 
-prefixController.js
-
-- refracutre mockWhat/localRead/prefixUtil
+mockWhat/localRead/orientationUtil
 
 ```js
 import { readFile } from 'fs/promises'
 import { nanoid } from 'nanoid'
-export const readLocalFile = async () => {
-  const jsonPrefix = JSON.parse(
-    await readFile(new URL('../mockPrefixData.json', import.meta.url))
+export const readLocalFile = async (relative_path) => {
+  const jsonData = JSON.parse(
+    await readFile(new URL(relative_path, import.meta.url))
   )
 
-  const packedData = jsonPrefix.map((keyless) => {
+  const packedData = jsonData.map((keyless) => {
     return { ...keyless, _id: nanoid() }
   })
   return packedData
 }
 ```
 
+### postman testing local to remote prefix crud
+
+prefixController.js
+
 ```js
 import Prefix from '../models/prefixModel.js'
-import { readLocalFile } from '../utils/mockWhat/localRead.js/prefixnUtil.js'
 ```
 
 ```js
@@ -44,7 +45,6 @@ export const createPrefix = async (req, res) => {
 
 ```js
 export const getAllPrefixes = async (req, res) => {
-  //const packagedData = await readLocalFile()
   const prefix = await Prefix.find({})
 
   res.status(StatusCodes.OK).json({ prefixes: prefix })
