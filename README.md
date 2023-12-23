@@ -415,19 +415,62 @@ AllOrientation.jsx
 -take dependencies and do for us
 
 ```js
+import { useQuery } from '@tanstack/react-query'
 
+const allOrientationsQuery = (params) => {
+  return {
+    queryKey: ['orientations'],
+    queryFn: async () => {
+      const { data } = await customFetch.get('/orientations', { params })
+
+      return data
+    },
+  }
+}
+
+const AllOrientation = () => {
+  const { searchValues } = useLoaderData()
+  const { data } = useQuery(allOrientationsQuery(searchValues))
+}
 ```
 
 - loader need invoke and only return relevant
 
 ```js
-
+try {
+  await queryClient.ensureQueryData(allOrientationsQuery(params))
+  return {
+    searchValues: { ...params },
+  }
+} catch (error) {
+  toast.error(error?.response?.data?.msg)
+  return error
+}
 ```
 
 - prevent formRow default text --> optimal key
 
 ```js
-
+const allOrientationsQuery = (params) => {
+  const {
+    search,
+    fingerdirection,
+    fingerdirection2,
+    palmdirection,
+    palmdirection2,
+    page,
+  } = params
+  return {
+    queryKey: [
+      'orientations',
+      search ?? 'all',
+      fingerdirection ?? 'all',
+      fingerdirection2 ?? 'all',
+      palmdirection ?? 'all',
+      palmdirection2 ?? 'all',
+      page ?? 1,
+    ],
+    ...}}
 ```
 
 ### invalidate orientation

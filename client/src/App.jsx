@@ -264,7 +264,7 @@ const router = createBrowserRouter([
             path: 'orientation',
             element: <AllOrientation />,
             action: orientationAction,
-            loader: orientationLoader,
+            loader: orientationLoader(queryClient),
           },
           {
             path: 'delete-orientation/:id',
