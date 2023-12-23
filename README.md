@@ -116,16 +116,36 @@ const withValidationErrors = (validateValues) => {
 
 ### validate create Prefix
 
+constants.js
+
+```js
+export const PREFIX_POSITION = {
+  BODY: 'body',
+  CHEEK: 'cheek',
+  CHIN: 'chin',
+  EAR: 'ear',
+  EYE: 'eye',
+  FACE: 'face',
+  FOREHEAD: 'forehead',
+  HAND: 'hand',
+  MOUTH: 'mouth',
+  NOSE: 'nose',
+  THROUGHT: 'throught',
+}
+```
+
 validatePrefixMiddleware.js
 
 ```js
-import { POSITION, HAND_VARIANTS } from '../utils/constants.js'
+import { PREFIX_POSITION, HAND_VARIANTS } from '../utils/constants.js'
 
 export const validatePrefixInput = withValidationErrors([
   body('position')
-    .isIn(Object.values(POSITION))
-    .withMessage('invalid fingerdirection value'),
-  body('hand').isIn(Object.values(HAND_VARIANTS)),
+    .isIn(Object.values(PREFIX_POSITION))
+    .withMessage('invalid position value'),
+  body('hand')
+    .isIn(Object.values(HAND_VARIANTS))
+    .withMessage('invalid hand value'),
 ])
 ```
 

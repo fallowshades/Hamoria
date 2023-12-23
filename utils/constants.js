@@ -315,6 +315,19 @@ export const ORIENTATION = {
   NULL: null,
   EMPTY: '',
 }
+export const PREFIX_POSITION = {
+  BODY: 'body',
+  CHEEK: 'cheek',
+  CHIN: 'chin',
+  EAR: 'ear',
+  EYE: 'eye',
+  FACE: 'face',
+  FOREHEAD: 'forehead',
+  HAND: 'hand',
+  MOUTH: 'mouth',
+  NOSE: 'nose',
+  THROUGHT: 'throught',
+}
 
 export const POSITION = {
   SHOULDER: 'shoulder',
