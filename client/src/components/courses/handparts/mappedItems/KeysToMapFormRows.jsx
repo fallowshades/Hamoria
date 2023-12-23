@@ -5,7 +5,7 @@ import {
 } from '../../../../../../utils/modelKeyConstants'
 import { FormRow, FormRowSelect } from '../../..'
 
-const KeysToMapFormRows = ({ isOrientation, mapKey }) => {
+const KeysToMapFormRows = ({ isOrientation, mapKey, event }) => {
   {
     let mappedKeys = isOrientation ? orientationKeys : prefixKeys
 
@@ -16,6 +16,9 @@ const KeysToMapFormRows = ({ isOrientation, mapKey }) => {
       <>
         {mappedKeys.map((constant) => {
           if (!constant.hasOwnProperty('default')) {
+            if (constant.field == 'orderid') {
+              return null
+            }
             return (
               <FormRow
                 key={constant.identifier}
@@ -31,6 +34,11 @@ const KeysToMapFormRows = ({ isOrientation, mapKey }) => {
                 name={constant.field}
                 defaultValue={constant?.default}
                 list={Object.values(constant?.list)}
+                onChange={(e) => {
+                  if (event) {
+                    event(e.currentTarget.form)
+                  }
+                }}
               />
             )
           }

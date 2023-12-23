@@ -1,255 +1,323 @@
-# v0.6.5
+# v0.6.6
 
-# Iteration3 layer 7
+## crud orientation controll
 
-## Params -> send request
+### postman testing local to remote orientation crud
 
-### (1) get all affect pipieline
+orientationController.js
 
-#### 1. Get All Words - Server
-
-word model
+- refracutre mockWhat/localRead/orientationUtil
 
 ```js
-const WordSchema = new mongoose.Schema({
-  word: {
-    type: String,
-    required: true,
-    default: 'NaN',
-  },
-  subgroup: {
-    type: String,
-    required: true,
-    default: 'NaN',
-  },
-  subsection: {
-    type: String,
-    required: true,
-    default: NaN,
-  },
-})
-```
-
-wordController.js
-
-```js
-export const getAllWords = async (req, res) => {
-  const { search, subgroup, subsection, sort } = req.query
-
-  // Read data from the file
-  const jsonWord = JSON.parse(
-    await readFile(
-      new URL('../utils/mockWhat/mockWordData.json', import.meta.url)
-    )
+import { readFile } from 'fs/promises'
+import { nanoid } from 'nanoid'
+export const readLocalFile = async () => {
+  const jsonOrientation = JSON.parse(
+    await readFile(new URL('../mockOrientationData.json', import.meta.url))
   )
+
+  const packedData = jsonOrientation.map((keyless) => {
+    return { ...keyless, _id: nanoid() }
+  })
+  return packedData
 }
 ```
 
 ```js
-// Local filtering based on the query parameters
-const filteredWord = jsonWord.filter((row) => {
-  return (
-    (!search || new RegExp(search, 'i').test(row.word)) &&
-    (!subgroup || new RegExp(subgroup, 'i').test(row.subgroup)) &&
-    (!subsection || new RegExp(subsection, 'i').test(row.subsection))
-  )
-})
-...
+import Orientation from '../models/orientationModel.js'
+import { readLocalFile } from '../utils/mockWhat/localRead.js/orientationUtil.js'
 ```
 
 ```js
-// Local sorting based on the query parameter
-const sortOptions = {
-  'a-z': 'position',
-  'z-a': '-position',
-  ...
+export const createOrientation = async (req, res) => {
+  const {
+    orderid,
+    fingerdirection,
+    fingerdirection2,
+    palmdirection,
+    palmdirection2,
+  } = req.body
+  const orientation = await Orientation.create(req.body)
+  res.status(StatusCodes.OK).json({ orientation })
 }
-
-const sortKey = sortOptions[sort] || sortOptions['a-z']
-
-const correlatedOperationData = filteredWord.sort((a, b) =>
-  sortKey.startsWith('-')
-    ? b[sortKey.slice(1)] - a[sortKey.slice(1)]
-    : a[sortKey] - b[sortKey]
-)
-...
 ```
 
 ```js
-// setup pagination
-const page = Number(req.query.page) || 1
-const limit = Number(req.query.limit) || 10
-const skip = (page - 1) * limit
+export const getAllOrientations = async (req, res) => {
+  //const packagedData = await readLocalFile()
+  const orienetation = await Orientation.find({})
 
-// Paginate the data
-const paginatedData = correlatedOperationData.slice(skip, skip + limit)
-
-// Add unique _id to each item
-const packagedData = paginatedData.map((keyless) => ({
-  ...keyless,
-  _id: nanoid(),
-}))
-...
-```
-
-#### 2. Search Container
-
-SearchWordContainer.jsx
-
-```js
-import { FormRow, FormRowSelect, SubmitBtn } from '../../../components'
-import Wrapper from '../../../assets/wrappers/DashboardFormPage'
-import { Form, useSubmit, Link } from 'react-router-dom'
-
-import { useAllWordContext } from '../../../pages/handparts/AllWord'
+  res.status(StatusCodes.OK).json({ orientations: orienetation })
+}
 ```
 
 ```js
-return (
-  <Wrapper>
-    <Form className="form">
-      <h5 className="form-title">search form</h5>
-      <div className="form-center">
-        {/* search position */}
-
-        <FormRow type="search" name="search" defaultValue="a" />
-        <FormRow name="subgroup" labelText="subgroup" />
-        <FormRow name="subsection" labelText="subsection" />
-        <FormRowSelect name="sort" defaultValue="a-z" list={['a-z', 'z-a']} />
-
-        <Link to="/dashboard/word" className="btn form-btn delete-btn">
-          Reset Search Values
-        </Link>
-        {/* TEMP!!!! */}
-        <SubmitBtn formBtn />
-      </div>
-    </Form>
-  </Wrapper>
-)
+export const getSingleOrientation = async (req, res) => {
+  const { id } = req.params
+  const orientation = await Orientation.findById(id)
+  if (!orientation) {
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ msg: 'no orientation with id' })
+  }
+  res.status(StatusCodes.OK).json({ orientation })
+}
 ```
 
-#### 3. All Words Loader
+```js
+export const updateOrientation = async (req, res) => {
+  const { id } = req.params
 
-All word (const loader)
+  const updatedOrientation = await Orientation.findByIdAndUpdate(id, req.body, {
+    new: true,
+  })
+
+  if (!updatedOrientation) {
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ msg: `no reference with id ${id}` })
+  }
+  res.status(StatusCodes.OK).json({ updatedOrientation })
+}
+```
+
+```js
+export const deleteOrientation = async (req, res) => {
+  const { id } = req.params
+  const removedOrientation = await Orientation.findByIdAndDelete(id)
+
+  res.status(StatusCodes.OK).json({ removedOrientation })
+}
+```
+
+## validation
+
+### setup array of possible validation and middleware
+
+orientationMiddleware.js
+
+```js
+import { body, validationResult } from 'express-validator'
+import { BadRequestError } from '../errors/customErrors'
+
+const withValidationErrors = (validateValues) => {
+  return [
+    validateValues,
+    (req, res, next) => {
+      const errors = validationResult(req)
+
+      if (!errors.isEmpty()) {
+        const errorMessages = errors.array().map((error) => error.msg)
+        throw new BadRequestError(errorMessages)
+      }
+      next()
+    },
+  ]
+}
+```
+
+### validate create orientation
+
+validateOrientationeMiddleware.js
+
+```js
+import { ORIENTATION } from '../utils/constants.js'
+
+export const validateOrientationInput = withValidationErrors([
+  body('fingerdirection')
+    .isIn(Object.values(ORIENTATION))
+    .withMessage('invalid fingerdirection value'),
+  body('fingerdirection2')
+    .isIn(Object.values(ORIENTATION))
+    .withMessage('invalid fingerdirection2 value'),
+  body('palmdirection')
+    .isIn(Object.values(ORIENTATION))
+    .withMessage('invalid palmdirection value'),
+  body('palmdirection2')
+    .isIn(Object.values(ORIENTATION))
+    .withMessage('invalid palmdirection2 value'),
+])
+```
+
+orientationRouter.js
+
+```js
+import { validateOrientationInput } from '../middleware/validateOrientationMiddleware.js'
+
+router
+  .route('/')
+  .post(validateOrientationInput, createOrientation)
+  .get(getAllOrientations)
+
+router.route('/:id').patch(validateOrientationInput, updateOrientation)
+```
+
+### validate id param orientation
+
+orientationController
+
+validateOrientationRouter.js
+
+```js
+import {
+  validateOrientationInput,
+  validateIdParam,
+} from '../middleware/validateOrientationMiddleware.js'
+
+router
+  .route('/:id')
+  .get(validateIdParam, getSingleOrientation)
+  .delete(validateIdParam, deleteOrientation)
+```
+
+validateOrientationMiddleware.js
+
+```js
+import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
+
+const withValidationErrors = (validateValues) => {
+  if (!errors.isEmpty()) {
+    const errorMessages = errors.array().map((error) => error.msg)
+    if (errorMessages[0].startsWith('no reference')) {
+      throw new NotFoundError(errorMessages)
+    }
+    throw new BadRequestError(errorMessages)
+  }
+}
+```
+
+```js
+import mongoose from 'mongoose'
+import { param } from 'express-validator'
+import Orientation from '../models/orientationModel.js'
+
+export const validateIdParam = withValidationErrors([
+  param('id').custom(async (value) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value)
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id')
+    const orientation = await Orientation.findById(value)
+    if (!orientation)
+      throw new NotFoundError(`no orientation with id : ${value}`)
+  }),
+])
+```
+
+#### get all orientation - server
+
+orientationController.jsx
+
+```js
+export const getAllOrientations = async (req, res) => {
+  const {
+    orderid,
+    fingerdirection,
+    fingerdirection2,
+    palmdirection,
+    palmdirection2,
+    sort,
+  } = req.body
+
+  const queryObject = {}
+
+  if (fingerdirection && fingerdirection !== 'all') {
+    queryObject.fingerdirection = fingerdirection
+  }
+  if (fingerdirection2 && fingerdirection2 !== 'all') {
+    queryObject.fingerdirection2 = fingerdirection2
+  }
+  if (palmdirection && palmdirection !== 'all') {
+    queryObject.palmdirection = palmdirection
+  }
+  if (palmdirection2 && palmdirection2 !== 'all') {
+    queryObject.palmdirection2 = palmdirection2
+  }
+
+  const sortOptions = {
+    'a-z': 'fingerdirection',
+    'z-a': '-fingerdirection',
+  }
+
+  const sortKey = sortOptions[sort] || sortOptions['a-z']
+  // setup pagination
+  const page = Number(req.query.page) || 1
+  const limit = Number(req.query.limit) || 10
+  const skip = (page - 1) * limit
+
+  const orienetation = await Orientation.find({})
+    .sort(sortKey)
+    .skip(skip)
+    .limit(limit)
+
+  const totalOrientations = await Orientation.countDocuments(queryObject)
+  const numOfPages = Math.ceil(totalOrientations / limit)
+
+  res.status(StatusCodes.OK).json({
+    totalOrientations,
+    numOfPages,
+    currentPage: page,
+    orientations: orienetation,
+  })
+}
+```
+
+OrientationModel.jsx
+
+```js
+
+```
+
+#### all orientation loader
+
+AllOrientation.jsx
 
 ```js
 const params = Object.fromEntries([
   ...new URL(request.url).searchParams.entries(), ////
 ])
-const { data } = await customFetch.get('/words', { params })
+```
 
+```js
+const { data } = await customFetch.get('/orientations', { params })
 return {
   data,
-  params, ////////
+  searchValues: { ...params },
 }
 ```
-
-#### 4. Submit Form Programmatically
-
-constants.js
 
 ```js
-export const WORD_SUBSECTION = {}
-export const WORD_SUBGROUP = {}
-```
 
-searchWordContainer.jsx
+const AllOrientation = () => {
 
-```jsx
-import { wordKeys } from '../../../../../utils/modelKeyConstants'
-import { WORD_SUBGROUP, WORD_SUBSECTION } from '../../../../../utils/constants'
-```
+  const { data, searchValues } = useLoaderData()
 
-```jsx
-const SearchWordContainer = () => {
-  const { searchValues } = useAllWordContext()
-  const { search, subgroup, subsection, sort } = searchValues
-  const submit = useSubmit()
-  return(
-    ...
-  )
-
-}
-```
-
-```jsx
- return(
-  <FormRow
-            type="search"
-            name="search"
-            defaultValue={search}
-            onChange={(e) => {
-              submit(e.currentTarget.form)
-            }}
-          />
-          <FormRowSelect
-            labelText="subgroup"
-            name={wordKeys[1]}
-            defaultValue={WORD_SUBGROUP.ACCUMULATION}
-            list={['all', ...Object.values(WORD_SUBGROUP)]}
-            onChange={(e) => {
-              submit(e.currentTarget.form)
-            }}
-          />
-          <FormRowSelect
-            labelText="subsection"
-            name={wordKeys[2]}
-            defaultValue={WORD_SUBSECTION.INTRO_1}
-            list={['all', ...Object.values(WORD_SUBSECTION)]}
-            onChange={(e) => {
-              submit(e.currentTarget.form)
-            }}
-          />
- )
-```
-
-```jsx
-     onChange={(e) => {
-              submit(e.currentTarget.form)
-            }}
-```
-
-AllWord.jsx
-
-- forgot packaging of params
-
-```jsx
- export const loader = async ({ request }) => {
-
-return{
-  ...
-  searchValues: { ...params }, ////////
-}
- }
-
-const AllWord = () => {
-    const { data, searchValues } = useLoaderData()
   return (
-    <AllWordContext.Provider value={{ data, searchValues }}>
-    ...
-  )
-}
+
+    <AllOrientationContext.Provider value={{ data, searchValues }}>
+  )}
 ```
 
-### (2)Tool life cycle mounted
+#### submit form programmatically
 
-#### 5. ammend default value on formRowSelect
-
-SearchWordContainer.jsx
-
-- add attribute
+SearchOrientationContainer.jsx
 
 ```js
-defaultValue = { subgroup }
-```
+import Wrapper from '../../../assets/wrappers/DashboardFormPage'
+import { useAllOrientationContext } from '../../../pages/handparts/AllOrientation'
+import { Form, useSubmit, Link } from 'react-router-dom'
+import { KeysToMapFormRows } from './mappedItems'
+import { FormRowSelect } from '../../../components'
+const SearchOrientationContainer = () => {
+  const { searchValues } = useAllOrientationContext()
+  const { search, status, type, sort } = searchValues
 
-SearchWordContainer.jsx
-
-```js
-defaultValue = { status } //forgot to set default values
- defaultValue={subsection}
-
-        <FormRowSelect
+  const submit = useSubmit()
+  return (
+    <Wrapper>
+      <Form className="form">
+        <h5 className="form-title">search form</h5>
+        <div className="form-center">
+          <KeysToMapFormRows isOrientation event={submit} />
+          <FormRowSelect
             name="sort"
             defaultValue={sort}
             list={['a-z', 'z-a']}
@@ -257,260 +325,235 @@ defaultValue = { status } //forgot to set default values
               submit(e.currentTarget.form)
             }}
           />
-```
-
-## Pagination of response data
-
-### (1)lots
-
-#### 8. Complex - PageBtnContainer PICK context
-
-wordController.jsx
-
-```jsx
-const totalWords = jsonWord.length
-const numOfPages = Math.ceil(totalWords / limit)
-
-res.status(StatusCodes.OK).json({
-  words: packagedData,
-  numOfPages,
-  currentPage: page,
-  totalWords,
-})
-```
-
-AllWords.jsx
-
-```jsx
-const { data } = await customFetch.get('/words', { params })
-```
-
-WordContainer.jsx
-
-```jsx
-import HandButtonContainer from './HandButtonContainer'
-
-
-  const { words, totalWords, numOfPages } = data
-
-  return(
-    ...
-       <h5>
-          {totalWords} word{words.length > 1 && 's'} found
-        </h5>
-      ...
-      {numOfPages > 1 && <HandButtonContainer dataContext="allWords" />}
+          <Link
+            to="/dashboard/all-achievements"
+            className="btn form-btn delete-btn"
+          >
+            Reset Search Values
+          </Link>
+        </div>
+      </Form>
+    </Wrapper>
   )
-
+}
+export default SearchOrientationContainer
 ```
+
+KeysToMapFormRow.jsx
+
+```jsx
+const KeysToMapFormRows = ({ isOrientation, mapKey, event }) => {
+
+
+  {mappedKeys.map((constant) => {
+if (!constant.hasOwnProperty('default')) {
+            if (constant.field == 'orderid') {
+              return null
+            }
+            ...}
+
+
+
+  })
+
+}  else {
+            return (
+              <FormRowSelect
+                key={constant.identifier}
+                type="text"
+                name={constant.field}
+                defaultValue={constant?.default}
+                list={Object.values(constant?.list)}
+                onChange={(e) => {
+                  if (event) {
+                    event(e.currentTarget.form)
+                  }
+                }}
+              />
+            )
+}
+}
+```
+
+- small fixes (Allorientation.jsx,index.js)
+- FilterOrientation --> SearchOrientationContaine
+
+#### complex pagination container add context
 
 HandButtonContainer.jsx
 
+- index all contexts
+
+```jsx
+import {
+  useAllReferenceContext,
+  useAllWordContext,
+  useAllOrientationContext,
+} from '../../../pages/handparts'
+```
+
+- switch case which context
+
 ```js
-import { useAllWordContext } from '../../../pages/handparts/AllWord'
-
-const HandButtonContainer = ({ dataContext }) => {
-  let numOfPages, currentPage
-  switch (dataContext) {
-    case 'allWords':
-      ;({ numOfPages, currentPage } = useAllWordContext().data)
+  case 'allOrientation':
+      ;({ numOfPages, currentPage } = useAllOrientationContext().data)
       break
+```
 
-    default:
-      ;({ numOfPages, currentPage } = useAllReferenceContext()?.data || {})
+- bug interior point is null
 
-      break
-  }
-  ..}
+```js
+<div className="btn-container">{numOfPages > 30 && renderPageButtons()}</div>
 ```
 
 ## optimization
 
-### all words query
+### all orientation query
 
-AllWord.jsx
+AllOrientation.jsx
+
+-take dependencies and do for us
 
 ```js
-import { QueryClient, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
-const allWordsQuery = (params) => {
+const allOrientationsQuery = (params) => {
   return {
-    queryKey: ['words'],
+    queryKey: ['orientations'],
     queryFn: async () => {
-      const { data } = await customFetch.get('/words', { params })
+      const { data } = await customFetch.get('/orientations', { params })
+
       return data
     },
   }
 }
-```
 
-```jsx
-const AllWord = () => {
-  const { data } = useQuery(allWordsQuery(searchValues))
+const AllOrientation = () => {
+  const { searchValues } = useLoaderData()
+  const { data } = useQuery(allOrientationsQuery(searchValues))
 }
 ```
 
 - loader need invoke and only return relevant
 
 ```js
-export const loader = (QueryClient = async ({ request }) => {
-  await QueryClient.ensureQueryData(allWordsQuery(params))
+try {
+  await queryClient.ensureQueryData(allOrientationsQuery(params))
   return {
-    data,
     searchValues: { ...params },
   }
-})
+} catch (error) {
+  toast.error(error?.response?.data?.msg)
+  return error
+}
 ```
 
 - prevent formRow default text --> optimal key
 
 ```js
-const allWordsReQuery = (params) => {
-  const { search, subgroup,subsection,page } =
-    params
-
+const allOrientationsQuery = (params) => {
+  const {
+    search,
+    fingerdirection,
+    fingerdirection2,
+    palmdirection,
+    palmdirection2,
+    page,
+  } = params
   return {
     queryKey: [
-      'words',
+      'orientations',
       search ?? 'all',
-      subgroup ?? 'all',
-      subsection ?? 'all',
+      fingerdirection ?? 'all',
+      fingerdirection2 ?? 'all',
+      palmdirection ?? 'all',
+      palmdirection2 ?? 'all',
       page ?? 1,
     ],
-    ...
-  } }
+    ...}}
 ```
 
-### invalidate words
+### invalidate orientation
 
 App.jsx
 
-- actions cover create, update, delete
-
 ```js
-  {
-            path: 'word',
-            element: <AllWord />,
-            action: wordAction(queryClient),
-            loader: wordLoader(queryClient),
+    {
+            path: 'orientation',
+            element: <AllOrientation />,
+            action: orientationAction(queryClient),
+            loader: orientationLoader(queryClient),
           },
-          { path: 'delete-word/:id', action: deleteWordAction(queryClient) },
-
+          {
+            path: 'delete-orientation/:id',
+            action: deleteOrientationAction(queryClient),
+          },
 ```
 
-/pages/DeleteWord.jsx
-
-- async function => const action ()
+/pages/DeleteOrientation.jsx
 
 ```js
 export const action =
   (queryClient) =>
   async ({ params }) => {
     try {
-      await customFetch.delete(`/words/${params.id}`)
-      queryClient.invalidateQueries(['words'])
-
-...
-    }}
+      await customFetch.delete(`/orientations/${params.id}`)
+      queryClient.invalidateQueries(['orientations'])
+      toast.success('orientation deleted successfully')
+    } catch (error) {
+      toast.error(error.response.data.msg)
+    }
+    return redirect('/dashboard/prefix')
+  }
 ```
 
-components/../handparts/AddWord.jsx
+components/../handparts/AddOrientation.jsx
 
-- only the create action
-
-```js
-export const action = async ({ request }) => {
- ...
-  switch (crudOperationPart) {
-    case 'create':
-      try {
-        await customFetch.post('/words', data)
-        queryClient.invalidateQueries(['words'])¨
-      }}}
-```
-
-### edit and add words formRow to formRowSelect
-
-EditWord.jsx
+- invalidate both edit and add cases
 
 ```js
-import { FormRow, FormRowSelect } from '../../../../components'
-import {
-  WORD_SUBGROUP,
-  WORD_SUBSECTION,
-} from '../../../../../../utils/constants'
-```
-
-```js
- <FormRowSelect
-            type="text"
-            name="subgroup"
-            defaultValue={WORD_SUBGROUP.ACCUMULATION}
-            list={['all', ...Object.values(WORD_SUBGROUP)]}
-          ></FormRowSelect>
-          <FormRowSelect
-            type="text"
-            name="subsection"
-            defaultValue={WORD_SUBSECTION.INTRO_1}
-            list={['all', ...Object.values(WORD_SUBSECTION)]}
-          ></FormRowSelect>
-```
-
-AddWord.jsx
-
-```js
-import { FormRow, FormRowSelect } from '../../../components'
-import { WORD_SUBGROUP, WORD_SUBSECTION } from '../../../../../utils/constants'
-```
-
-```js
-      <FormRowSelect
-            type="text"
-            name="subgroup"
-            defaultValue={WORD_SUBGROUP.ACCUMULATION}
-            list={['all', ...Object.values(WORD_SUBGROUP)]}
-          ></FormRowSelect>
-          <FormRowSelect
-            type="text"
-            name="subsection"
-            defaultValue={WORD_SUBSECTION.INTRO_1}
-            list={['all', ...Object.values(WORD_SUBSECTION)]}
-          ></FormRowSelect>
-```
-
-#### edit words loader
-
-App.jsx
-
-```js
-   action: wordAction(queryClient),
-```
-
-AddWord.jsx
-
-- invalidate both create and update changes (later update particular)
-
-```js
-
 export const action =
   (queryClient) =>
   async ({ request }) => {
 
-    ..
+    switch (crudOperationPart) {
+      case 'create':
+        try {
+          await customFetch.post('/orientations', data)
+          queryClient.invalidateQueries(['orientations'])
+          toast.success('orientation added successfully')
 
-      switch (crudOperationPart) {
-    case 'create':
-await customFetch.patch(`/words/${idPart}`, data)
-queryClient.invalidateQueries(['words'])
 
-    case 'patch':
- ...
+        }}
+
+         case 'patch':
+        //const nanoidRegex = /^[a-zA-Z0-9_-]{21}$/
+        const mongooseObjectIdRegex = /^[0-9a-fA-F]{24$/
 
         if (mongooseObjectIdRegex.test(idPart)) {
           try {
-            await customFetch.patch(`/words/${idPart}`, data)
+            await customFetch.patch(`/orientations/${idPart}`, data)
 
-            queryClient.invalidateQueries(['words'])
-          }}}
-          ...
+      if (nanoidRegex.test(idPart)) {
+        toast.success(`${idPart}`)
+            queryClient.invalidateQueries(['orientations'])
+            toast.success(`${idPart}`)
+            return null
+          } catch (error) {
+            toast.error(error.response.data.msg)
+            return error
+          }
+        }
+        toast.error('sad developer')
+        return null
+      }
+  }
+```
+
+### Fix link
+
+AddOrientation.js
+
+```js
+     <Link to="/dashboard/orientation" className="btn form-btn delete-btn">
 ```

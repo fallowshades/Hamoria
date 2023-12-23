@@ -263,12 +263,12 @@ const router = createBrowserRouter([
           {
             path: 'orientation',
             element: <AllOrientation />,
-            action: orientationAction,
-            loader: orientationLoader,
+            action: orientationAction(queryClient),
+            loader: orientationLoader(queryClient),
           },
           {
             path: 'delete-orientation/:id',
-            action: deleteOrientationAction,
+            action: deleteOrientationAction(queryClient),
           },
           {
             path: 'hand-status',

@@ -1,7 +1,7 @@
 export { default as FilterPrefix } from './FilterPrefix'
 export { default as PrefixContainer } from './PrefixContainer'
 
-export { default as FilterOrientation } from './FilterOrientation'
+export { default as SearchOrientationContainer } from './SearchOrientationContainer'
 export { default as HandOrientationContainer } from './HandOrientationContainer'
 
 export { default as ReviewContainer } from './ReviewContainer'

@@ -18,8 +18,6 @@ const orientationKeys = [
   {
     field: 'orderid',
     identifier: nanoid(),
-    list: ORIENTATION,
-    default: ORIENTATION.FORWARD,
   },
   {
     field: 'fingerdirection',
