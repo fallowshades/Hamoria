@@ -447,6 +447,53 @@ const prefixKeys = [
 ]
 ```
 
+### Fix searchcontainer defaults to KeyToMapFormRows
+
+SearchPrefixContainer.jsx
+
+```jsx
+const SearchPrefixContainer = () => {
+  const { position, hand, sort } = searchValues
+
+  const defaults = [null, position, hand, sort]
+  return <KeysToMapFormRows event={submit} defaultList={defaults} />
+}
+```
+
+KeysToMapFormRows
+
+```jsx
+const KeysToMapFormRows = ({ isOrientation, mapKey, event, defaultList }) => {
+
+  return(
+    <>
+     {mappedKeys.map((constant, index) => {
+      if(){
+
+      }else{
+return defaultList ? (
+              <FormRowSelect
+                key={constant.identifier}
+                type="text"
+                name={constant.field}
+                defaultValue={defaultList[index] || constant?.default}
+                list={Object.values(constant?.list)}
+                onChange={(e) => {
+                  if (event) {
+                    event(e.currentTarget.form)
+                  }
+                }}
+              />
+            ) : (...)
+      }
+
+     })}
+
+      </>
+  )
+}
+```
+
 ## optimization
 
 ### all prefix query

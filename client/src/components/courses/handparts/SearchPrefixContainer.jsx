@@ -7,7 +7,7 @@ import { FormRowSelect } from '../../../components'
 const SearchPrefixContainer = () => {
   const { searchValues } = useAllPrefixContext()
   const { position, hand, sort } = searchValues
-
+  const defaults = [null, position, hand, sort]
   const submit = useSubmit()
 
   return (
@@ -15,7 +15,7 @@ const SearchPrefixContainer = () => {
       <Form className="form">
         <h5 className="form-title">search form</h5>
         <div className="form-center">
-          <KeysToMapFormRows event={submit} />
+          <KeysToMapFormRows event={submit} defaultList={defaults} />
           <FormRowSelect
             name="sort"
             defaultValue={sort}
