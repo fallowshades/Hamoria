@@ -1,4 +1,4 @@
-# v0.6.4
+# v0.6.6
 
 ## crud orientation controll
 
@@ -478,45 +478,82 @@ const allOrientationsQuery = (params) => {
 App.jsx
 
 ```js
-
+    {
+            path: 'orientation',
+            element: <AllOrientation />,
+            action: orientationAction(queryClient),
+            loader: orientationLoader(queryClient),
+          },
+          {
+            path: 'delete-orientation/:id',
+            action: deleteOrientationAction(queryClient),
+          },
 ```
 
 /pages/DeleteOrientation.jsx
 
 ```js
-
+export const action =
+  (queryClient) =>
+  async ({ params }) => {
+    try {
+      await customFetch.delete(`/orientations/${params.id}`)
+      queryClient.invalidateQueries(['orientations'])
+      toast.success('orientation deleted successfully')
+    } catch (error) {
+      toast.error(error.response.data.msg)
+    }
+    return redirect('/dashboard/prefix')
+  }
 ```
 
 components/../handparts/AddOrientation.jsx
 
-```js
+- invalidate both edit and add cases
 
+```js
+export const action =
+  (queryClient) =>
+  async ({ request }) => {
+
+    switch (crudOperationPart) {
+      case 'create':
+        try {
+          await customFetch.post('/orientations', data)
+          queryClient.invalidateQueries(['orientations'])
+          toast.success('orientation added successfully')
+
+
+        }}
+
+         case 'patch':
+        //const nanoidRegex = /^[a-zA-Z0-9_-]{21}$/
+        const mongooseObjectIdRegex = /^[0-9a-fA-F]{24$/
+
+        if (mongooseObjectIdRegex.test(idPart)) {
+          try {
+            await customFetch.patch(`/orientations/${idPart}`, data)
+
+      if (nanoidRegex.test(idPart)) {
+        toast.success(`${idPart}`)
+            queryClient.invalidateQueries(['orientations'])
+            toast.success(`${idPart}`)
+            return null
+          } catch (error) {
+            toast.error(error.response.data.msg)
+            return error
+          }
+        }
+        toast.error('sad developer')
+        return null
+      }
+  }
 ```
 
-### edit orientation fix FormRowSelect and query
+### Fix link
 
-utils\modelKeyConstants.js
-
-```js
-
-```
-
-AddOrientation.jsx
+AddOrientation.js
 
 ```js
-
-```
-
-#### edit orientation loader
-
-App.jsx
-
-```js
-
-```
-
-AddOrientation
-
-```js
-
+     <Link to="/dashboard/orientation" className="btn form-btn delete-btn">
 ```
