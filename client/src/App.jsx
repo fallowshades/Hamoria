@@ -277,12 +277,12 @@ const router = createBrowserRouter([
           {
             path: 'prefix',
             element: <AllPrefix />,
-            action: prefixAction,
+            action: prefixAction(queryClient),
             loader: prefixLoader(queryClient),
           },
           {
             path: 'delete-prefix/:id',
-            action: deletePrefixAction,
+            action: deletePrefixAction(queryClient),
           },
           {
             path: 'crud',
