@@ -1,7 +1,7 @@
 //Dynamically render keys frontend and backend
 import Wrapper from '../../../assets/wrappers/DashboardFormPage'
 import { Form } from 'react-router-dom'
-import { SectionTitle } from '../../../components'
+import { SectionTitle } from '../..'
 //network submission
 import { KeysToMapFormRows } from './mappedItems'
 import customFetch from '../../../utils/customFetch'

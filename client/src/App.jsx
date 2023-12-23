@@ -96,7 +96,7 @@ import { loader as checkoutLoader } from './pages/Checkout'
 import { action as checkoutAction } from './components/CheckoutForm'
 import { loader as ordersLoader } from './pages/Orders'
 
-import { action as prefixAction } from './components/courses/handparts/FooterAddPrefix'
+import { action as prefixAction } from './components/courses/handparts/AddPrefix'
 import { loader as prefixLoader } from './pages/handparts/AllPrefix'
 import { action as deletePrefixAction } from './pages/handparts/DeletePrefix'
 import { action as orientationAction } from './components/courses/handparts/AddOrientation'

@@ -31,13 +31,7 @@ import Prefix from '../models/prefixModel.js'
 
 ```js
 export const createPrefix = async (req, res) => {
-  const {
-    orderid,
-    fingerdirection,
-    fingerdirection2,
-    palmdirection,
-    palmdirection2,
-  } = req.body
+  const { orderid, position, hand } = req.body
   const prefix = await Prefix.create(req.body)
   res.status(StatusCodes.OK).json({ prefix })
 }
@@ -638,10 +632,6 @@ export const action =
   }
 ```
 
-### Fix link
+### Fix change file name on AddPrefix
 
-AddPrefix.js
-
-```js
-     <Link to="/dashboard/prefix" className="btn form-btn delete-btn">
-```
+- name change FooterAddPrefix -> AddPrefix.js

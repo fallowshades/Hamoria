@@ -1,4 +1,4 @@
-import FooterAddPrefix from './FooterAddPrefix'
+import FooterAddPrefix from './AddPrefix'
 import Prefix from './mappedItems/Prefix'
 import { useAllPrefixContext } from '../../../pages/handparts/AllPrefix'
 import Wrapper from '../../../assets/wrappers/handparts/PrefixContainer'
