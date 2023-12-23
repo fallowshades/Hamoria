@@ -1,4 +1,4 @@
-export { default as FilterPrefix } from './FilterPrefix'
+export { default as SearchPrefixContainer } from './SearchPrefixContainer'
 export { default as PrefixContainer } from './PrefixContainer'
 
 export { default as SearchOrientationContainer } from './SearchOrientationContainer'

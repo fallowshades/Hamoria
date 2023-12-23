@@ -16,7 +16,10 @@ const KeysToMapFormRows = ({ isOrientation, mapKey, event }) => {
       <>
         {mappedKeys.map((constant) => {
           if (!constant.hasOwnProperty('default')) {
-            if (constant.field == 'orderid') {
+            if (
+              constant.field == 'orderid' ||
+              constant.field == 'Connectionid'
+            ) {
               return null
             }
             return (

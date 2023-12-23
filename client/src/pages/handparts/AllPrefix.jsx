@@ -1,7 +1,7 @@
 import { useLoaderData } from 'react-router-dom'
 import {
   PrefixContainer,
-  FilterPrefix,
+  SearchPrefixContainer,
 } from '../../components/courses/handparts'
 import { toast } from 'react-toastify'
 import customFetch from '../../utils/customFetch'
@@ -33,8 +33,8 @@ const AllPrefix = () => {
   if (data)
     return (
       <AllPrefixContext.Provider value={{ data, searchValues }}>
+        <SearchPrefixContainer />
         <PrefixContainer />
-        <FilterPrefix />
       </AllPrefixContext.Provider>
     )
   return <p>Loading...</p>
