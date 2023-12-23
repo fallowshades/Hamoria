@@ -214,7 +214,7 @@ prefixController.jsx
 
 ```js
 export const getAllPrefixs = async (req, res) => {
-  const { orderid, position, hand, sort } = req.body
+  const { position, hand, sort } = req.body
 
   const queryObject = {}
 
