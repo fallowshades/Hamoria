@@ -278,7 +278,7 @@ const router = createBrowserRouter([
             path: 'prefix',
             element: <AllPrefix />,
             action: prefixAction,
-            loader: prefixLoader,
+            loader: prefixLoader(queryClient),
           },
           {
             path: 'delete-prefix/:id',

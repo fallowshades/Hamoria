@@ -507,7 +507,8 @@ import { useQuery } from '@tanstack/react-query'
 
 const allPrefixesQuery = (params) => {
   return {
-    queryKey: ['prefixes'],
+    queryKey: ['prefixes', position ?? 'all', hand ?? 'all', page ?? 1],
+
     queryFn: async () => {
       const { data } = await customFetch.get('/prefixes', { params })
 
@@ -526,7 +527,8 @@ const AlllPrefix = () => {
 
 ```js
 try {
-  await queryClient.ensureQueryData(alllPrefixesQuery(params))
+  await queryClient.ensureQueryData(allPrefixesQuery(params)) // console.log(data)
+
   return {
     searchValues: { ...params },
   }
