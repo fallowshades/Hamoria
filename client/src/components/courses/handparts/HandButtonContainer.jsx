@@ -1,9 +1,12 @@
 import Wrapper from '../../../assets/wrappers/handparts/HandButtonContainer'
 import { FaHandPointLeft, FaHandPointRight } from 'react-icons/fa6'
-import { useAllReferenceContext } from '../../../pages/handparts/AllReference'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { useAllWordContext } from '../../../pages/handparts/AllWord'
+import {
+  useAllReferenceContext,
+  useAllWordContext,
+  useAllOrientationContext,
+} from '../../../pages/handparts'
 
 const HandButtonContainer = ({ dataContext }) => {
   let numOfPages, currentPage
@@ -12,6 +15,9 @@ const HandButtonContainer = ({ dataContext }) => {
       ;({ numOfPages, currentPage } = useAllWordContext().data)
       break
 
+    case 'allOrientation':
+      ;({ numOfPages, currentPage } = useAllOrientationContext().data)
+      break
     default:
       ;({ numOfPages, currentPage } = useAllReferenceContext()?.data || {})
 
@@ -108,7 +114,9 @@ const HandButtonContainer = ({ dataContext }) => {
         <FaHandPointLeft />
         prev
       </button>
-      <div className="btn-container">{renderPageButtons()}</div>
+      <div className="btn-container">
+        {numOfPages > 30 && renderPageButtons()}
+      </div>
       <button
         className="btn next-btn"
         onClick={() => {

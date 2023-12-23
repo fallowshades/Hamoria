@@ -378,22 +378,32 @@ if (!constant.hasOwnProperty('default')) {
 - small fixes (Allorientation.jsx,index.js)
 - FilterOrientation --> SearchOrientationContaine
 
-AllOrientation.jsx
-
-```jsx
-
-```
-
 #### complex pagination container add context
 
 HandButtonContainer.jsx
 
-```jsx
+- index all contexts
 
+```jsx
+import {
+  useAllReferenceContext,
+  useAllWordContext,
+  useAllOrientationContext,
+} from '../../../pages/handparts'
 ```
 
-```js
+- switch case which context
 
+```js
+  case 'allOrientation':
+      ;({ numOfPages, currentPage } = useAllOrientationContext().data)
+      break
+```
+
+- bug interior point is null
+
+```js
+<div className="btn-container">{numOfPages > 30 && renderPageButtons()}</div>
 ```
 
 ## optimization
