@@ -8,11 +8,15 @@ import customFetch from '../../utils/customFetch'
 import { useContext, createContext } from 'react'
 
 export const loader = async ({ request }) => {
+  const params = Object.fromEntries([
+    ...new URL(request.url).searchParams.entries(), ////
+  ])
   try {
-    const { data } = await customFetch.get('/prefixes')
+    const { data } = await customFetch.get('/prefixes', { params })
     // console.log(data)
     return {
       data,
+      searchValues: { ...params },
     }
   } catch (error) {
     toast.error(error?.response?.data?.msg)
@@ -23,12 +27,12 @@ export const loader = async ({ request }) => {
 const AllPrefixContext = createContext()
 
 const AllPrefix = () => {
-  const { data } = useLoaderData()
+  const { data, searchValues } = useLoaderData()
   console.log(data)
 
   if (data)
     return (
-      <AllPrefixContext.Provider value={{ data }}>
+      <AllPrefixContext.Provider value={{ data, searchValues }}>
         <PrefixContainer />
         <FilterPrefix />
       </AllPrefixContext.Provider>
