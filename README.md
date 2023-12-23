@@ -1,22 +1,22 @@
-# v0.6.6
+# v0.6.7
 
-## crud orientation controll
+## crud prefix controll
 
-### postman testing local to remote orientation crud
+### postman testing local to remote prefix crud
 
-orientationController.js
+prefixController.js
 
-- refracutre mockWhat/localRead/orientationUtil
+- refracutre mockWhat/localRead/prefixUtil
 
 ```js
 import { readFile } from 'fs/promises'
 import { nanoid } from 'nanoid'
 export const readLocalFile = async () => {
-  const jsonOrientation = JSON.parse(
-    await readFile(new URL('../mockOrientationData.json', import.meta.url))
+  const jsonPrefix = JSON.parse(
+    await readFile(new URL('../mockPrefixData.json', import.meta.url))
   )
 
-  const packedData = jsonOrientation.map((keyless) => {
+  const packedData = jsonPrefix.map((keyless) => {
     return { ...keyless, _id: nanoid() }
   })
   return packedData
@@ -24,12 +24,12 @@ export const readLocalFile = async () => {
 ```
 
 ```js
-import Orientation from '../models/orientationModel.js'
-import { readLocalFile } from '../utils/mockWhat/localRead.js/orientationUtil.js'
+import Prefix from '../models/prefixModel.js'
+import { readLocalFile } from '../utils/mockWhat/localRead.js/prefixnUtil.js'
 ```
 
 ```js
-export const createOrientation = async (req, res) => {
+export const createPrefix = async (req, res) => {
   const {
     orderid,
     fingerdirection,
@@ -37,56 +37,54 @@ export const createOrientation = async (req, res) => {
     palmdirection,
     palmdirection2,
   } = req.body
-  const orientation = await Orientation.create(req.body)
-  res.status(StatusCodes.OK).json({ orientation })
+  const prefix = await Prefix.create(req.body)
+  res.status(StatusCodes.OK).json({ prefix })
 }
 ```
 
 ```js
-export const getAllOrientations = async (req, res) => {
+export const getAllPrefixes = async (req, res) => {
   //const packagedData = await readLocalFile()
-  const orienetation = await Orientation.find({})
+  const prefix = await Prefix.find({})
 
-  res.status(StatusCodes.OK).json({ orientations: orienetation })
+  res.status(StatusCodes.OK).json({ prefixes: prefix })
 }
 ```
 
 ```js
-export const getSingleOrientation = async (req, res) => {
+export const getSinglePrefix = async (req, res) => {
   const { id } = req.params
-  const orientation = await Orientation.findById(id)
-  if (!orientation) {
-    return res
-      .status(StatusCodes.NOT_FOUND)
-      .json({ msg: 'no orientation with id' })
+  const prefix = await Prefix.findById(id)
+  if (!prefix) {
+    return res.status(StatusCodes.NOT_FOUND).json({ msg: 'no prefix with id' })
   }
-  res.status(StatusCodes.OK).json({ orientation })
+  res.status(StatusCodes.OK).json({ prefix })
 }
 ```
 
 ```js
-export const updateOrientation = async (req, res) => {
+export const updatePrefix = async (req, res) => {
   const { id } = req.params
 
-  const updatedOrientation = await Orientation.findByIdAndUpdate(id, req.body, {
+  const updatedPrefix = await Prefix.findByIdAndUpdate(id, req.body, {
     new: true,
   })
 
-  if (!updatedOrientation) {
+  if (!updatedPrefix) {
     return res
       .status(StatusCodes.NOT_FOUND)
       .json({ msg: `no reference with id ${id}` })
   }
-  res.status(StatusCodes.OK).json({ updatedOrientation })
+  res.status(StatusCodes.OK).json({ updatedPrefix })
 }
 ```
 
 ```js
-export const deleteOrientation = async (req, res) => {
+export const deletePrefix = async (req, res) => {
   const { id } = req.params
-  const removedOrientation = await Orientation.findByIdAndDelete(id)
+  const removedPrefix = await Prefix.findByIdAndDelete(id)
 
-  res.status(StatusCodes.OK).json({ removedOrientation })
+  res.status(StatusCodes.OK).json({ removedPrefix })
 }
 ```
 
@@ -94,7 +92,7 @@ export const deleteOrientation = async (req, res) => {
 
 ### setup array of possible validation and middleware
 
-orientationMiddleware.js
+prefixMiddleware.js
 
 ```js
 import { body, validationResult } from 'express-validator'
@@ -116,61 +114,50 @@ const withValidationErrors = (validateValues) => {
 }
 ```
 
-### validate create orientation
+### validate create Prefix
 
-validateOrientationeMiddleware.js
+validatePrefixMiddleware.js
 
 ```js
-import { ORIENTATION } from '../utils/constants.js'
+import { POSITION, HAND_VARIANTS } from '../utils/constants.js'
 
-export const validateOrientationInput = withValidationErrors([
-  body('fingerdirection')
-    .isIn(Object.values(ORIENTATION))
+export const validatePrefixInput = withValidationErrors([
+  body('position')
+    .isIn(Object.values(POSITION))
     .withMessage('invalid fingerdirection value'),
-  body('fingerdirection2')
-    .isIn(Object.values(ORIENTATION))
-    .withMessage('invalid fingerdirection2 value'),
-  body('palmdirection')
-    .isIn(Object.values(ORIENTATION))
-    .withMessage('invalid palmdirection value'),
-  body('palmdirection2')
-    .isIn(Object.values(ORIENTATION))
-    .withMessage('invalid palmdirection2 value'),
+  body('hand').isIn(Object.values(HAND_VARIANTS)),
 ])
 ```
 
-orientationRouter.js
+prefixRouter.js
 
 ```js
-import { validateOrientationInput } from '../middleware/validateOrientationMiddleware.js'
+import { validatePrefixInput } from '../middleware/validatePrefixMiddleware.js'
 
-router
-  .route('/')
-  .post(validateOrientationInput, createOrientation)
-  .get(getAllOrientations)
+router.route('/').post(validatePrefixInput, createPrefix).get(getAllPrefixs)
 
-router.route('/:id').patch(validateOrientationInput, updateOrientation)
+router.route('/:id').patch(validatePrefixInput, updatePrefix)
 ```
 
-### validate id param orientation
+### validate id param prefix
 
-orientationController
+prefixController
 
-validateOrientationRouter.js
+validatePrefixRouter.js
 
 ```js
 import {
-  validateOrientationInput,
+  validatePrefixInput,
   validateIdParam,
-} from '../middleware/validateOrientationMiddleware.js'
+} from '../middleware/validatePrefixMiddleware.js'
 
 router
   .route('/:id')
-  .get(validateIdParam, getSingleOrientation)
-  .delete(validateIdParam, deleteOrientation)
+  .get(validateIdParam, getSinglePrefix)
+  .delete(validateIdParam, deletePrefix)
 ```
 
-validateOrientationMiddleware.js
+validatePrefixMiddleware.js
 
 ```js
 import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
@@ -178,7 +165,7 @@ import { BadRequestError, NotFoundError } from '../errors/customErrors.js'
 const withValidationErrors = (validateValues) => {
   if (!errors.isEmpty()) {
     const errorMessages = errors.array().map((error) => error.msg)
-    if (errorMessages[0].startsWith('no reference')) {
+    if (errorMessages[0].startsWith('no prefix')) {
       throw new NotFoundError(errorMessages)
     }
     throw new BadRequestError(errorMessages)
@@ -189,52 +176,38 @@ const withValidationErrors = (validateValues) => {
 ```js
 import mongoose from 'mongoose'
 import { param } from 'express-validator'
-import Orientation from '../models/orientationModel.js'
+import Prefix from '../models/prefixModel.js'
 
 export const validateIdParam = withValidationErrors([
   param('id').custom(async (value) => {
     const isValidId = mongoose.Types.ObjectId.isValid(value)
     if (!isValidId) throw new BadRequestError('invalid MongoDB id')
-    const orientation = await Orientation.findById(value)
-    if (!orientation)
-      throw new NotFoundError(`no orientation with id : ${value}`)
+    const prefix = await Prefix.findById(value)
+    if (!prefix) throw new NotFoundError(`no prefix with id : ${value}`)
   }),
 ])
 ```
 
-#### get all orientation - server
+#### get all prefix - server
 
-orientationController.jsx
+prefixController.jsx
 
 ```js
-export const getAllOrientations = async (req, res) => {
-  const {
-    orderid,
-    fingerdirection,
-    fingerdirection2,
-    palmdirection,
-    palmdirection2,
-    sort,
-  } = req.body
+export const getAllPrefixs = async (req, res) => {
+  const { orderid, position, hand, sort } = req.body
 
   const queryObject = {}
 
-  if (fingerdirection && fingerdirection !== 'all') {
-    queryObject.fingerdirection = fingerdirection
+  if (position && position !== 'all') {
+    queryObject.position = position
   }
-  if (fingerdirection2 && fingerdirection2 !== 'all') {
-    queryObject.fingerdirection2 = fingerdirection2
-  }
-  if (palmdirection && palmdirection !== 'all') {
-    queryObject.palmdirection = palmdirection
-  }
-  if (palmdirection2 && palmdirection2 !== 'all') {
-    queryObject.palmdirection2 = palmdirection2
+  if (hand && hand !== 'all') {
+    queryObject.hand = hand
   }
 
   const sortOptions = {
-    'a-z': 'fingerdirection',
-    'z-a': '-fingerdirection',
+    'a-z': 'hand',
+    'z-a': '-hand',
   }
 
   const sortKey = sortOptions[sort] || sortOptions['a-z']
@@ -243,32 +216,29 @@ export const getAllOrientations = async (req, res) => {
   const limit = Number(req.query.limit) || 10
   const skip = (page - 1) * limit
 
-  const orienetation = await Orientation.find({})
-    .sort(sortKey)
-    .skip(skip)
-    .limit(limit)
+  const prefix = await Prefix.find({}).sort(sortKey).skip(skip).limit(limit)
 
-  const totalOrientations = await Orientation.countDocuments(queryObject)
-  const numOfPages = Math.ceil(totalOrientations / limit)
+  const totalPrefixes = await Prefix.countDocuments(queryObject)
+  const numOfPages = Math.ceil(totalPrefixes / limit)
 
   res.status(StatusCodes.OK).json({
-    totalOrientations,
+    totalPrefixes,
     numOfPages,
     currentPage: page,
-    orientations: orienetation,
+    prefixes: prefix,
   })
 }
 ```
 
-OrientationModel.jsx
+PrefixModel.jsx
 
 ```js
 
 ```
 
-#### all orientation loader
+#### all prefix loader
 
-AllOrientation.jsx
+AllPrefix.jsx
 
 ```js
 const params = Object.fromEntries([
@@ -277,7 +247,7 @@ const params = Object.fromEntries([
 ```
 
 ```js
-const { data } = await customFetch.get('/orientations', { params })
+const { data } = await customFetch.get('/prefixes', { params })
 return {
   data,
   searchValues: { ...params },
@@ -286,28 +256,28 @@ return {
 
 ```js
 
-const AllOrientation = () => {
+const AllPrefix = () => {
 
   const { data, searchValues } = useLoaderData()
 
   return (
 
-    <AllOrientationContext.Provider value={{ data, searchValues }}>
+    <AllPrefixContext.Provider value={{ data, searchValues }}>
   )}
 ```
 
 #### submit form programmatically
 
-SearchOrientationContainer.jsx
+SearchPrefixContainer.jsx
 
 ```js
 import Wrapper from '../../../assets/wrappers/DashboardFormPage'
-import { useAllOrientationContext } from '../../../pages/handparts/AllOrientation'
+import { useAllPrefixContext } from '../../../pages/handparts/AllPrefix'
 import { Form, useSubmit, Link } from 'react-router-dom'
 import { KeysToMapFormRows } from './mappedItems'
 import { FormRowSelect } from '../../../components'
-const SearchOrientationContainer = () => {
-  const { searchValues } = useAllOrientationContext()
+const SearchPrefixContainer = () => {
+  const { searchValues } = useAllPrefixContext()
   const { search, status, type, sort } = searchValues
 
   const submit = useSubmit()
@@ -316,7 +286,7 @@ const SearchOrientationContainer = () => {
       <Form className="form">
         <h5 className="form-title">search form</h5>
         <div className="form-center">
-          <KeysToMapFormRows isOrientation event={submit} />
+          <KeysToMapFormRows event={submit} />
           <FormRowSelect
             name="sort"
             defaultValue={sort}
@@ -336,13 +306,13 @@ const SearchOrientationContainer = () => {
     </Wrapper>
   )
 }
-export default SearchOrientationContainer
+export default SearchPrefixContainer
 ```
 
 KeysToMapFormRow.jsx
 
 ```jsx
-const KeysToMapFormRows = ({ isOrientation, mapKey, event }) => {
+const KeysToMapFormRows = ({mapKey, event }) => {
 
 
   {mappedKeys.map((constant) => {
@@ -375,9 +345,6 @@ if (!constant.hasOwnProperty('default')) {
 }
 ```
 
-- small fixes (Allorientation.jsx,index.js)
-- FilterOrientation --> SearchOrientationContaine
-
 #### complex pagination container add context
 
 HandButtonContainer.jsx
@@ -389,14 +356,15 @@ import {
   useAllReferenceContext,
   useAllWordContext,
   useAllOrientationContext,
+  useAllPrefixContext,
 } from '../../../pages/handparts'
 ```
 
 - switch case which context
 
 ```js
-  case 'allOrientation':
-      ;({ numOfPages, currentPage } = useAllOrientationContext().data)
+  case 'allPrefix':
+      ;({ numOfPages, currentPage } = useAllPrefixContext().data)
       break
 ```
 
@@ -408,29 +376,29 @@ import {
 
 ## optimization
 
-### all orientation query
+### all prefix query
 
-AllOrientation.jsx
+AllPrefix.jsx
 
 -take dependencies and do for us
 
 ```js
 import { useQuery } from '@tanstack/react-query'
 
-const allOrientationsQuery = (params) => {
+const allPrefixesQuery = (params) => {
   return {
-    queryKey: ['orientations'],
+    queryKey: ['prefixes'],
     queryFn: async () => {
-      const { data } = await customFetch.get('/orientations', { params })
+      const { data } = await customFetch.get('/prefixes', { params })
 
       return data
     },
   }
 }
 
-const AllOrientation = () => {
+const AlllPrefix = () => {
   const { searchValues } = useLoaderData()
-  const { data } = useQuery(allOrientationsQuery(searchValues))
+  const { data } = useQuery(allPrefixesQuery(searchValues))
 }
 ```
 
@@ -438,7 +406,7 @@ const AllOrientation = () => {
 
 ```js
 try {
-  await queryClient.ensureQueryData(allOrientationsQuery(params))
+  await queryClient.ensureQueryData(alllPrefixesQuery(params))
   return {
     searchValues: { ...params },
   }
@@ -451,18 +419,16 @@ try {
 - prevent formRow default text --> optimal key
 
 ```js
-const allOrientationsQuery = (params) => {
+const alllPrefixesQuery = (params) => {
   const {
     search,
-    fingerdirection,
-    fingerdirection2,
-    palmdirection,
-    palmdirection2,
+    position,
+    hand,
     page,
   } = params
   return {
     queryKey: [
-      'orientations',
+      'prefixes',
       search ?? 'all',
       fingerdirection ?? 'all',
       fingerdirection2 ?? 'all',
@@ -473,33 +439,33 @@ const allOrientationsQuery = (params) => {
     ...}}
 ```
 
-### invalidate orientation
+### invalidate Prefix
 
 App.jsx
 
 ```js
     {
-            path: 'orientation',
-            element: <AllOrientation />,
-            action: orientationAction(queryClient),
-            loader: orientationLoader(queryClient),
+            path: 'prefix',
+            element: <AllPrefix />,
+            action: prefixAction(queryClient),
+            loader: prefixLoader(queryClient),
           },
           {
-            path: 'delete-orientation/:id',
-            action: deleteOrientationAction(queryClient),
+            path: 'delete-prefix/:id',
+            action: deletePrefixAction(queryClient),
           },
 ```
 
-/pages/DeleteOrientation.jsx
+/pages/DeletePrefix.jsx
 
 ```js
 export const action =
   (queryClient) =>
   async ({ params }) => {
     try {
-      await customFetch.delete(`/orientations/${params.id}`)
-      queryClient.invalidateQueries(['orientations'])
-      toast.success('orientation deleted successfully')
+      await customFetch.delete(`/prefixes/${params.id}`)
+      queryClient.invalidateQueries(['prefixes'])
+      toast.success('prefix deleted successfully')
     } catch (error) {
       toast.error(error.response.data.msg)
     }
@@ -507,7 +473,7 @@ export const action =
   }
 ```
 
-components/../handparts/AddOrientation.jsx
+components/../handparts/AddPrefix.jsx
 
 - invalidate both edit and add cases
 
@@ -519,9 +485,9 @@ export const action =
     switch (crudOperationPart) {
       case 'create':
         try {
-          await customFetch.post('/orientations', data)
-          queryClient.invalidateQueries(['orientations'])
-          toast.success('orientation added successfully')
+          await customFetch.post('/prefixes', data)
+          queryClient.invalidateQueries(['prefixes'])
+          toast.success('prefix added successfully')
 
 
         }}
@@ -532,11 +498,11 @@ export const action =
 
         if (mongooseObjectIdRegex.test(idPart)) {
           try {
-            await customFetch.patch(`/orientations/${idPart}`, data)
+            await customFetch.patch(`/prefixes/${idPart}`, data)
 
       if (nanoidRegex.test(idPart)) {
         toast.success(`${idPart}`)
-            queryClient.invalidateQueries(['orientations'])
+            queryClient.invalidateQueries(['prefixes'])
             toast.success(`${idPart}`)
             return null
           } catch (error) {
@@ -552,8 +518,8 @@ export const action =
 
 ### Fix link
 
-AddOrientation.js
+AddPrefix.js
 
 ```js
-     <Link to="/dashboard/orientation" className="btn form-btn delete-btn">
+     <Link to="/dashboard/prefix" className="btn form-btn delete-btn">
 ```
