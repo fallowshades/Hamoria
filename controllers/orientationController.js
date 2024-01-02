@@ -51,7 +51,8 @@ export const getAllOrientations = async (req, res) => {
   const limit = Number(req.query.limit) || 10
   const skip = (page - 1) * limit
 
-  //const packagedData = await readLocalFile()
+  //const packagedData = await readLocalFile('../mockOrientationData.json')
+
   const orienetation = await Orientation.find({})
     .sort(sortKey)
     .skip(skip)
@@ -60,14 +61,12 @@ export const getAllOrientations = async (req, res) => {
   const totalOrientations = await Orientation.countDocuments(queryObject)
   const numOfPages = Math.ceil(totalOrientations / limit)
 
-  res
-    .status(StatusCodes.OK)
-    .json({
-      totalOrientations,
-      numOfPages,
-      currentPage: page,
-      orientations: orienetation,
-    })
+  res.status(StatusCodes.OK).json({
+    totalOrientations,
+    numOfPages,
+    currentPage: page,
+    orientations: orienetation,
+  })
 }
 
 export const getSingleOrientation = async (req, res) => {

@@ -1,44 +1,74 @@
 import { StatusCodes } from 'http-status-codes'
-import PrefixModel from '../models/prefixModel.js'
+import Prefix from '../models/prefixModel.js'
 import 'express-async-errors'
 
-import { readFile } from 'fs/promises'
-import dotenv from 'dotenv'
-import { nanoid } from 'nanoid'
-
 export const createPrefix = async (req, res) => {
-  res.send('create prefix')
+  const { Connectionid, position, hand } = req.body
+
+  const prefix = await Prefix.create(req.body)
+  res.status(StatusCodes.OK).json({ prefix })
 }
 
 export const getAllPrefixes = async (req, res) => {
-  const jsonPrefix = JSON.parse(
-    await readFile(
-      new URL('../utils/mockWhat/mockPrefixData.json', import.meta.url)
-    )
-  )
-  console.log(jsonPrefix)
+  const { position, hand, sort } = req.body
 
-  const packagedData = jsonPrefix.map((keyless) => {
-    return { ...keyless, _id: nanoid() }
-  })
+  const queryObject = {}
 
-  // res.status(StatusCodes.OK).send()
-  res.status(StatusCodes.OK).json({ prefixes: packagedData })
+  if (position && position !== 'all') {
+    queryObject.position = position
+  }
+  if (hand && hand !== 'all') {
+    queryObject.hand = hand
+  }
+
+  const sortOptions = {
+    'a-z': 'hand',
+    'z-a': '-hand',
+  }
+
+  const sortKey = sortOptions[sort] || sortOptions['a-z']
+  // setup pagination
+  const page = Number(req.query.page) || 1
+  const limit = Number(req.query.limit) || 10
+  const skip = (page - 1) * limit
+
+  const prefix = await Prefix.find({}).sort(sortKey).skip(skip).limit(limit)
+
+  const totalPrefixes = await Prefix.countDocuments(queryObject)
+  const numOfPages = Math.ceil(totalPrefixes / limit)
+
+  res
+    .status(StatusCodes.OK)
+    .json({ totalPrefixes, numOfPages, currentPage: page, prefixes: prefix })
 }
 
 export const getSinglePrefix = async (req, res) => {
-  const testItem = {
-    Connectionid: req.noRead ? '1' : req.value,
-    position: 'mouth',
-    hand: 'j',
+  const { id } = req.params
+  const prefix = await Prefix.findById(id)
+  if (!prefix) {
+    return res.status(StatusCodes.NOT_FOUND).json({ msg: 'no prefix with id' })
   }
-  res.status(StatusCodes.OK).json({ prefix: testItem })
+  res.status(StatusCodes.OK).json({ prefix })
 }
 
 export const updatePrefix = async (req, res) => {
-  getSinglePrefix({ noRead: false, value: nanoid() }, res)
+  const { id } = req.params
+
+  const updatedPrefix = await Prefix.findByIdAndUpdate(id, req.body, {
+    new: true,
+  })
+
+  if (!updatedPrefix) {
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ msg: `no reference with id ${id}` })
+  }
+  res.status(StatusCodes.OK).json({ updatedPrefix })
 }
 
 export const deletePrefix = async (req, res) => {
-  getSinglePrefix({ noRead: false, value: nanoid() }, res)
+  const { id } = req.params
+  const removedPrefix = await Prefix.findByIdAndDelete(id)
+
+  res.status(StatusCodes.OK).json({ removedPrefix })
 }

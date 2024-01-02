@@ -8,13 +8,18 @@ import {
   deletePrefix,
 } from '../controllers/prefixController.js'
 
+import {
+  validatePrefixInput,
+  validateIdParam,
+} from '../middleware/validatePrefixMiddleware.js'
+
 const router = Router()
 
-router.route('/').post(createPrefix).get(getAllPrefixes)
+router.route('/').post(validatePrefixInput, createPrefix).get(getAllPrefixes)
 
 router
   .route('/:id')
-  .get(getSinglePrefix)
-  .patch(updatePrefix)
-  .delete(deletePrefix)
+  .get(validateIdParam, getSinglePrefix)
+  .patch(validatePrefixInput, updatePrefix)
+  .delete(validateIdParam, deletePrefix)
 export default router

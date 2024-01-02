@@ -2,11 +2,23 @@
 import { nanoid } from 'nanoid'
 
 import * as constants from './constants'
-const { HAND_VARIANTS, ORIENTATION, TOUCH_TYPE, FACE_EXPRESSION } = constants
+const {
+  HAND_VARIANTS,
+  ORIENTATION,
+  TOUCH_TYPE,
+  FACE_EXPRESSION,
+  PREFIX_POSITION,
+} = constants
 
 const prefixKeys = [
   { field: 'Connectionid', identifier: nanoid() },
-  { field: 'position', identifier: nanoid() },
+  {
+    field: 'position',
+    identifier: nanoid(),
+    list: PREFIX_POSITION,
+    default: PREFIX_POSITION.BODY,
+  },
+
   {
     field: 'hand',
     identifier: nanoid(),

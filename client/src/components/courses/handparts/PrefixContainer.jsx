@@ -1,14 +1,17 @@
-import FooterAddPrefix from './FooterAddPrefix'
+import FooterAddPrefix from './AddPrefix'
 import Prefix from './mappedItems/Prefix'
 import { useAllPrefixContext } from '../../../pages/handparts/AllPrefix'
 import Wrapper from '../../../assets/wrappers/handparts/PrefixContainer'
+import HandButtonContainer from './HandButtonContainer'
+
 const PrefixContainer = () => {
   const { data } = useAllPrefixContext()
+
   if (!data) {
     return <h2>No prefixes found</h2>
   }
 
-  const { prefixes } = data
+  const { prefixes, totalPrefixes, numOfPages } = data
 
   if (prefixes.length == 0) {
     return (
@@ -21,6 +24,9 @@ const PrefixContainer = () => {
   return (
     <>
       <Wrapper>
+        <h5>
+          {totalPrefixes} prefix{prefixes.length > 1 && 's'} found
+        </h5>
         <div>to be toggle</div>
         <FooterAddPrefix />
 
@@ -30,6 +36,7 @@ const PrefixContainer = () => {
             return <Prefix key={prefix._id} {...prefix}></Prefix>
           })}
         </div>
+        {numOfPages > 1 && <HandButtonContainer dataContext="allPrefix" />}
       </Wrapper>
     </>
   )
