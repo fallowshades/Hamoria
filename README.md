@@ -29,7 +29,8 @@ const Reference = ({...}) =>{
             onClick={() => {
               setIsEdit(!isEdit)
             }}
-          >
+          >  {isEdit ? 'reference' : ' Edit'}
+          </button>
       )
 
 }
