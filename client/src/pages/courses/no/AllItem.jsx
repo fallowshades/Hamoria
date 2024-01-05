@@ -18,12 +18,16 @@ export const loader = async () => {
   }
 }
 
+const AllItemContext = createContext()
 const AllItem = () => {
   const { data } = useLoaderData()
   return (
-    <div>
-      <ItemContainer />
-    </div>
+    <AllItemContext.Provider value={{ data }}>
+      <div>
+        <ItemContainer />
+      </div>
+    </AllItemContext.Provider>
   )
 }
+export const useAllCrudContext = () => useContext(AllItemContext)
 export default AllItem

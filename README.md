@@ -38,3 +38,22 @@ const AllCrud = () => {
   const { data } = useLoaderData()
 }
 ```
+
+#### setup all NO course pages context
+
+AllCrud.jsx
+
+- and AllDomain, AllTuple, AllPlace, AllItem
+
+```js
+const AllCrudContext = createContext()
+
+const All[name] = () =>{
+
+  return
+  <All[name]Provider value= {{data}}>
+...
+    </All[name]Provider>
+}
+export const useAllCrudContext = () => useContext(AllCrudContext)
+```

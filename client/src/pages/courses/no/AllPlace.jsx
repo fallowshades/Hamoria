@@ -17,12 +17,16 @@ export const loader = async () => {
     return error
   }
 }
+const AllPlaceContext = createContext()
 const AllPlace = () => {
   const { data } = useLoaderData()
   return (
-    <div>
-      <PlaceContainer />
-    </div>
+    <AllPlaceContext.Provider value={{ data }}>
+      <div>
+        <PlaceContainer />
+      </div>
+    </AllPlaceContext.Provider>
   )
 }
+export const useAllPlaceContext = () => useContext(AllPlaceContext)
 export default AllPlace

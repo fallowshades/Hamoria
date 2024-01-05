@@ -17,13 +17,16 @@ export const loader = async () => {
     return error
   }
 }
-
+const AllTupleContext = createContext()
 const AllTuple = () => {
   const { data } = useLoaderData()
   return (
-    <div>
-      <TupleContainer />
-    </div>
+    <AllTupleContext value={{ data }}>
+      <div>
+        <TupleContainer />
+      </div>
+    </AllTupleContext>
   )
 }
+export const useAllTupleContext = () => useContext(AllTupleContext)
 export default AllTuple

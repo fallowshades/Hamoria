@@ -17,12 +17,16 @@ export const loader = async () => {
     return error
   }
 }
+const AllDomainContext = createContext()
 const AllDomain = () => {
   const { data } = useLoaderData()
   return (
-    <div>
-      <DomainContainer />
-    </div>
+    <AllDomainContext.Provider value={{ data }}>
+      <div>
+        <DomainContainer />
+      </div>
+    </AllDomainContext.Provider>
   )
 }
+export const useAllDomainContext = () => useContext(AllDomainContext)
 export default AllDomain

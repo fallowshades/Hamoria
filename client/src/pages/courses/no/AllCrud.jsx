@@ -16,13 +16,19 @@ export const loader = async () => {
     return error
   }
 }
+
+const AllCrudContext = createContext()
+
 const AllCrud = () => {
   const { data } = useLoaderData()
 
   return (
-    <div>
-      <CrudContainer />
-    </div>
+    <AllCrudContext.Provider value={{ data }}>
+      <div>
+        <CrudContainer />
+      </div>
+    </AllCrudContext.Provider>
   )
 }
+export const useAllCrudContext = () => useContext(AllCrudContext)
 export default AllCrud
