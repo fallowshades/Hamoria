@@ -11,13 +11,16 @@ const WordSchema = new mongoose.Schema({
   },
   subgroup: {
     type: String,
-    required: true,
+
     default: NaN,
   },
   subsection: {
     type: String,
-    required: true,
+
     default: NaN,
+  },
+  order: {
+    type: String,
   },
   prefixid: [singleHandPrefix],
 })
