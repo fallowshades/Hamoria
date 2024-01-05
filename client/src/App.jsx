@@ -111,6 +111,12 @@ import { action as wordAction } from './components/courses/handparts/AddWord'
 import { loader as wordLoader } from './pages/handparts/AllWord'
 import { action as deleteWordAction } from './pages/handparts/DeleteWord'
 
+import { loader as crudLoader } from './pages/courses/no/AllCrud'
+import { loader as domainLoader } from './pages/courses/no/AllDomain'
+import { loader as tupleLoader } from './pages/courses/no/AllTuple'
+import { loader as placeLoader } from './pages/courses/no/AllPlace'
+import { loader as itemLoader } from './pages/courses/no/AllItem'
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -287,22 +293,27 @@ const router = createBrowserRouter([
           {
             path: 'crud',
             element: <AllCrud />,
+            loader: crudLoader,
           },
           {
             path: 'domain',
             element: <AllDomain />,
+            loader: domainLoader,
           },
           {
             path: 'tuple',
             element: <AllTuple />,
+            loader: tupleLoader,
           },
           {
             path: 'place',
             element: <AllPlace />,
+            loader: placeLoader,
           },
           {
             path: 'item',
             element: <AllItem />,
+            loader: itemLoader,
           },
           {
             path: 'shock',
