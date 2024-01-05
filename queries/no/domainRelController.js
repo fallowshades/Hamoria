@@ -2,6 +2,10 @@ import { StatusCodes } from 'http-status-codes'
 import 'express-async-errors'
 import { WORD_SUBSECTION } from '../../utils/constants.js'
 import Word from '../../models/wordModel.js'
+import {
+  getCategoryQuery,
+  getGroupByQuery,
+} from '../sharedQueries/categorizedData.js'
 
 export const createDomain = async (req, res) => {
   res.send('create Domain')
@@ -25,8 +29,12 @@ export const getAllDomain = async (req, res) => {
     ],
   }
 
-  const domainData = await Word.find(queryObject)
-  res.status(StatusCodes.OK).json({ domainData })
+  const categorizedDomainData = await Word.aggregate([
+    getCategoryQuery(queryObject.subsection),
+    getGroupByQuery(),
+  ])
+
+  res.status(StatusCodes.OK).json({ categorizedDomainData })
 }
 
 export const getSingleDomain = async (req, res) => {

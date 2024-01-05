@@ -2,6 +2,10 @@ import { StatusCodes } from 'http-status-codes'
 import 'express-async-errors'
 import Word from '../../models/wordModel.js'
 import { WORD_SUBSECTION } from '../../utils/constants.js'
+import {
+  getCategoryQuery,
+  getGroupByQuery,
+} from '../sharedQueries/categorizedData.js'
 
 export const createCRUD = async (req, res) => {
   res.send('create crud')
@@ -20,9 +24,12 @@ export const getAllCRUD = async (req, res) => {
     ],
   }
 
-  const CrudData = await Word.find(queryObject)
+  const categorizedCrudData = await Word.aggregate([
+    getCategoryQuery(queryObject.subsection),
+    getGroupByQuery(),
+  ])
 
-  res.status(StatusCodes.OK).json({ CrudData })
+  res.status(StatusCodes.OK).json({ categorizedCrudData })
 }
 
 export const getSingleCRUD = async (req, res) => {

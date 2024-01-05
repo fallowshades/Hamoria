@@ -1,10 +1,10 @@
 # v0.7.0
 
-##
+## queriable static data
 
-####
+### data from NO curriculum
 
-### data in all courses in curriculum
+#### data in all courses in curriculum
 
 constants.js
 
@@ -126,4 +126,82 @@ const queryObject = {
 const itemData = await Word.find(queryObject)
 
 res.status(StatusCodes.OK).json({ itemData })
+```
+
+#### categorized data
+
+sharedQueries\categorizedData.js
+
+```js
+export const getCategoryQuery = (subsections) => ({
+  $match: { subsection: { $in: subsections } },
+})
+
+export const getGroupByQuery = () => ({
+  $group: { _id: '$subsection', items: { $push: '$$ROOT' } },
+})
+```
+
+-- shared for each course controller
+
+```js
+import {
+  getCategoryQuery,
+  getGroupByQuery,
+} from '../sharedQueries/categorizedData.js'
+```
+
+crudController.js
+
+```js
+const categorizedCrudData = await Word.aggregate([
+  getCategoryQuery(queryObject.subsection),
+  getGroupByQuery(),
+])
+
+res.status(StatusCodes.OK).json({ categorizedCrudData })
+```
+
+domainController.js
+
+```js
+const categorizedDomainData = await Word.aggregate([
+  getCategoryQuery(queryObject.subsection),
+  getGroupByQuery(),
+])
+
+res.status(StatusCodes.OK).json({ categorizedDomainData })
+```
+
+tupleController.js
+
+```js
+const categorizedTupleData = await Word.aggregate([
+  getCategoryQuery(queryObject.subsection),
+  getGroupByQuery(),
+])
+
+res.status(StatusCodes.OK).json({ categorizedTupleData })
+```
+
+placeController.js
+
+```js
+const categorizedPlaceData = await Word.aggregate([
+  getCategoryQuery(queryObject.subsection),
+  getGroupByQuery(),
+])
+
+res.status(StatusCodes.OK).json({ categorizedPlaceData })
+```
+
+itemController.js
+
+```js
+const categorizedItemData = await Word.aggregate([
+  getCategoryQuery(queryObject.subsection),
+  getGroupByQuery(),
+])
+
+res.status(StatusCodes.OK).json({ categorizedItemData })
 ```

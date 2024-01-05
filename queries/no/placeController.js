@@ -2,7 +2,10 @@ import { StatusCodes } from 'http-status-codes'
 import 'express-async-errors'
 import { WORD_SUBSECTION } from '../../utils/constants.js'
 import Word from '../../models/wordModel.js'
-
+import {
+  getCategoryQuery,
+  getGroupByQuery,
+} from '../sharedQueries/categorizedData.js'
 export const createPlace = async (req, res) => {
   res.send('create place')
 }
@@ -16,8 +19,12 @@ export const getAllPlace = async (req, res) => {
     ],
   }
 
-  const placeData = await Word.find(queryObject)
-  res.status(StatusCodes.OK).json({ placeData })
+  const categorizedPlaceData = await Word.aggregate([
+    getCategoryQuery(queryObject.subsection),
+    getGroupByQuery(),
+  ])
+
+  res.status(StatusCodes.OK).json({ categorizedPlaceData })
 }
 
 export const getSinglePlace = async (req, res) => {
