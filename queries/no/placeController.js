@@ -1,12 +1,23 @@
 import { StatusCodes } from 'http-status-codes'
 import 'express-async-errors'
+import { WORD_SUBSECTION } from '../../utils/constants.js'
+import Word from '../../models/wordModel.js'
 
 export const createPlace = async (req, res) => {
   res.send('create place')
 }
 
 export const getAllPlace = async (req, res) => {
-  res.send('get all Place')
+  const queryObject = {
+    subsection: [
+      WORD_SUBSECTION.N_1,
+      WORD_SUBSECTION.NYP_1,
+      WORD_SUBSECTION.I_1,
+    ],
+  }
+
+  const placeData = await Word.find(queryObject)
+  res.status(StatusCodes.OK).json({ placeData })
 }
 
 export const getSinglePlace = async (req, res) => {

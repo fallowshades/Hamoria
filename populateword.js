@@ -10,8 +10,8 @@ console.log('start')
 try {
   await mongoose.connect(process.env.MONGO_URL)
 
-  const prefixes = await Prefix.find({})
-  // console.log(prefixes)
+  // const prefixes = await Word.find({})
+  //console.log(prefixes)
 
   const jsonWord = JSON.parse(
     await readFile(
@@ -41,7 +41,7 @@ try {
   })
 
   await Word.deleteMany()
-  await Word.create(jsonPrefix)
+  await Word.create(jsonWord)
   console.log('Success!!!')
   process.exit(0)
 } catch (error) {
