@@ -134,3 +134,55 @@ export const getSortByQuery = () => ({
   },
 })
 ```
+
+#### custom order
+
+sharedQueries\categorizedData.js
+
+```js
+export const customOrder = (categorizedData, queryObject) => {
+  const subsectionOrder = {}
+  queryObject.subsection.forEach((subsection, index) => {
+    subsectionOrder[subsection] = index
+  })
+
+  // Custom sorting logic
+  categorizedData.sort((a, b) => {
+    const orderA = subsectionOrder[a._id]
+    const orderB = subsectionOrder[b._id]
+
+    if (orderA < orderB) return -1
+    if (orderA > orderB) return 1
+    return 0
+  })
+  return categorizedData
+}
+```
+
+domainRelController.js
+
+- also tupleRelController, placeController, itemController
+- (not trivial as crudController w non alphabetic order)
+
+```js
+import {
+  getCategoryQuery,
+  getGroupByQuery,
+  getSortByQuery,
+  customOrder,
+} from '../sharedQueries/categorizedData.js'
+```
+
+```js
+export const getAllDomain = async (req, res) => {
+  let categorizedDomainData = await Word.aggregate([
+    getCategoryQuery(queryObject.subsection),
+    getGroupByQuery(),
+    getSortByQuery(),
+  ])
+
+  categorizedDomainData = customOrder(categorizedDomainData, queryObject)
+
+  res.status(StatusCodes.OK).json({ categorizedDomainData })
+}
+```

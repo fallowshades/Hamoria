@@ -6,6 +6,7 @@ import {
   getCategoryQuery,
   getGroupByQuery,
   getSortByQuery,
+  customOrder,
 } from '../sharedQueries/categorizedData.js'
 export const createPlace = async (req, res) => {
   res.send('create place')
@@ -20,11 +21,12 @@ export const getAllPlace = async (req, res) => {
     ],
   }
 
-  const categorizedPlaceData = await Word.aggregate([
+  let categorizedPlaceData = await Word.aggregate([
     getCategoryQuery(queryObject.subsection),
     getGroupByQuery(),
     getSortByQuery(),
   ])
+  categorizedPlaceData = customOrder(categorizedPlaceData, queryObject)
 
   res.status(StatusCodes.OK).json({ categorizedPlaceData })
 }

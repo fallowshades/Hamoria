@@ -6,6 +6,7 @@ import {
   getCategoryQuery,
   getGroupByQuery,
   getSortByQuery,
+  customOrder,
 } from '../sharedQueries/categorizedData.js'
 export const createTuple = async (req, res) => {
   res.send('create Tuple')
@@ -32,13 +33,14 @@ export const getAllTuple = async (req, res) => {
     ],
   }
 
-  const categorizedTupleData = await Word.aggregate([
+  let categorizedTupleData = await Word.aggregate([
     getCategoryQuery(queryObject.subsection),
     getGroupByQuery(),
 
     getSortByQuery(),
   ])
-  console.log(categorizedTupleData)
+
+  categorizedTupleData = customOrder(categorizedTupleData, queryObject)
 
   res.status(StatusCodes.OK).json({ categorizedTupleData })
 }
