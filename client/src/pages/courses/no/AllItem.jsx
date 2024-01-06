@@ -29,5 +29,5 @@ const AllItem = () => {
     </AllItemContext.Provider>
   )
 }
-export const useAllCrudContext = () => useContext(AllItemContext)
+export const useAllItemContext = () => useContext(AllItemContext)
 export default AllItem

@@ -5,6 +5,7 @@ import Word from '../../models/wordModel.js'
 import {
   getCategoryQuery,
   getGroupByQuery,
+  getSortByQuery,
 } from '../sharedQueries/categorizedData.js'
 
 export const createDomain = async (req, res) => {
@@ -32,6 +33,7 @@ export const getAllDomain = async (req, res) => {
   const categorizedDomainData = await Word.aggregate([
     getCategoryQuery(queryObject.subsection),
     getGroupByQuery(),
+    getSortByQuery(),
   ])
 
   res.status(StatusCodes.OK).json({ categorizedDomainData })

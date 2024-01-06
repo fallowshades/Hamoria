@@ -5,6 +5,7 @@ import { WORD_SUBSECTION } from '../../utils/constants.js'
 import {
   getCategoryQuery,
   getGroupByQuery,
+  getSortByQuery,
 } from '../sharedQueries/categorizedData.js'
 
 export const createCRUD = async (req, res) => {
@@ -24,12 +25,13 @@ export const getAllCRUD = async (req, res) => {
     ],
   }
 
-  const categorizedCrudData = await Word.aggregate([
+  const sortedCategorizedCrudData = await Word.aggregate([
     getCategoryQuery(queryObject.subsection),
     getGroupByQuery(),
+    getSortByQuery(),
   ])
 
-  res.status(StatusCodes.OK).json({ categorizedCrudData })
+  res.status(StatusCodes.OK).json({ sortedCategorizedCrudData })
 }
 
 export const getSingleCRUD = async (req, res) => {

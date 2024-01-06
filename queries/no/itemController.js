@@ -5,6 +5,7 @@ import Word from '../../models/wordModel.js'
 import {
   getCategoryQuery,
   getGroupByQuery,
+  getSortByQuery,
 } from '../sharedQueries/categorizedData.js'
 export const createItem = async (req, res) => {
   res.send('create Item')
@@ -24,6 +25,7 @@ export const getAllItem = async (req, res) => {
   const categorizedItemData = await Word.aggregate([
     getCategoryQuery(queryObject.subsection),
     getGroupByQuery(),
+    getSortByQuery(),
   ])
 
   res.status(StatusCodes.OK).json({ categorizedItemData })

@@ -57,3 +57,80 @@ const All[name] = () =>{
 }
 export const useAllCrudContext = () => useContext(AllCrudContext)
 ```
+
+#### render ascending sorted NO courses
+
+- create CRUD, Domain, Tuple, Place, Item
+
+CrudContainer
+
+- similarly DomainContainer, tupleContainer, PlaceContainer, ItemContainer
+
+```js
+import Crud from './Crud'
+import Wrapper from '../../../assets/wrappers/courses/no/CrudContainer'
+
+import { useAllAchievementsContext } from '../../../pages/AllAchievements'
+import { useAllCrudContext } from '../../../pages/courses/no/AllCrud'
+```
+
+```js
+const CrudContainer = () => {
+  const { data } = useAllCrudContext()
+  const { sortedCategorizedCrudData } = data
+
+  if (sortedCategorizedCrudData === 0) {
+    return (
+      <Wrapper>
+        <h2>No Crud to display...</h2>
+      </Wrapper>
+    )
+  }
+  return (
+    <Wrapper>
+      <div className="grid-template">
+        {sortedCategorizedCrudData.map((category) => (
+          <div key={category._id}>
+            <h2>{category._id}</h2> {/* Display category name or identifier */}
+            {category.items.map((crud) => (
+              <Crud key={crud._id} {...crud} />
+            ))}
+          </div>
+        ))}
+      </div>
+    </Wrapper>
+  )
+}
+```
+
+crudController
+
+```js
+import {
+  getCategoryQuery,
+  getGroupByQuery,
+  getSortByQuery,
+} from '../sharedQueries/categorizedData.js'
+```
+
+```js
+export const createCRUD = async (req, res) => {
+  const sortedCategorizedCrudData = await Word.aggregate([
+    getCategoryQuery(queryObject.subsection),
+    getGroupByQuery(),
+    getSortByQuery(),
+  ])
+
+  res.status(StatusCodes.OK).json({ sortedCategorizedCrudData })
+}
+```
+
+sharedQueries\categorizedData
+
+```js
+export const getSortByQuery = () => ({
+  $sort: {
+    _id: 1, // Sorting in ascending order based on the _id field (group ID)
+  },
+})
+```

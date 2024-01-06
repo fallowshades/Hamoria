@@ -21,11 +21,11 @@ const AllTupleContext = createContext()
 const AllTuple = () => {
   const { data } = useLoaderData()
   return (
-    <AllTupleContext value={{ data }}>
+    <AllTupleContext.Provider value={{ data }}>
       <div>
         <TupleContainer />
       </div>
-    </AllTupleContext>
+    </AllTupleContext.Provider>
   )
 }
 export const useAllTupleContext = () => useContext(AllTupleContext)

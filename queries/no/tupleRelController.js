@@ -5,6 +5,7 @@ import Word from '../../models/wordModel.js'
 import {
   getCategoryQuery,
   getGroupByQuery,
+  getSortByQuery,
 } from '../sharedQueries/categorizedData.js'
 export const createTuple = async (req, res) => {
   res.send('create Tuple')
@@ -34,7 +35,10 @@ export const getAllTuple = async (req, res) => {
   const categorizedTupleData = await Word.aggregate([
     getCategoryQuery(queryObject.subsection),
     getGroupByQuery(),
+
+    getSortByQuery(),
   ])
+  console.log(categorizedTupleData)
 
   res.status(StatusCodes.OK).json({ categorizedTupleData })
 }
