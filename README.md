@@ -1,4 +1,4 @@
-# v0.7.0
+# v0.7.1
 
 ## queriable static data
 
@@ -184,5 +184,24 @@ export const getAllDomain = async (req, res) => {
   categorizedDomainData = customOrder(categorizedDomainData, queryObject)
 
   res.status(StatusCodes.OK).json({ categorizedDomainData })
+}
+```
+
+#### prep
+
+Crud.jsx
+
+- also in Domain.jsx, Tuple.jsx, Place.jsx and Item.jsx
+
+```js
+const Crud = ({ word, subgroup }) => {
+  return (
+    <div>
+      {' '}
+      <p style={{ whiteSpace: 'pre' }}>
+        {`word: ${word} \t subgroup: ${subgroup} `}
+      </p>
+    </div>
+  )
 }
 ```

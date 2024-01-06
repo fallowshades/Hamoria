@@ -1,4 +1,11 @@
-const Item = () => {
-  return <div>Item</div>
+const Item = ({ word, subgroup }) => {
+  return (
+    <div>
+      {' '}
+      <p style={{ whiteSpace: 'pre' }}>
+        {`word: ${word} \t subgroup: ${subgroup} `}
+      </p>
+    </div>
+  )
 }
 export default Item

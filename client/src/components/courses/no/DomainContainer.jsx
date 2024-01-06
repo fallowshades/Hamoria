@@ -6,7 +6,7 @@ import { useAllDomainContext } from '../../../pages/courses/no/AllDomain'
 const DomainContainer = () => {
   const { data } = useAllDomainContext()
   const { categorizedDomainData } = data
-
+  console.log(categorizedDomainData)
   if (categorizedDomainData === 0) {
     return (
       <Wrapper>
