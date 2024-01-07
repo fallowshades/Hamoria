@@ -8,10 +8,19 @@ import {
   deleteExample,
 } from '../controllers/exampleController.js'
 
+import {
+  validateExampleInput,
+  validateIdParam,
+} from '../middleware/validateExampleMiddleware.js'
+
 const router = Router()
 
-router.route('/').post(createExample).get(getAllExample)
+router.route('/').post(validateExampleInput, createExample).get(getAllExample)
 
-router.route('/:id').get(getExample).patch(updateExample).delete(deleteExample)
+router
+  .route('/:id')
+  .get(validateIdParam, getExample)
+  .patch(validateExampleInput, updateExample)
+  .delete(validateIdParam, deleteExample)
 
 export default router
