@@ -28,6 +28,10 @@ const ExampleSchema = new mongoose.Schema({
   kommenteratranscription: {
     type: String,
   },
+  subsection: {
+    type: String,
+    required: true,
+  },
 })
 
 export default mongoose.model('example', ExampleSchema)

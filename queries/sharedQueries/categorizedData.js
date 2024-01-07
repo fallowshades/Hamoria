@@ -1,3 +1,6 @@
+import Word from '../../models/wordModel.js'
+import Example from '../../models/exampleModel.js'
+
 export const getCategoryQuery = (subsections) => ({
   $match: { subsection: { $in: subsections } },
 })
@@ -28,4 +31,14 @@ export const customOrder = (categorizedData, queryObject) => {
     return 0
   })
   return categorizedData
+}
+
+export const getCategorizedData = async (model, queryObject) => {
+  let categorizedData = await model.aggregate([
+    getCategoryQuery(queryObject.subsection),
+    getGroupByQuery(),
+    getSortByQuery(),
+  ])
+
+  return customOrder(categorizedData, queryObject)
 }

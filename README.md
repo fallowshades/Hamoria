@@ -425,3 +425,73 @@ try {
   process.exit(1)
 }
 ```
+
+#### non modular group queries
+
+exampleModel
+
+```js
+ const ExampleSchema = new mongoose.Schema({
+
+ subsection: {
+    type: String,
+    required: true,
+  },
+ }
+```
+
+domainRelController
+
+```js
+import Example from '../../models/exampleModel.js'
+
+export const getAllDomain = async (req, res) => {
+  ...
+
+  let categorizedExampleData = await Example.aggregate([
+    getCategoryQuery(queryObject.subsection),
+    getGroupByQuery(),
+    getSortByQuery(),
+  ])
+  categorizedExampleData = customOrder(categorizedExampleData, queryObject)
+
+  console.log({ categorizedExampleData, categorizedDomainData })
+  res
+    .status(StatusCodes.OK)
+    .json({ categorizedExampleData, categorizedDomainData })
+}
+```
+
+#### refracture concurrent categorized data
+
+domainRelController.js
+
+```js
+import { getCategorizedData } from '../sharedQueries/categorizedData.js'
+import Word from '../../models/wordModel.js'
+import Example from '../../models/exampleModel.js'
+```
+
+```js
+export const getAllDomain = async (req, res) => {
+  const [categorizedDomainData, categorizedExampleData] = await Promise.all([
+    getCategorizedData(Word, queryObject),
+    getCategorizedData(Example, queryObject),
+  ])
+  categorizedExampleData = customOrder(categorizedExampleData, queryObject)
+}
+```
+
+sharedQueries\categorizedData.js
+
+```js
+export const getCategorizedData = async (model, queryObject) => {
+  let categorizedData = await model.aggregate([
+    getCategoryQuery(queryObject.subsection),
+    getGroupByQuery(),
+    getSortByQuery(),
+  ])
+
+  return customOrder(categorizedData, queryObject)
+}
+```
