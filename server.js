@@ -31,6 +31,8 @@ import courseRouter from './routes/courseRouter.js'
 import swaggerUI from 'swagger-ui-express'
 import YAML from 'yamljs'
 
+import exampleRouter from './routes/exampleRouter.js'
+
 dotenv.config()
 
 cloudinary.config({
@@ -68,6 +70,7 @@ app.use('/api/v1/orientations', orientationRouter)
 app.use('/api/v1/words', wordRouter)
 app.use('/api/v1/references', referenceRouter)
 app.use('/api/v1/courses', courseRouter)
+app.use('/api/v1/examples', exampleRouter)
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, './client/dist', 'index.html'))

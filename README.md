@@ -205,3 +205,60 @@ const Crud = ({ word, subgroup }) => {
   )
 }
 ```
+
+### data to be mixed
+
+#### set up route and test postman
+
+```js
+import 'express-async-errors'
+
+export const createExample = async (req, res) => {
+  res.send('create example')
+}
+
+export const getAllExample = async (req, res) => {
+  res.send('get All example')
+}
+
+export const getExample = async (req, res) => {
+  res.send('get example')
+}
+
+export const updateExample = async (req, res) => {
+  res.send('update example')
+}
+
+export const deleteExample = async (req, res) => {
+  res.send('delete example')
+}
+```
+
+exampleRouter.js
+
+```js
+import { Router } from 'express'
+
+import {
+  createExample,
+  getAllExample,
+  getExample,
+  updateExample,
+  deleteExample,
+} from '../controllers/exampleController.js'
+
+const router = Router()
+
+router.route('/').post(createExample).get(getAllExample)
+
+router.route('/:id').get(getExample).patch(updateExample).delete(deleteExample)
+
+export default router
+```
+
+server.js
+
+```js
+import exampleRouter from './routes/exampleRouter.js'
+app.use('/api/v1/examples', exampleRouter)
+```
