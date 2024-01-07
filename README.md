@@ -495,3 +495,10 @@ export const getCategorizedData = async (model, queryObject) => {
   return customOrder(categorizedData, queryObject)
 }
 ```
+
+#### refracture remaining NO courses
+
+[x]crudController.js
+[x]tupleController.js
+[x]placeController.js
+[x]itemController.js

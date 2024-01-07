@@ -32,7 +32,6 @@ export const getAllDomain = async (req, res) => {
     getCategorizedData(Example, queryObject),
   ])
 
-  console.log({ categorizedExampleData, categorizedDomainData })
   res
     .status(StatusCodes.OK)
     .json({ categorizedExampleData, categorizedDomainData })

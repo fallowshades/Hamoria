@@ -2,12 +2,9 @@ import { StatusCodes } from 'http-status-codes'
 import 'express-async-errors'
 import { WORD_SUBSECTION } from '../../utils/constants.js'
 import Word from '../../models/wordModel.js'
-import {
-  getCategoryQuery,
-  getGroupByQuery,
-  getSortByQuery,
-  customOrder,
-} from '../sharedQueries/categorizedData.js'
+import Example from '../../models/exampleModel.js'
+import { getCategorizedData } from '../sharedQueries/categorizedData.js'
+
 export const createItem = async (req, res) => {
   res.send('create Item')
 }
@@ -23,15 +20,13 @@ export const getAllItem = async (req, res) => {
     ],
   }
 
-  let categorizedItemData = await Word.aggregate([
-    getCategoryQuery(queryObject.subsection),
-    getGroupByQuery(),
-    getSortByQuery(),
+  const [categorizedItemData, categorizedExampleData] = await Promise.all([
+    getCategorizedData(Word, queryObject),
+    getCategorizedData(Example, queryObject),
   ])
-
-  categorizedItemData = customOrder(categorizedItemData, queryObject)
-
-  res.status(StatusCodes.OK).json({ categorizedItemData })
+  res
+    .status(StatusCodes.OK)
+    .json({ categorizedItemData, categorizedExampleData })
 }
 
 export const getSingleItem = async (req, res) => {

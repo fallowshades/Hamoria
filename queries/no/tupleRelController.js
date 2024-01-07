@@ -2,12 +2,8 @@ import { StatusCodes } from 'http-status-codes'
 import 'express-async-errors'
 import { WORD_SUBSECTION } from '../../utils/constants.js'
 import Word from '../../models/wordModel.js'
-import {
-  getCategoryQuery,
-  getGroupByQuery,
-  getSortByQuery,
-  customOrder,
-} from '../sharedQueries/categorizedData.js'
+import Example from '../../models/exampleModel.js'
+import { getCategorizedData } from '../sharedQueries/categorizedData.js'
 export const createTuple = async (req, res) => {
   res.send('create Tuple')
 }
@@ -33,16 +29,13 @@ export const getAllTuple = async (req, res) => {
     ],
   }
 
-  let categorizedTupleData = await Word.aggregate([
-    getCategoryQuery(queryObject.subsection),
-    getGroupByQuery(),
-
-    getSortByQuery(),
+  const [categorizedTupleData, categorizedExampleData] = await Promise.all([
+    getCategorizedData(Word, queryObject),
+    getCategorizedData(Example, queryObject),
   ])
-
-  categorizedTupleData = customOrder(categorizedTupleData, queryObject)
-
-  res.status(StatusCodes.OK).json({ categorizedTupleData })
+  res
+    .status(StatusCodes.OK)
+    .json({ categorizedTupleData, categorizedExampleData })
 }
 
 export const getSingleTuple = async (req, res) => {

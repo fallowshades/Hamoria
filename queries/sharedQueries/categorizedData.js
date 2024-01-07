@@ -1,6 +1,3 @@
-import Word from '../../models/wordModel.js'
-import Example from '../../models/exampleModel.js'
-
 export const getCategoryQuery = (subsections) => ({
   $match: { subsection: { $in: subsections } },
 })
